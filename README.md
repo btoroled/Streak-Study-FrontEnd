@@ -1,73 +1,112 @@
-# React + TypeScript + Vite
+#  StreakStudy Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend oficial de **StreakStudy**, una plataforma de aprendizaje gamificada que permite a los estudiantes crear tarjetas de estudio, generar contenido con IA, realizar sesiones de repaso y competir en rankings mediante un sistema de experiencia (XP), rachas y logros.
 
-Currently, two official plugins are available:
+## Lo Utilizado
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* React
+* TypeScript
+* Vite
+* React Router
+* Zustand
+* React Query
+* Axios
+* React Hook Form
+* Zod
+* Tailwind CSS
 
-## React Compiler
+##  Estructura del Proyecto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+├── assets/
+├── config/
+├── features/
+├── hooks/
+├── layouts/
+├── lib/
+├── pages/
+├── providers/
+├── router/
+├── services/
+├── shared/
+├── store/
+├── types/
+└── main.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+##  Requisitos Previos
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* Node.js 20+
+* npm 10+
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+##  Instalación
+
+Clonar el repositorio:
+
+```bash
+git clone https://github.com/CS2031-DBP/proyecto-2-frontend-streakstudy.git
 ```
+
+Ingresar al proyecto:
+
+```bash
+cd proyecto-2-frontend-streakstudy
+```
+
+Instalar dependencias:
+
+```bash
+npm install
+```
+
+## ▶ Ejecución en Desarrollo
+
+```bash
+npm run dev
+```
+
+La aplicación estará disponible en:
+
+```text
+http://localhost:5173
+```
+
+##  Construcción para Producción
+
+```bash
+npm run build
+```
+
+##  Linter
+
+```bash
+npm run lint
+```
+
+##  Integración con Backend
+
+Este frontend consume los servicios REST desarrollados en el backend de StreakStudy mediante Spring Boot.
+
+Las configuraciones de conexión se realizan mediante variables de entorno.
+
+Ejemplo:
+
+```env
+VITE_API_URL=http://localhost:8080/api
+```
+
+##  Funcionalidades
+
+* Autenticación de usuarios
+* Gestión de cursos
+* Gestión de mazos de estudio
+* Gestión de flashcards
+* Sesiones de estudio gamificadas
+* Sistema de experiencia (XP)
+* Sistema de logros
+* Ranking de estudiantes
+* Perfil de usuario
+* Generación de contenido mediante IA
+* Gestión de documentos PDF
+
