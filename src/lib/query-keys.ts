@@ -1,0 +1,15 @@
+export const QK = {
+  progress: ['progress'] as const,
+  leaderboard: ['leaderboard'] as const,
+  decks: ['decks'] as const,
+  deck: (id: number) => ['decks', id] as const,
+  flashcards: (deckId: number) => ['flashcards', deckId] as const,
+  flashcard: (id: number) => ['flashcard', id] as const,
+  courses: ['courses'] as const,
+  course: (id: number) => ['courses', id] as const,
+  rewards: ['rewards'] as const,
+  documentStatus: (id: number) => ['document', id, 'status'] as const,
+  documentMarkdown: (id: number) => ['document', id, 'markdown'] as const,
+  aiJob: (id: number) => ['ai-job', id] as const,
+  institution: (id: number) => ['institution', id] as const,
+}

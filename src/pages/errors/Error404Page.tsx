@@ -1,0 +1,16 @@
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/shared/components/ui/button'
+
+export default function Error404Page() {
+  const navigate = useNavigate()
+  return (
+    <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center p-4">
+      <div className="text-center space-y-4 max-w-sm">
+        <p className="text-7xl font-black text-white/10">404</p>
+        <h1 className="text-xl font-bold text-white">Página no encontrada</h1>
+        <p className="text-sm text-white/50">La página que buscas no existe o fue movida.</p>
+        <Button onClick={() => navigate('/')}>Volver al inicio</Button>
+      </div>
+    </div>
+  )
+}
