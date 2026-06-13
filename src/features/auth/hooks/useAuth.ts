@@ -27,8 +27,10 @@ export function useAuth() {
         xp: authData.xp,
       })
 
-      const progress = await progressService.getProgress()
-      useAuthStore.getState().setProgress(progress)
+      try {
+        const progress = await progressService.getProgress()
+        useAuthStore.getState().setProgress(progress)
+      } catch { /* use xp from AuthResponse as fallback */ }
       useSessionStore.getState().setStatus('ready')
 
       const params = new URLSearchParams(location.search)
@@ -56,8 +58,10 @@ export function useAuth() {
         xp: authData.xp,
       })
 
-      const progress = await progressService.getProgress()
-      useAuthStore.getState().setProgress(progress)
+      try {
+        const progress = await progressService.getProgress()
+        useAuthStore.getState().setProgress(progress)
+      } catch { /* use xp from AuthResponse as fallback */ }
       useSessionStore.getState().setStatus('ready')
 
       navigate('/dashboard', { replace: true })
@@ -94,8 +98,10 @@ export function useAuth() {
       xp: authData.xp,
     })
 
-    const progress = await progressService.getProgress()
-    useAuthStore.getState().setProgress(progress)
+    try {
+      const progress = await progressService.getProgress()
+      useAuthStore.getState().setProgress(progress)
+    } catch { /* non-fatal */ }
   }, [])
 
   return { login, register, logout, initSession }
