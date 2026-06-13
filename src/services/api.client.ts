@@ -17,10 +17,15 @@ function flushQueue(error: unknown, token: string | null) {
   pendingQueue = []
 }
 
+// Auth endpoints that should never receive the access token in the request
+const UNAUTHENTICATED_PATHS = ['/auth/login', '/auth/register', '/auth/refresh']
+
 // ── Request interceptor — attach access token ─────────────────────────────────
 axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const url = config.url ?? ''
+  const isPublicAuthPath = UNAUTHENTICATED_PATHS.some((p) => url.includes(p))
   const token = useAuthStore.getState().accessToken
-  if (token && config.headers) {
+  if (token && config.headers && !isPublicAuthPath) {
     config.headers.Authorization = `Bearer ${token}`
   }
   return config
@@ -32,9 +37,12 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const original = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
     const status: number | undefined = error.response?.status
-    const isRefreshEndpoint = (original.url ?? '').includes('/auth/refresh')
+    const url = original.url ?? ''
+    const isRefreshEndpoint = url.includes('/auth/refresh')
+    // Auth endpoints that handle their own 401 (invalid credentials, etc.)
+    const isUnauthenticatedEndpoint = url.includes('/auth/login') || url.includes('/auth/register')
 
-    if (status !== 401 || isRefreshEndpoint || original._retry) {
+    if (status !== 401 || isRefreshEndpoint || isUnauthenticatedEndpoint || original._retry) {
       return Promise.reject(error)
     }
 
