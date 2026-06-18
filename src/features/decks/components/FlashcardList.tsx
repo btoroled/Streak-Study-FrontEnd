@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Plus, Layers } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import FlashcardItem from './FlashcardItem'
 import FlashcardForm from './FlashcardForm'
 import EmptyState from '@/shared/components/feedback/EmptyState'
+import mascotThinking from '@/assets/brand/mascot-thinking.png'
 import { Button } from '@/shared/components/ui/button'
 import { useFlashcards } from '@/features/decks/hooks/useFlashcards'
 import type { FlashcardResponse } from '@/types/flashcard.types'
@@ -67,7 +68,7 @@ export default function FlashcardList({ deckId }: Props) {
 
       {cards.length === 0 && !showCreate ? (
         <EmptyState
-          icon={Layers}
+          mascot={mascotThinking}
           title="Sin flashcards"
           description="Agrega la primera flashcard a este mazo"
           action={{ label: 'Agregar flashcard', onClick: () => setShowCreate(true) }}

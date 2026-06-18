@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/shared/components/ui/button'
+import mascotWave from '@/assets/brand/mascot-wave.png'
 
 export default function LandingPage() {
   const navigate = useNavigate()
@@ -8,8 +9,24 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center p-6">
       <div className="max-w-md w-full text-center space-y-8">
         <div className="space-y-3">
-          <div className="text-5xl">🔥</div>
-          <h1 className="text-3xl font-black text-white">StreakStudy</h1>
+          {/* Mascota héroe */}
+          <div className="relative flex justify-center">
+            <div
+              className="absolute inset-0 m-auto w-48 h-48 rounded-full blur-3xl opacity-30"
+              style={{ background: 'radial-gradient(circle, #f97316 0%, #7c3aed 70%, transparent 100%)' }}
+            />
+            <img
+              src={mascotWave}
+              alt="Mascota StreakStudy"
+              className="relative w-44 h-44 object-contain drop-shadow-2xl animate-[float_4s_ease-in-out_infinite]"
+            />
+          </div>
+          <h1 className="text-3xl font-black text-white">
+            Streak
+            <span className="bg-gradient-to-r from-[#f97316] to-[#7c3aed] bg-clip-text text-transparent">
+              Study
+            </span>
+          </h1>
           <p className="text-white/60 text-base">Aprende. Mantén tu racha. Crece.</p>
         </div>
 

@@ -1,5 +1,6 @@
-import { Trash2, BookOpen } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import EmptyState from '@/shared/components/feedback/EmptyState'
+import mascotThinking from '@/assets/brand/mascot-thinking.png'
 import type { CourseResponse } from '@/types/course.types'
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
 
 export default function CourseTable({ courses, canDelete, onDelete }: Props) {
   if (courses.length === 0) {
-    return <EmptyState icon={BookOpen} title="Sin cursos" description="No hay cursos disponibles aún" />
+    return <EmptyState mascot={mascotThinking} title="Sin cursos" description="No hay cursos disponibles aún" />
   }
 
   return (
