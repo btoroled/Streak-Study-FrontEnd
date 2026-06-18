@@ -12,7 +12,7 @@ export default function StudySessionPage() {
   const { deckId } = useParams<{ deckId: string }>()
   const id = Number(deckId)
   const navigate = useNavigate()
-  const { phase, loadCards, current, currentIdx, total, flipped, flip, rate, restart, xpGained, levelUp, dismissLevelUp, isSubmitting } =
+  const { phase, loadCards, current, currentIdx, total, flipped, flip, rate, restart, xpGained, levelUp, dismissLevelUp, streakExtended, isSubmitting } =
     useStudySession(id)
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function StudySessionPage() {
   if (phase === 'complete') {
     return (
       <div className="max-w-lg mx-auto">
-        <StudyComplete total={total} xpGained={xpGained} deckId={id} onRestart={restart} />
+        <StudyComplete total={total} xpGained={xpGained} deckId={id} streakExtended={streakExtended} onRestart={restart} />
         <LevelUpModal
           open={levelUp !== null}
           level={levelUp?.level ?? 1}
