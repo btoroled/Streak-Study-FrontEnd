@@ -9,10 +9,11 @@ interface Props {
   total: number
   xpGained: number
   deckId: number
+  streakExtended?: number | null
   onRestart: () => void
 }
 
-export default function StudyComplete({ total, xpGained, deckId, onRestart }: Props) {
+export default function StudyComplete({ total, xpGained, deckId, streakExtended, onRestart }: Props) {
   const navigate = useNavigate()
 
   return (
@@ -33,6 +34,20 @@ export default function StudyComplete({ total, xpGained, deckId, onRestart }: Pr
       </div>
 
       <XpGainAnimation xp={xpGained} />
+
+      {streakExtended != null && streakExtended > 0 && (
+        <motion.div
+          initial={{ scale: 0.6, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 18, delay: 0.15 }}
+          className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#f97316]/12 border border-[#f97316]/25"
+        >
+          <span className="text-xl animate-[flame-flicker_1.1s_ease-in-out_infinite]">🔥</span>
+          <span className="text-sm font-semibold text-[#f97316]">
+            ¡Racha de {streakExtended} {streakExtended === 1 ? 'día' : 'días'}!
+          </span>
+        </motion.div>
+      )}
 
       <div className="flex gap-3 w-full max-w-xs">
         <Button variant="outline" className="flex-1" onClick={() => navigate(`/decks/${deckId}`)}>

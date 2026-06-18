@@ -26,6 +26,7 @@ export function useStudySession(deckId: number) {
   const [phase, setPhase] = useState<Phase>('loading')
   const [xpGained, setXpGained] = useState(0)
   const [levelUp, setLevelUp] = useState<LevelUpInfo | null>(null)
+  const [streakExtended, setStreakExtended] = useState<number | null>(null)
   const startedAt = useRef(Date.now())
 
   const finishMutation = useMutation({
@@ -74,11 +75,15 @@ export function useStudySession(deckId: number) {
       setPhase('complete')
 
       const levelBefore = getUserLevel(useAuthStore.getState().xp).level
+      const streakBefore = useAuthStore.getState().currentStreak
       const data = await finishMutation.mutateAsync({ reviewedCards: reviewed, durationMinutes: duration })
       if (data) {
         const after = getUserLevel(data.xp)
         if (after.level > levelBefore) {
           setLevelUp({ level: after.level, name: after.name })
+        }
+        if (data.currentStreak > streakBefore) {
+          setStreakExtended(data.currentStreak)
         }
       }
     } else {
@@ -92,6 +97,7 @@ export function useStudySession(deckId: number) {
     setCurrentIdx(0)
     setFlipped(false)
     setLevelUp(null)
+    setStreakExtended(null)
     startedAt.current = Date.now()
     setPhase('studying')
   }
@@ -101,5 +107,5 @@ export function useStudySession(deckId: number) {
   const current = cards[currentIdx] ?? null
   const progress = cards.length > 0 ? currentIdx / cards.length : 0
 
-  return { phase, loadCards, current, currentIdx, total: cards.length, progress, flipped, flip, rate, restart, xpGained, levelUp, dismissLevelUp, isSubmitting: finishMutation.isPending }
+  return { phase, loadCards, current, currentIdx, total: cards.length, progress, flipped, flip, rate, restart, xpGained, levelUp, dismissLevelUp, streakExtended, isSubmitting: finishMutation.isPending }
 }
