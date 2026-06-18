@@ -5,13 +5,14 @@ import FlashcardFlip from '@/features/study/components/FlashcardFlip'
 import DifficultyRating from '@/features/study/components/DifficultyRating'
 import StudyProgressBar from '@/features/study/components/StudyProgressBar'
 import StudyComplete from '@/features/study/components/StudyComplete'
+import LevelUpModal from '@/shared/components/gamification/LevelUpModal'
 import { useStudySession } from '@/features/study/hooks/useStudySession'
 
 export default function StudySessionPage() {
   const { deckId } = useParams<{ deckId: string }>()
   const id = Number(deckId)
   const navigate = useNavigate()
-  const { phase, loadCards, current, currentIdx, total, flipped, flip, rate, restart, xpGained, isSubmitting } =
+  const { phase, loadCards, current, currentIdx, total, flipped, flip, rate, restart, xpGained, levelUp, dismissLevelUp, isSubmitting } =
     useStudySession(id)
 
   useEffect(() => {
@@ -48,6 +49,12 @@ export default function StudySessionPage() {
     return (
       <div className="max-w-lg mx-auto">
         <StudyComplete total={total} xpGained={xpGained} deckId={id} onRestart={restart} />
+        <LevelUpModal
+          open={levelUp !== null}
+          level={levelUp?.level ?? 1}
+          name={levelUp?.name ?? ''}
+          onClose={dismissLevelUp}
+        />
       </div>
     )
   }
