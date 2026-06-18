@@ -17,8 +17,9 @@ export default function WelcomeCard() {
           <p className="text-sm text-[#9896a8]">{greeting()}</p>
           <h2 className="text-xl font-bold text-[#f1f0f5] mt-0.5">{displayName} {mascot}</h2>
           {currentStreak > 0 ? (
-            <p className="text-sm text-[#f97316] mt-1 font-medium">
-              🔥 {currentStreak} {currentStreak === 1 ? 'día' : 'días'} de racha — ¡sigue así!
+            <p className="text-sm text-[#f97316] mt-1 font-medium flex items-center gap-1">
+              <span className="inline-block animate-[flame-flicker_1.1s_ease-in-out_infinite]">🔥</span>
+              {currentStreak} {currentStreak === 1 ? 'día' : 'días'} de racha — ¡sigue así!
             </p>
           ) : (
             <p className="text-sm text-[#9896a8] mt-1">Empieza tu racha hoy estudiando.</p>

@@ -83,3 +83,11 @@ body {
   0%, 100% { transform: translateY(0); opacity: 0.4; }
   50% { transform: translateY(-6px); opacity: 1; }
 }
+
+/* Parpadeo de la llama de racha */
+@keyframes flame-flicker {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  25% { transform: scale(1.12) rotate(2deg); }
+  50% { transform: scale(0.96) rotate(-1deg); }
+  75% { transform: scale(1.06) rotate(1deg); }
+}
