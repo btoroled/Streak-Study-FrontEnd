@@ -4,6 +4,8 @@ import {
   LayoutDashboard, BookOpen, Layers, FileText, GraduationCap,
   Trophy, ShoppingBag, BarChart2, User, Flame, ChevronLeft, ChevronRight, LogOut,
 } from 'lucide-react'
+import logoMark from '@/assets/brand/logo-mark.png'
+import { LevelAvatar } from '@/shared/components/gamification/LevelAvatar'
 import { useUiStore } from '@/store/ui.store'
 import { useAuthStore } from '@/store/auth.store'
 import { useAuth } from '@/features/auth/hooks/useAuth'
@@ -31,7 +33,6 @@ export default function Sidebar() {
   const levelInfo = getUserLevel(xp)
 
   const displayName = fullName ?? email ?? 'Usuario'
-  const initials = displayName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
 
   const allNavItems = [
     ...navItems,
@@ -48,9 +49,7 @@ export default function Sidebar() {
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 h-16 border-b border-[#2a2b38] shrink-0">
-        <div className="w-8 h-8 shrink-0 rounded-lg bg-gradient-to-br from-[#f97316] to-[#7c3aed] flex items-center justify-center">
-          <Flame className="w-4 h-4 text-white" />
-        </div>
+        <img src={logoMark} alt="StreakStudy" className="w-9 h-9 shrink-0 object-contain" />
         <AnimatePresence>
           {sidebarOpen && (
             <motion.span
@@ -138,11 +137,8 @@ export default function Sidebar() {
 
         {/* User row */}
         <div className="flex items-center gap-2 px-2 py-1">
-          <div
-            onClick={() => navigate('/profile')}
-            className="w-7 h-7 shrink-0 rounded-full bg-gradient-to-br from-[#f97316] to-[#7c3aed] flex items-center justify-center cursor-pointer"
-          >
-            <span className="text-xs font-bold text-white">{initials}</span>
+          <div onClick={() => navigate('/profile')} className="cursor-pointer">
+            <LevelAvatar level={levelInfo.level} size={28} alt={displayName} />
           </div>
           <AnimatePresence>
             {sidebarOpen && (
