@@ -65,3 +65,9 @@ body {
 #root {
   min-height: 100svh;
 }
+
+/* Flotación suave para la mascota (panel de marca, estados vacíos) */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
