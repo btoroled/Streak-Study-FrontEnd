@@ -71,3 +71,15 @@ body {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-12px); }
 }
+
+/* Glow pulsante detrás de la mascota (pantalla de carga) */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.25; transform: scale(0.9); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+/* Puntos de progreso que rebotan (pantalla de carga) */
+@keyframes bounce-dot {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
