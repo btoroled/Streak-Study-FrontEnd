@@ -5,6 +5,7 @@ import {
   Trophy, ShoppingBag, BarChart2, User, Flame, ChevronLeft, ChevronRight, LogOut,
 } from 'lucide-react'
 import logoMark from '@/assets/brand/logo-mark.png'
+import { LevelAvatar } from '@/shared/components/gamification/LevelAvatar'
 import { useUiStore } from '@/store/ui.store'
 import { useAuthStore } from '@/store/auth.store'
 import { useAuth } from '@/features/auth/hooks/useAuth'
@@ -32,7 +33,6 @@ export default function Sidebar() {
   const levelInfo = getUserLevel(xp)
 
   const displayName = fullName ?? email ?? 'Usuario'
-  const initials = displayName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
 
   const allNavItems = [
     ...navItems,
@@ -137,11 +137,8 @@ export default function Sidebar() {
 
         {/* User row */}
         <div className="flex items-center gap-2 px-2 py-1">
-          <div
-            onClick={() => navigate('/profile')}
-            className="w-7 h-7 shrink-0 rounded-full bg-gradient-to-br from-[#f97316] to-[#7c3aed] flex items-center justify-center cursor-pointer"
-          >
-            <span className="text-xs font-bold text-white">{initials}</span>
+          <div onClick={() => navigate('/profile')} className="cursor-pointer">
+            <LevelAvatar level={levelInfo.level} size={28} alt={displayName} />
           </div>
           <AnimatePresence>
             {sidebarOpen && (
