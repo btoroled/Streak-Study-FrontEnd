@@ -1,4 +1,6 @@
 import { Flame, Zap, Brain, Trophy } from 'lucide-react'
+import logoMark from '@/assets/brand/logo-mark.png'
+import mascotWave from '@/assets/brand/mascot-wave.png'
 
 const features = [
   { icon: Flame, text: 'Rachas diarias que te mantienen motivado' },
@@ -12,14 +14,26 @@ export function AuthBrandPanel() {
     <div className="hidden lg:flex flex-col justify-between w-[460px] shrink-0 bg-[#16171f] border-r border-[#2a2b38] p-12">
       {/* Logo */}
       <div className="flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#f97316] to-[#7c3aed] flex items-center justify-center">
-          <Flame className="w-4 h-4 text-white" />
-        </div>
+        <img src={logoMark} alt="StreakStudy" className="w-9 h-9 object-contain" />
         <span className="text-lg font-bold text-[#f1f0f5]">StreakStudy</span>
       </div>
 
       {/* Center content */}
       <div className="space-y-8">
+        {/* Mascot hero */}
+        <div className="relative flex justify-center">
+          {/* glow detrás de la mascota */}
+          <div
+            className="absolute inset-0 m-auto w-56 h-56 rounded-full blur-3xl opacity-30"
+            style={{ background: 'radial-gradient(circle, #f97316 0%, #7c3aed 70%, transparent 100%)' }}
+          />
+          <img
+            src={mascotWave}
+            alt="Mascota StreakStudy"
+            className="relative w-52 h-52 object-contain drop-shadow-2xl animate-[float_4s_ease-in-out_infinite]"
+          />
+        </div>
+
         {/* Tagline */}
         <div>
           <h2 className="text-3xl font-bold text-[#f1f0f5] leading-tight">

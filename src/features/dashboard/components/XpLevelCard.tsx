@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import SectionCard from '@/shared/components/layout/SectionCard'
+import { LevelAvatar } from '@/shared/components/gamification/LevelAvatar'
 import { useDashboard } from '../hooks/useDashboard'
 
 export default function XpLevelCard() {
@@ -20,9 +21,7 @@ export default function XpLevelCard() {
   return (
     <SectionCard title="Progreso de nivel">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#f97316] to-[#7c3aed] flex items-center justify-center shrink-0">
-          <span className="text-sm font-black text-white">{levelInfo.level}</span>
-        </div>
+        <LevelAvatar level={levelInfo.level} size={44} showBadge />
         <div>
           <p className="text-sm font-semibold text-[#f1f0f5]">{levelInfo.name}</p>
           <p className="text-xs text-[#9896a8]">
