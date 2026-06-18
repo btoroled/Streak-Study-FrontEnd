@@ -6,9 +6,15 @@ import { progressService } from '@/services/progress.service'
 import { useAuthStore } from '@/store/auth.store'
 import { QK } from '@/lib/query-keys'
 import { shuffle, computeXpGain, formatDuration, type DifficultyRating, type SessionCard } from '../utils/studySession.utils'
+import { getUserLevel } from '@/lib/xp.utils'
 import type { FlashcardResponse } from '@/types/flashcard.types'
 
 type Phase = 'loading' | 'studying' | 'complete' | 'error'
+
+export interface LevelUpInfo {
+  level: number
+  name: string
+}
 
 export function useStudySession(deckId: number) {
   const qc = useQueryClient()
@@ -19,6 +25,7 @@ export function useStudySession(deckId: number) {
   const [flipped, setFlipped] = useState(false)
   const [phase, setPhase] = useState<Phase>('loading')
   const [xpGained, setXpGained] = useState(0)
+  const [levelUp, setLevelUp] = useState<LevelUpInfo | null>(null)
   const startedAt = useRef(Date.now())
 
   const finishMutation = useMutation({
@@ -65,7 +72,15 @@ export function useStudySession(deckId: number) {
       const xp = computeXpGain(reviewed)
       setXpGained(xp)
       setPhase('complete')
-      await finishMutation.mutateAsync({ reviewedCards: reviewed, durationMinutes: duration })
+
+      const levelBefore = getUserLevel(useAuthStore.getState().xp).level
+      const data = await finishMutation.mutateAsync({ reviewedCards: reviewed, durationMinutes: duration })
+      if (data) {
+        const after = getUserLevel(data.xp)
+        if (after.level > levelBefore) {
+          setLevelUp({ level: after.level, name: after.name })
+        }
+      }
     } else {
       setCurrentIdx(next)
     }
@@ -76,12 +91,15 @@ export function useStudySession(deckId: number) {
     setCards(reshuffled)
     setCurrentIdx(0)
     setFlipped(false)
+    setLevelUp(null)
     startedAt.current = Date.now()
     setPhase('studying')
   }
 
+  const dismissLevelUp = () => setLevelUp(null)
+
   const current = cards[currentIdx] ?? null
   const progress = cards.length > 0 ? currentIdx / cards.length : 0
 
-  return { phase, loadCards, current, currentIdx, total: cards.length, progress, flipped, flip, rate, restart, xpGained, isSubmitting: finishMutation.isPending }
+  return { phase, loadCards, current, currentIdx, total: cards.length, progress, flipped, flip, rate, restart, xpGained, levelUp, dismissLevelUp, isSubmitting: finishMutation.isPending }
 }
