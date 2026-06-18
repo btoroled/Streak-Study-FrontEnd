@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, Play } from 'lucide-react'
+import { Play } from 'lucide-react'
 import EmptyState from '@/shared/components/feedback/EmptyState'
+import mascotReading from '@/assets/brand/mascot-reading.png'
 import ApiErrorDisplay from '@/shared/components/feedback/ApiErrorDisplay'
 import { Button } from '@/shared/components/ui/button'
 import { useDecks } from '@/features/decks/hooks/useDecks'
@@ -24,7 +25,7 @@ export default function DeckSelector() {
   if (decks.length === 0) {
     return (
       <EmptyState
-        icon={BookOpen}
+        mascot={mascotReading}
         title="Sin mazos disponibles"
         description="Crea un mazo con flashcards para poder estudiar"
         action={{ label: 'Ir a mazos', onClick: () => navigate('/decks') }}
