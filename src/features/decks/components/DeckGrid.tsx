@@ -1,6 +1,6 @@
 import DeckCard from './DeckCard'
 import EmptyState from '@/shared/components/feedback/EmptyState'
-import { BookOpen } from 'lucide-react'
+import mascotReading from '@/assets/brand/mascot-reading.png'
 import type { DeckResponse } from '@/types/deck.types'
 
 interface Props {
@@ -14,7 +14,7 @@ export default function DeckGrid({ decks, onEdit, onDelete, onCreateFirst }: Pro
   if (decks.length === 0) {
     return (
       <EmptyState
-        icon={BookOpen}
+        mascot={mascotReading}
         title="No tienes mazos aún"
         description="Crea tu primer mazo para empezar a estudiar con flashcards"
         action={onCreateFirst ? { label: 'Crear primer mazo', onClick: onCreateFirst } : undefined}
