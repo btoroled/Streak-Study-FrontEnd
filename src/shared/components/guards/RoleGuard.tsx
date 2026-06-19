@@ -23,8 +23,11 @@ export default function RoleGuard({
   fallback,
 }: RoleGuardProps) {
   const userRole = useAuthStore((s) => s.role)
+  // `fallback` provisto (incluso null) → ocultar; sin `fallback` → redirigir a /403.
+  // Distinguir null de undefined es clave: fallback={null} oculta sin expulsar.
+  const denied = fallback !== undefined ? <>{fallback}</> : <Navigate to="/403" replace />
 
-  if (!userRole) return fallback ? <>{fallback}</> : <Navigate to="/403" replace />
+  if (!userRole) return denied
 
   const allowed = (() => {
     if (permission) return hasPermission(userRole, permission)
@@ -33,7 +36,7 @@ export default function RoleGuard({
     return true
   })()
 
-  if (!allowed) return fallback ? <>{fallback}</> : <Navigate to="/403" replace />
+  if (!allowed) return denied
 
   return <>{children}</>
 }
