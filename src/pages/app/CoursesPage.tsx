@@ -39,7 +39,7 @@ export default function CoursesPage() {
           <h1 className="text-xl font-bold text-white">Cursos</h1>
           <p className="text-sm text-white/50 mt-0.5">{courses.length} curso{courses.length !== 1 ? 's' : ''}</p>
         </div>
-        <RoleGuard permission="create:course">
+        <RoleGuard permission="create:course" fallback={null}>
           <Button onClick={() => setShowCreate(true)}>
             <Plus className="w-4 h-4 mr-1" /> Nuevo curso
           </Button>
