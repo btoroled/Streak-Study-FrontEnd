@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Play } from 'lucide-react'
+import { BookOpen, Play } from 'lucide-react'
 import EmptyState from '@/shared/components/feedback/EmptyState'
 import mascotReading from '@/assets/brand/mascot-reading.png'
 import ApiErrorDisplay from '@/shared/components/feedback/ApiErrorDisplay'
