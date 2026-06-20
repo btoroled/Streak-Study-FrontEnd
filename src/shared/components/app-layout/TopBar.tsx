@@ -2,9 +2,11 @@ import { Menu, Flame } from 'lucide-react'
 import { useUiStore } from '@/store/ui.store'
 import { useAuthStore } from '@/store/auth.store'
 import { useLocation } from 'react-router-dom'
+import NotificationBell from '@/features/notifications/components/NotificationBell'
 
 const PAGE_TITLES: Record<string, string> = {
   '/dashboard':    'Dashboard',
+  '/analytics':    'Analítica',
   '/study':        'Estudiar',
   '/decks':        'Mis Mazos',
   '/documents':    'Documentos',
@@ -37,8 +39,9 @@ export default function TopBar() {
       {/* Page title */}
       <h1 className="text-sm font-semibold text-[#f1f0f5] flex-1">{title}</h1>
 
-      {/* Right: streak + XP */}
+      {/* Right: notifications + streak + XP */}
       <div className="flex items-center gap-3">
+        <NotificationBell />
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1e1f2a] border border-[#2a2b38]">
           <Flame className="w-3.5 h-3.5 text-[#f97316]" />
           <span className="text-xs font-semibold text-[#f1f0f5]">{currentStreak}</span>
