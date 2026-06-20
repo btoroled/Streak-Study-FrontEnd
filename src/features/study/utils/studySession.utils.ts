@@ -1,4 +1,6 @@
-import type { FlashcardResponse } from '@/types/flashcard.types'
+import type { FlashcardResponse, ReviewRating } from '@/types/flashcard.types'
+
+export type { ReviewRating }
 
 export function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -17,9 +19,7 @@ export function formatDuration(startMs: number): number {
   return Math.max(1, Math.ceil((Date.now() - startMs) / 60000))
 }
 
-export type DifficultyRating = 'EASY' | 'MEDIUM' | 'HARD'
-
 export interface SessionCard {
   card: FlashcardResponse
-  rating: DifficultyRating | null
+  rating: ReviewRating | null
 }
