@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { BookOpen, Play } from 'lucide-react'
 import EmptyState from '@/shared/components/feedback/EmptyState'
+import DeckDueBadge from './DeckDueBadge'
 import mascotReading from '@/assets/brand/mascot-reading.png'
 import ApiErrorDisplay from '@/shared/components/feedback/ApiErrorDisplay'
 import { Button } from '@/shared/components/ui/button'
@@ -51,9 +52,12 @@ export default function DeckSelector() {
               )}
             </div>
           </div>
-          <Button size="sm" onClick={() => navigate(`/study/${deck.id}`)}>
-            <Play className="w-3.5 h-3.5 mr-1" /> Estudiar
-          </Button>
+          <div className="flex items-center gap-3 shrink-0">
+            <DeckDueBadge deckId={deck.id} />
+            <Button size="sm" onClick={() => navigate(`/study/${deck.id}`)}>
+              <Play className="w-3.5 h-3.5 mr-1" /> Estudiar
+            </Button>
+          </div>
         </div>
       ))}
     </div>

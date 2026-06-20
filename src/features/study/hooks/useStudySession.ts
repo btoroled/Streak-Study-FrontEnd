@@ -5,11 +5,12 @@ import { flashcardsService } from '@/services/flashcards.service'
 import { progressService } from '@/services/progress.service'
 import { useAuthStore } from '@/store/auth.store'
 import { QK } from '@/lib/query-keys'
-import { shuffle, computeXpGain, formatDuration, type DifficultyRating, type SessionCard } from '../utils/studySession.utils'
+import { shuffle, computeXpGain, formatDuration, type ReviewRating, type SessionCard } from '../utils/studySession.utils'
 import { getUserLevel } from '@/lib/xp.utils'
 import type { FlashcardResponse } from '@/types/flashcard.types'
 
-type Phase = 'loading' | 'studying' | 'complete' | 'error'
+// 'empty' = no hay tarjetas pendientes (todo al día); 'error' = el mazo no tiene flashcards
+type Phase = 'loading' | 'studying' | 'complete' | 'empty' | 'error'
 
 export interface LevelUpInfo {
   level: number
@@ -41,14 +42,19 @@ export function useStudySession(deckId: number) {
   const loadCards = useCallback(async () => {
     setPhase('loading')
     startedAt.current = Date.now()
+    setLevelUp(null)
+    setStreakExtended(null)
     try {
-      const data = await flashcardsService.listByDeck(deckId)
-      if (data.length === 0) {
-        setPhase('error')
+      // Solo las tarjetas pendientes de repaso hoy (SM-2)
+      const due = await flashcardsService.listDue(deckId)
+      if (due.length === 0) {
+        // ¿El mazo tiene tarjetas pero ya están al día, o no tiene ninguna?
+        const all = await flashcardsService.listByDeck(deckId)
+        setPhase(all.length === 0 ? 'error' : 'empty')
         return
       }
-      const shuffled: SessionCard[] = shuffle(data).map((c: FlashcardResponse) => ({ card: c, rating: null }))
-      setCards(shuffled)
+      const ordered: SessionCard[] = shuffle(due).map((c: FlashcardResponse) => ({ card: c, rating: null }))
+      setCards(ordered)
       setCurrentIdx(0)
       setFlipped(false)
       setPhase('studying')
@@ -59,12 +65,18 @@ export function useStudySession(deckId: number) {
 
   const flip = () => setFlipped((v) => !v)
 
-  const rate = async (rating: DifficultyRating) => {
+  const rate = async (rating: ReviewRating) => {
+    const currentCard = cards[currentIdx]?.card
     const updated = cards.map((sc, i) =>
       i === currentIdx ? { ...sc, rating } : sc
     )
     setCards(updated)
     setFlipped(false)
+
+    // Registrar el repaso (SM-2) en el backend. No bloquea el avance.
+    if (currentCard) {
+      flashcardsService.review(currentCard.id, rating).catch(() => {})
+    }
 
     const next = currentIdx + 1
     if (next >= cards.length) {
@@ -91,15 +103,9 @@ export function useStudySession(deckId: number) {
     }
   }
 
+  // Reintentar = volver a cargar las tarjetas pendientes (ya reprogramadas por SM-2)
   const restart = () => {
-    const reshuffled: SessionCard[] = shuffle(cards.map(sc => sc.card)).map(c => ({ card: c, rating: null }))
-    setCards(reshuffled)
-    setCurrentIdx(0)
-    setFlipped(false)
-    setLevelUp(null)
-    setStreakExtended(null)
-    startedAt.current = Date.now()
-    setPhase('studying')
+    loadCards()
   }
 
   const dismissLevelUp = () => setLevelUp(null)

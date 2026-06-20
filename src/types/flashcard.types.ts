@@ -19,6 +19,10 @@ export interface FlashcardResponse {
   answer: string
   createdAt: string
   difficulty: Difficulty
+  nextReviewAt?: string | null
 }
 
 export type FlashcardDetailResponse = FlashcardResponse
+
+/** Calificación de repaso (alimenta el algoritmo SM-2 en el backend). */
+export type ReviewRating = 'AGAIN' | 'HARD' | 'GOOD' | 'EASY'

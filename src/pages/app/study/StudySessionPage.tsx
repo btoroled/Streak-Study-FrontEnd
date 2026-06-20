@@ -7,6 +7,7 @@ import StudyProgressBar from '@/features/study/components/StudyProgressBar'
 import StudyComplete from '@/features/study/components/StudyComplete'
 import LevelUpModal from '@/shared/components/gamification/LevelUpModal'
 import { useStudySession } from '@/features/study/hooks/useStudySession'
+import mascotCelebrate from '@/assets/brand/mascot-celebrate.png'
 
 export default function StudySessionPage() {
   const { deckId } = useParams<{ deckId: string }>()
@@ -40,6 +41,26 @@ export default function StudySessionPage() {
           onClick={() => navigate(`/decks/${id}`)}
         >
           Agregar flashcards →
+        </button>
+      </div>
+    )
+  }
+
+  if (phase === 'empty') {
+    return (
+      <div className="max-w-lg mx-auto text-center space-y-4 py-16">
+        <img
+          src={mascotCelebrate}
+          alt=""
+          className="w-28 h-28 object-contain mx-auto drop-shadow-xl animate-[float_4s_ease-in-out_infinite]"
+        />
+        <h2 className="text-xl font-bold text-white">¡Todo al día! 🎉</h2>
+        <p className="text-white/60 text-sm">No tienes tarjetas para repasar hoy en este mazo. Vuelve mañana para mantener tu racha.</p>
+        <button
+          className="text-orange-400 text-sm hover:underline"
+          onClick={() => navigate('/study')}
+        >
+          Estudiar otro mazo →
         </button>
       </div>
     )

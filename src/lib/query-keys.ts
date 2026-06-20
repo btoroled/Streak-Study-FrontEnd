@@ -5,6 +5,7 @@ export const QK = {
   deck: (id: number) => ['decks', id] as const,
   flashcards: (deckId: number) => ['flashcards', deckId] as const,
   flashcard: (id: number) => ['flashcard', id] as const,
+  deckDue: (deckId: number) => ['decks', deckId, 'due'] as const,
   courses: ['courses'] as const,
   course: (id: number) => ['courses', id] as const,
   rewards: ['rewards'] as const,
