@@ -1,5 +1,8 @@
 export const QK = {
   progress: ['progress'] as const,
+  stats: ['stats'] as const,
+  activity: (days: number) => ['activity', days] as const,
+  forecast: (days: number) => ['forecast', days] as const,
   leaderboard: ['leaderboard'] as const,
   decks: ['decks'] as const,
   deck: (id: number) => ['decks', id] as const,
