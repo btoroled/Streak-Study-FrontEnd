@@ -13,6 +13,9 @@ export const flashcardsService = {
   /** Registra un repaso y reprograma la tarjeta según SM-2. */
   review: (id: number, rating: ReviewRating) =>
     api.post<FlashcardResponse>(`/flashcards/${id}/review`, { rating }).then(r => r.data),
+  /** Pide al tutor IA una explicación del concepto de la flashcard. */
+  explain: (id: number) =>
+    api.post<{ explanation: string }>(`/flashcards/${id}/explain`).then(r => r.data.explanation),
   get: (id: number) =>
     api.get<FlashcardDetailResponse>(`/flashcards/${id}`).then(r => r.data),
   create: (data: CreateFlashcardRequest) =>

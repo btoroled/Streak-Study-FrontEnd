@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import FlashcardFlip from '@/features/study/components/FlashcardFlip'
 import DifficultyRating from '@/features/study/components/DifficultyRating'
+import ExplainButton from '@/features/study/components/ExplainButton'
 import StudyProgressBar from '@/features/study/components/StudyProgressBar'
 import StudyComplete from '@/features/study/components/StudyComplete'
 import LevelUpModal from '@/shared/components/gamification/LevelUpModal'
@@ -99,7 +100,10 @@ export default function StudySessionPage() {
           <FlashcardFlip card={current.card} flipped={flipped} onFlip={flip} />
 
           {flipped && (
-            <DifficultyRating onRate={rate} disabled={isSubmitting} />
+            <>
+              <DifficultyRating onRate={rate} disabled={isSubmitting} />
+              <ExplainButton flashcardId={current.card.id} />
+            </>
           )}
 
           {!flipped && (
