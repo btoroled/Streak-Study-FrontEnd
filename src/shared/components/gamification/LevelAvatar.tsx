@@ -14,7 +14,7 @@ const LEVEL_AVATARS: Record<number, string> = {
 }
 
 /** Devuelve el avatar de fénix correspondiente a un nivel (clamp 1..8). */
-export function getLevelAvatar(level: number): string {
+function getLevelAvatar(level: number): string {
   const clamped = Math.min(Math.max(level, 1), 8)
   return LEVEL_AVATARS[clamped] ?? level1
 }
