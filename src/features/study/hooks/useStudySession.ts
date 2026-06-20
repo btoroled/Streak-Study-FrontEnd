@@ -27,7 +27,7 @@ export function useStudySession(deckId: number) {
   const [xpGained, setXpGained] = useState(0)
   const [levelUp, setLevelUp] = useState<LevelUpInfo | null>(null)
   const [streakExtended, setStreakExtended] = useState<number | null>(null)
-  const startedAt = useRef(Date.now())
+  const startedAt = useRef(0)
 
   const finishMutation = useMutation({
     mutationFn: progressService.finishReview,

@@ -26,11 +26,13 @@ import ProfilePage from '@/pages/app/ProfilePage'
 import Error403Page from '@/pages/errors/Error403Page'
 import Error404Page from '@/pages/errors/Error404Page'
 import Error500Page from '@/pages/errors/Error500Page'
+import RouteErrorBoundary from '@/shared/components/feedback/RouteErrorBoundary'
 
 export const router = createBrowserRouter([
   // Public routes — GuestGuard redirects authenticated users to /dashboard
   {
     element: <PublicLayout />,
+    errorElement: <RouteErrorBoundary />,
     children: [
       { path: '/', element: <LandingPage /> },
       { path: '/login', element: <LoginPage /> },
@@ -42,6 +44,7 @@ export const router = createBrowserRouter([
   // Protected routes — AuthGuard handles session init + unauthenticated redirect
   {
     element: <AppLayout />,
+    errorElement: <RouteErrorBoundary />,
     children: [
       { path: '/dashboard', element: <DashboardPage /> },
       { path: '/study', element: <StudyPage /> },

@@ -4,8 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { institutionsService } from '@/services/institutions.service'
 import { QK } from '@/lib/query-keys'
 
-type ResolverMode = 'url-param' | 'manual'
-
 interface UrlParamResult {
   mode: 'url-param'
   institutionId: number

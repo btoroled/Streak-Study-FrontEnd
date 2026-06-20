@@ -21,4 +21,4 @@ export interface FlashcardResponse {
   difficulty: Difficulty
 }
 
-export interface FlashcardDetailResponse extends FlashcardResponse {}
+export type FlashcardDetailResponse = FlashcardResponse

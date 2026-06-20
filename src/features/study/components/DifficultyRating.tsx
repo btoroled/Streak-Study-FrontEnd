@@ -1,4 +1,3 @@
-import { Button } from '@/shared/components/ui/button'
 import type { DifficultyRating as Rating } from '../utils/studySession.utils'
 
 interface Props {
