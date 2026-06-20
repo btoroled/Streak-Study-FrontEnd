@@ -1,5 +1,7 @@
 export const QK = {
   progress: ['progress'] as const,
+  notifications: ['notifications'] as const,
+  notificationsUnread: ['notifications', 'unread'] as const,
   stats: ['stats'] as const,
   activity: (days: number) => ['activity', days] as const,
   forecast: (days: number) => ['forecast', days] as const,
