@@ -11,6 +11,7 @@ import ResetPasswordPage from '@/pages/public/ResetPasswordPage'
 
 // App pages
 import DashboardPage from '@/pages/app/DashboardPage'
+import AnalyticsPage from '@/pages/app/AnalyticsPage'
 import StudyPage from '@/pages/app/StudyPage'
 import StudySessionPage from '@/pages/app/study/StudySessionPage'
 import DecksPage from '@/pages/app/DecksPage'
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
     children: [
       { path: '/dashboard', element: <DashboardPage /> },
+      { path: '/analytics', element: <AnalyticsPage /> },
       { path: '/study', element: <StudyPage /> },
       { path: '/study/:deckId', element: <StudySessionPage /> },
       { path: '/decks', element: <DecksPage /> },

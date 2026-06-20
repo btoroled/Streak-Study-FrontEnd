@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  LayoutDashboard, BookOpen, Layers, FileText, GraduationCap,
+  LayoutDashboard, LineChart, BookOpen, Layers, FileText, GraduationCap,
   Trophy, ShoppingBag, BarChart2, User, Flame, ChevronLeft, ChevronRight, LogOut,
 } from 'lucide-react'
 import logoMark from '@/assets/brand/logo-mark.png'
@@ -16,6 +16,7 @@ import { cn } from '@/lib/cn'
 
 const navItems = [
   { to: '/dashboard',    icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/analytics',    icon: LineChart,       label: 'Analítica' },
   { to: '/study',        icon: BookOpen,        label: 'Estudiar' },
   { to: '/decks',        icon: Layers,          label: 'Mazos' },
   { to: '/documents',    icon: FileText,        label: 'Documentos' },
