@@ -91,8 +91,7 @@ export function useAuth() {
 
     const authData = await authService.refresh({ refreshToken })
 
-    useAuthStore.getState().setAuth({
-      ...useAuthStore.getState(),
+    useAuthStore.getState().setTokens({
       accessToken: authData.accessToken,
       refreshToken: authData.refreshToken,
       xp: authData.xp,
