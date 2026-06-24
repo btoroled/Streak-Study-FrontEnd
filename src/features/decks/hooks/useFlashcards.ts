@@ -10,7 +10,7 @@ export function useFlashcards(deckId: number) {
 
   const query = useQuery({
     queryKey: QK.flashcards(deckId),
-    queryFn: () => flashcardsService.listByDeck(deckId),
+    queryFn: ({ signal }) => flashcardsService.listByDeck(deckId, signal),
     enabled: deckId > 0,
   })
 

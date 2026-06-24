@@ -10,7 +10,7 @@ export function useDecks() {
 
   const query = useQuery({
     queryKey: QK.decks,
-    queryFn: decksService.list,
+    queryFn: ({ signal }) => decksService.list(signal),
   })
 
   const createDeck = useMutation({
@@ -48,7 +48,7 @@ export function useDecks() {
 export function useDeckDetail(deckId: number) {
   return useQuery({
     queryKey: QK.deck(deckId),
-    queryFn: () => decksService.get(deckId),
+    queryFn: ({ signal }) => decksService.get(deckId, signal),
     enabled: deckId > 0,
   })
 }
