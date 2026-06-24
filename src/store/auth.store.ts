@@ -33,6 +33,8 @@ interface AuthState {
     xp: number
   }) => void
   setAccessToken: (token: string) => void
+  /** Actualiza solo tokens + xp tras un refresh — no toca userId/institutionId/email/role. */
+  setTokens: (payload: { accessToken: string; refreshToken: string; xp: number }) => void
   setProgress: (progress: UserProgressResponse) => void
   logout: () => void
   isAuthenticated: () => boolean
@@ -67,6 +69,13 @@ export const useAuthStore = create<AuthState>()(
         })),
 
       setAccessToken: (token) => set({ accessToken: token }),
+
+      setTokens: (payload) =>
+        set({
+          accessToken: payload.accessToken,
+          refreshToken: payload.refreshToken,
+          xp: payload.xp,
+        }),
 
       setProgress: (progress) =>
         set({
