@@ -1,12 +1,15 @@
-import { useState } from 'react'
-import { Plus, X } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Plus, Search, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import DeckGrid from '@/features/decks/components/DeckGrid'
 import DeckForm from '@/features/decks/components/DeckForm'
 import DeckDeleteDialog from '@/features/decks/components/DeckDeleteDialog'
 import ApiErrorDisplay from '@/shared/components/feedback/ApiErrorDisplay'
+import EmptyState from '@/shared/components/feedback/EmptyState'
 import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
 import { useDecks } from '@/features/decks/hooks/useDecks'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import type { DeckResponse } from '@/types/deck.types'
 import type { DeckFormValues } from '@/features/decks/schemas/deck.schemas'
 
@@ -16,9 +19,27 @@ type ModalState =
   | { type: 'delete'; deck: DeckResponse }
   | null
 
+type SortOrder = 'recent' | 'name'
+
 export default function DecksPage() {
   const { data: decks = [], isLoading, error, refetch, createDeck, updateDeck, deleteDeck } = useDecks()
   const [modal, setModal] = useState<ModalState>(null)
+  const [search, setSearch] = useState('')
+  const [sort, setSort] = useState<SortOrder>('recent')
+  const debouncedSearch = useDebouncedValue(search)
+
+  const visibleDecks = useMemo(() => {
+    const term = debouncedSearch.trim().toLowerCase()
+    const filtered = term
+      ? decks.filter((d) => d.name.toLowerCase().includes(term) || d.description?.toLowerCase().includes(term))
+      : decks
+
+    return [...filtered].sort((a, b) =>
+      sort === 'name'
+        ? a.name.localeCompare(b.name)
+        : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+  }, [decks, debouncedSearch, sort])
 
   const handleSubmit = async (values: DeckFormValues) => {
     if (modal?.type === 'create') {
@@ -64,12 +85,42 @@ export default function DecksPage() {
         </Button>
       </div>
 
-      <DeckGrid
-        decks={decks}
-        onEdit={(deck) => setModal({ type: 'edit', deck })}
-        onDelete={(deck) => setModal({ type: 'delete', deck })}
-        onCreateFirst={() => setModal({ type: 'create' })}
-      />
+      {decks.length > 0 && (
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+            <Input
+              placeholder="Buscar mazo por nombre o descripción…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortOrder)}
+            className="bg-surface-overlay border border-surface-border rounded-lg px-3 py-3 text-sm text-text-primary focus:outline-none focus:border-brand-purple focus:ring-2 focus:ring-brand-purple/30"
+          >
+            <option value="recent">Más reciente</option>
+            <option value="name">Nombre (A-Z)</option>
+          </select>
+        </div>
+      )}
+
+      {decks.length > 0 && visibleDecks.length === 0 ? (
+        <EmptyState
+          icon={Search}
+          title="Sin resultados"
+          description={`No encontramos mazos que coincidan con "${debouncedSearch}"`}
+        />
+      ) : (
+        <DeckGrid
+          decks={visibleDecks}
+          onEdit={(deck) => setModal({ type: 'edit', deck })}
+          onDelete={(deck) => setModal({ type: 'delete', deck })}
+          onCreateFirst={() => setModal({ type: 'create' })}
+        />
+      )}
 
       <AnimatePresence>
         {modal && (
