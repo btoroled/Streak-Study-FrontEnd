@@ -10,7 +10,7 @@ interface Props {
 export default function DeckDueBadge({ deckId }: Props) {
   const { data: due, isLoading } = useQuery({
     queryKey: QK.deckDue(deckId),
-    queryFn: () => flashcardsService.countDue(deckId),
+    queryFn: ({ signal }) => flashcardsService.countDue(deckId, signal),
     staleTime: 60_000,
   })
 
