@@ -2,26 +2,28 @@ import { createBrowserRouter } from 'react-router-dom'
 import PublicLayout from '@/layouts/PublicLayout'
 import AppLayout from '@/layouts/AppLayout'
 
-// Public pages
+// Public pages — sin lazy loading, para first-paint instantáneo en login/landing
 import LandingPage from '@/pages/public/LandingPage'
 import LoginPage from '@/pages/public/LoginPage'
 import RegisterPage from '@/pages/public/RegisterPage'
 import ForgotPasswordPage from '@/pages/public/ForgotPasswordPage'
 import ResetPasswordPage from '@/pages/public/ResetPasswordPage'
 
-// App pages
-import DashboardPage from '@/pages/app/DashboardPage'
-import AnalyticsPage from '@/pages/app/AnalyticsPage'
-import StudyPage from '@/pages/app/StudyPage'
-import StudySessionPage from '@/pages/app/study/StudySessionPage'
-import DecksPage from '@/pages/app/DecksPage'
-import DeckDetailPage from '@/pages/app/decks/DeckDetailPage'
-import DocumentsPage from '@/pages/app/DocumentsPage'
-import CoursesPage from '@/pages/app/CoursesPage'
-import AchievementsPage from '@/pages/app/AchievementsPage'
-import StorePage from '@/pages/app/StorePage'
-import LeaderboardPage from '@/pages/app/LeaderboardPage'
-import ProfilePage from '@/pages/app/ProfilePage'
+// App pages — lazy: code-splitting por ruta, cargan bajo demanda
+import {
+  DashboardPage,
+  AnalyticsPage,
+  StudyPage,
+  StudySessionPage,
+  DecksPage,
+  DeckDetailPage,
+  DocumentsPage,
+  CoursesPage,
+  AchievementsPage,
+  StorePage,
+  LeaderboardPage,
+  ProfilePage,
+} from './lazyPages'
 
 // Error pages
 import Error403Page from '@/pages/errors/Error403Page'
