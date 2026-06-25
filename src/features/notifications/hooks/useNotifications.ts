@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { notificationsService } from '@/services/notifications.service'
 import { QK } from '@/lib/query-keys'
 
@@ -13,11 +13,15 @@ export function useUnreadCount() {
 export function useNotifications(enabled: boolean) {
   const qc = useQueryClient()
 
-  const list = useQuery({
+  const query = useInfiniteQuery({
     queryKey: QK.notifications,
-    queryFn: () => notificationsService.list(),
+    queryFn: ({ pageParam }) => notificationsService.list(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.page + 1 : undefined),
     enabled, // solo carga al abrir el dropdown
   })
+
+  const items = query.data?.pages.flatMap((p) => p.content) ?? []
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: QK.notifications })
@@ -34,5 +38,13 @@ export function useNotifications(enabled: boolean) {
     onSuccess: invalidate,
   })
 
-  return { list, markRead, markAllRead }
+  return {
+    items,
+    isLoading: query.isLoading,
+    isFetchingMore: query.isFetchingNextPage,
+    hasMore: query.hasNextPage,
+    loadMore: query.fetchNextPage,
+    markRead,
+    markAllRead,
+  }
 }
