@@ -1,3 +1,13 @@
+/** Envoltorio de respuesta paginada — mismo contrato que `PageResponse<T>` del backend. */
+export interface PageResponse<T> {
+  content: T[]
+  page: number
+  size: number
+  totalElements: number
+  totalPages: number
+  hasNext: boolean
+}
+
 export interface ApiError {
   timestamp: string
   status: number

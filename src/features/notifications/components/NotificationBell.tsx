@@ -18,7 +18,7 @@ export default function NotificationBell() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { data: unread = 0 } = useUnreadCount()
-  const { list, markRead, markAllRead } = useNotifications(open)
+  const { items, isLoading, isFetchingMore, hasMore, loadMore, markRead, markAllRead } = useNotifications(open)
 
   useEffect(() => {
     if (!open) return
@@ -66,31 +66,42 @@ export default function NotificationBell() {
             </div>
 
             <div className="overflow-y-auto">
-              {list.isLoading ? (
+              {isLoading ? (
                 <div className="p-4 space-y-2">
                   {[0, 1, 2].map((i) => <div key={i} className="h-12 bg-white/5 rounded-lg animate-pulse" />)}
                 </div>
-              ) : (list.data?.length ?? 0) === 0 ? (
+              ) : items.length === 0 ? (
                 <p className="text-sm text-white/40 text-center py-10">No tienes notificaciones</p>
               ) : (
-                list.data!.map((n) => (
-                  <button
-                    key={n.id}
-                    onClick={() => !n.read && markRead.mutate(n.id)}
-                    className={`w-full text-left px-4 py-3 border-b border-[#2a2b38]/60 hover:bg-white/5 transition-colors ${
-                      n.read ? 'opacity-60' : ''
-                    }`}
-                  >
-                    <div className="flex items-start gap-2">
-                      {!n.read && <span className="w-2 h-2 rounded-full bg-[#f97316] mt-1.5 shrink-0" />}
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-white">{n.title}</p>
-                        <p className="text-xs text-white/50 mt-0.5">{n.message}</p>
-                        <p className="text-[10px] text-white/30 mt-1">{timeAgo(n.createdAt)}</p>
+                <>
+                  {items.map((n) => (
+                    <button
+                      key={n.id}
+                      onClick={() => !n.read && markRead.mutate(n.id)}
+                      className={`w-full text-left px-4 py-3 border-b border-[#2a2b38]/60 hover:bg-white/5 transition-colors ${
+                        n.read ? 'opacity-60' : ''
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        {!n.read && <span className="w-2 h-2 rounded-full bg-[#f97316] mt-1.5 shrink-0" />}
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-white">{n.title}</p>
+                          <p className="text-xs text-white/50 mt-0.5">{n.message}</p>
+                          <p className="text-[10px] text-white/30 mt-1">{timeAgo(n.createdAt)}</p>
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                ))
+                    </button>
+                  ))}
+                  {hasMore && (
+                    <button
+                      onClick={() => loadMore()}
+                      disabled={isFetchingMore}
+                      className="w-full text-center text-xs text-white/40 hover:text-white/70 py-2.5 transition-colors disabled:opacity-50"
+                    >
+                      {isFetchingMore ? 'Cargando…' : 'Cargar más'}
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </motion.div>

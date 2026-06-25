@@ -50,7 +50,7 @@ export function useStudySession(deckId: number) {
       if (due.length === 0) {
         // ¿El mazo tiene tarjetas pero ya están al día, o no tiene ninguna?
         const all = await flashcardsService.listByDeck(deckId)
-        setPhase(all.length === 0 ? 'error' : 'empty')
+        setPhase(all.totalElements === 0 ? 'error' : 'empty')
         return
       }
       const ordered: SessionCard[] = shuffle(due).map((c: FlashcardResponse) => ({ card: c, rating: null }))
