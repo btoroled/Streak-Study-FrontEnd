@@ -43,8 +43,8 @@ export default function ForgotPasswordForm() {
           </div>
         </div>
         <div>
-          <p className="text-[#f1f0f5] font-medium">Revisa tu correo</p>
-          <p className="text-sm text-[#9896a8] mt-1">
+          <p className="text-text-primary font-medium">Revisa tu correo</p>
+          <p className="text-sm text-text-secondary mt-1">
             Si existe una cuenta con ese email, recibirás el enlace de recuperación.
           </p>
         </div>
@@ -55,11 +55,11 @@ export default function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Email
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type="email"
             placeholder="tucorreo@universidad.edu"
@@ -70,7 +70,7 @@ export default function ForgotPasswordForm() {
           />
         </div>
         {errors.email && (
-          <p className="text-xs text-[#ef4444]">{errors.email.message}</p>
+          <p className="text-xs text-error">{errors.email.message}</p>
         )}
       </div>
 

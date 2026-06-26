@@ -19,14 +19,14 @@ export default function LandingPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-[#0f0f14] flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-surface-base flex flex-col items-center justify-center p-6">
       {/* Nav */}
       <header className="w-full max-w-2xl flex items-center justify-between mb-10">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#f97316] to-[#7c3aed] flex items-center justify-center">
             <Flame className="w-4 h-4 text-white" />
           </div>
-          <span className="text-base font-bold text-[#f1f0f5]">StreakStudy</span>
+          <span className="text-base font-bold text-text-primary">StreakStudy</span>
         </div>
         <button
           onClick={() => navigate('/login')}
@@ -73,9 +73,9 @@ export default function LandingPage() {
         {/* Features */}
         <div className="grid grid-cols-3 gap-3 mb-8">
           {features.map(({ icon: Icon, color, title, desc }) => (
-            <div key={title} className="bg-[#16171f] border border-white/8 rounded-xl p-4">
+            <div key={title} className="bg-surface-card border border-white/8 rounded-xl p-4">
               <Icon className="w-6 h-6 mx-auto" style={{ color }} />
-              <p className="text-sm font-semibold text-[#f1f0f5] mt-2.5">{title}</p>
+              <p className="text-sm font-semibold text-text-primary mt-2.5">{title}</p>
               <p className="text-xs text-white/45 mt-0.5">{desc}</p>
             </div>
           ))}

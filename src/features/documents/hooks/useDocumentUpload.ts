@@ -1,33 +1,30 @@
-import { useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { documentsService } from '@/services/documents.service'
+import { getErrorMessage } from '@/lib/error.utils'
 import type { DocumentUploadResponse } from '@/types/document.types'
 
-type UploadPhase = 'idle' | 'uploading' | 'done' | 'error'
-
+/**
+ * Sube un PDF al backend. Wrapper alrededor de useMutation para mantener
+ * consistencia con el resto de la capa de datos (devtools, abort, retry).
+ */
 export function useDocumentUpload() {
-  const [phase, setPhase] = useState<UploadPhase>('idle')
-  const [result, setResult] = useState<DocumentUploadResponse | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const mutation = useMutation<DocumentUploadResponse, unknown, File>({
+    mutationFn: (file) => documentsService.upload(file),
+  })
 
-  const upload = async (file: File) => {
-    setPhase('uploading')
-    setError(null)
-    try {
-      const data = await documentsService.upload(file)
-      setResult(data)
-      setPhase('done')
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al subir el archivo'
-      setError(msg)
-      setPhase('error')
-    }
+  const phase: 'idle' | 'uploading' | 'done' | 'error' = mutation.isPending
+    ? 'uploading'
+    : mutation.isSuccess
+      ? 'done'
+      : mutation.isError
+        ? 'error'
+        : 'idle'
+
+  return {
+    upload: (file: File) => mutation.mutate(file),
+    reset: mutation.reset,
+    result: mutation.data ?? null,
+    error: mutation.error ? getErrorMessage(mutation.error, 'Error al subir el archivo') : null,
+    phase,
   }
-
-  const reset = () => {
-    setPhase('idle')
-    setResult(null)
-    setError(null)
-  }
-
-  return { phase, result, error, upload, reset }
 }

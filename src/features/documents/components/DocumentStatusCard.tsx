@@ -15,7 +15,7 @@ export default function DocumentStatusCard({ doc }: Props) {
   const Icon = info.icon
 
   return (
-    <div className="flex items-center gap-3 bg-[#16171f] border border-white/8 rounded-xl px-4 py-3">
+    <div className="flex items-center gap-3 bg-surface-card border border-white/8 rounded-xl px-4 py-3">
       <Icon className={`w-5 h-5 flex-shrink-0 ${info.spin ? 'animate-spin' : ''} ${info.cls}`} />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-white truncate">{doc.originalFilename}</p>

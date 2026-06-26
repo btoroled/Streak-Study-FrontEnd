@@ -12,7 +12,7 @@ export default function BadgeUnlockedModal({ badgeName, badgeIcon, onClose }: Pr
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
       <motion.div
-        className="relative z-10 bg-[#16171f] border border-orange-500/30 rounded-2xl p-8 text-center max-w-xs w-full shadow-2xl overflow-hidden"
+        className="relative z-10 bg-surface-card border border-orange-500/30 rounded-2xl p-8 text-center max-w-xs w-full shadow-2xl overflow-hidden"
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}

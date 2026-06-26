@@ -33,11 +33,11 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       {/* Email */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Email
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type="email"
             placeholder="tucorreo@universidad.edu"
@@ -48,14 +48,14 @@ export default function LoginForm() {
           />
         </div>
         {errors.email && (
-          <p className="text-xs text-[#ef4444]">{errors.email.message}</p>
+          <p className="text-xs text-error">{errors.email.message}</p>
         )}
       </div>
 
       {/* Password */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+          <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
             Contraseña
           </label>
           <Link
@@ -66,7 +66,7 @@ export default function LoginForm() {
           </Link>
         </div>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
@@ -78,7 +78,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5e5c70] hover:text-[#9896a8] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
             tabIndex={-1}
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           >
@@ -86,7 +86,7 @@ export default function LoginForm() {
           </button>
         </div>
         {errors.password && (
-          <p className="text-xs text-[#ef4444]">{errors.password.message}</p>
+          <p className="text-xs text-error">{errors.password.message}</p>
         )}
       </div>
 

@@ -46,10 +46,10 @@ export default function Sidebar() {
     <motion.aside
       animate={{ width: sidebarOpen ? 240 : 64 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="hidden lg:flex flex-col bg-[#16171f] border-r border-[#2a2b38] shrink-0 overflow-hidden relative z-10"
+      className="hidden lg:flex flex-col bg-surface-card border-r border-surface-border shrink-0 overflow-hidden relative z-10"
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 h-16 border-b border-[#2a2b38] shrink-0">
+      <div className="flex items-center gap-3 px-4 h-16 border-b border-surface-border shrink-0">
         <img src={logoMark} alt="StreakStudy" className="w-9 h-9 shrink-0 object-contain" />
         <AnimatePresence>
           {sidebarOpen && (
@@ -58,7 +58,7 @@ export default function Sidebar() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -8 }}
               transition={{ duration: 0.15 }}
-              className="text-sm font-bold text-[#f1f0f5] whitespace-nowrap overflow-hidden"
+              className="text-sm font-bold text-text-primary whitespace-nowrap overflow-hidden"
             >
               StreakStudy
             </motion.span>
@@ -66,7 +66,7 @@ export default function Sidebar() {
         </AnimatePresence>
         <button
           onClick={toggleSidebar}
-          className="ml-auto text-[#5e5c70] hover:text-[#9896a8] transition-colors shrink-0"
+          className="ml-auto text-text-muted hover:text-text-secondary transition-colors shrink-0"
           aria-label={sidebarOpen ? 'Colapsar sidebar' : 'Expandir sidebar'}
         >
           {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -83,8 +83,8 @@ export default function Sidebar() {
               cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative',
                 isActive
-                  ? 'bg-[#252636] text-[#f1f0f5] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:rounded-full before:bg-[#f97316]'
-                  : 'text-[#9896a8] hover:bg-[#1e1f2a] hover:text-[#f1f0f5]'
+                  ? 'bg-surface-hover text-text-primary before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:rounded-full before:bg-[#f97316]'
+                  : 'text-text-secondary hover:bg-surface-overlay hover:text-text-primary'
               )
             }
           >
@@ -107,7 +107,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom: XP card + logout */}
-      <div className="border-t border-[#2a2b38] p-3 space-y-2 shrink-0">
+      <div className="border-t border-surface-border p-3 space-y-2 shrink-0">
         {/* Streak + level mini-card */}
         <AnimatePresence>
           {sidebarOpen && (
@@ -115,15 +115,15 @@ export default function Sidebar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="px-2 py-2 rounded-lg bg-[#1e1f2a] space-y-2"
+              className="px-2 py-2 rounded-lg bg-surface-overlay space-y-2"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#9896a8]">{levelInfo.name}</span>
+                <span className="text-xs text-text-secondary">{levelInfo.name}</span>
                 <span className="text-xs text-[#f97316] font-semibold flex items-center gap-1">
                   <Flame className="w-3 h-3" />{currentStreak}
                 </span>
               </div>
-              <div className="h-1 rounded-full bg-[#2a2b38] overflow-hidden">
+              <div className="h-1 rounded-full bg-surface-border overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.round(levelInfo.progress * 100)}%` }}
@@ -131,7 +131,7 @@ export default function Sidebar() {
                   className="h-full bg-gradient-to-r from-[#f97316] to-[#7c3aed] rounded-full"
                 />
               </div>
-              <p className="text-xs text-[#5e5c70]">{xp} XP</p>
+              <p className="text-xs text-text-muted">{xp} XP</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -149,13 +149,13 @@ export default function Sidebar() {
                 exit={{ opacity: 0 }}
                 className="flex-1 min-w-0"
               >
-                <p className="text-xs font-medium text-[#f1f0f5] truncate">{displayName}</p>
+                <p className="text-xs font-medium text-text-primary truncate">{displayName}</p>
               </motion.div>
             )}
           </AnimatePresence>
           <button
             onClick={logout}
-            className="shrink-0 text-[#5e5c70] hover:text-[#ef4444] transition-colors"
+            className="shrink-0 text-text-muted hover:text-error transition-colors"
             aria-label="Cerrar sesión"
           >
             <LogOut className="w-4 h-4" />

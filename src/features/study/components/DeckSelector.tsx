@@ -39,7 +39,7 @@ export default function DeckSelector() {
       {decks.map((deck) => (
         <div
           key={deck.id}
-          className="flex items-center justify-between gap-3 bg-[#16171f] border border-white/8 rounded-xl px-4 py-3 hover:border-orange-500/30 transition-colors"
+          className="flex items-center justify-between gap-3 bg-surface-card border border-white/8 rounded-xl px-4 py-3 hover:border-orange-500/30 transition-colors"
         >
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">

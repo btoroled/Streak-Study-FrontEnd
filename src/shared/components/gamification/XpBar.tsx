@@ -18,10 +18,10 @@ export default function XpBar({ xp, showLevel = true, compact = false, className
       {showLevel && !compact && (
         <div className="flex items-center justify-between text-xs">
           <span className="text-[#a78bfa] font-medium">Nivel {level.level} — {level.name}</span>
-          <span className="text-[#5e5c70]">{level.xpToNext > 0 ? `${level.xpToNext} XP para siguiente` : 'Nivel máximo'}</span>
+          <span className="text-text-muted">{level.xpToNext > 0 ? `${level.xpToNext} XP para siguiente` : 'Nivel máximo'}</span>
         </div>
       )}
-      <div className={cn('rounded-full bg-[#2a2b38] overflow-hidden', compact ? 'h-1' : 'h-2')}>
+      <div className={cn('rounded-full bg-surface-border overflow-hidden', compact ? 'h-1' : 'h-2')}>
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
@@ -30,7 +30,7 @@ export default function XpBar({ xp, showLevel = true, compact = false, className
         />
       </div>
       {!compact && (
-        <p className="text-xs text-[#5e5c70]">{xp} XP total</p>
+        <p className="text-xs text-text-muted">{xp} XP total</p>
       )}
     </div>
   )
