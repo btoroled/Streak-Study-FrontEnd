@@ -88,13 +88,28 @@ npm run lint
 
 Este frontend consume los servicios REST desarrollados en el backend de StreakStudy mediante Spring Boot.
 
-Las configuraciones de conexión se realizan mediante variables de entorno.
+Las configuraciones de conexión se realizan mediante variables de entorno. El cliente HTTP construye la baseURL como `${VITE_API_URL}/api/v1`, por lo que la variable solo debe apuntar al host del backend.
 
-Ejemplo:
+Ejemplo (copiar de `.env.local.example`):
 
 ```env
-VITE_API_URL=http://localhost:8080/api
+VITE_API_URL=http://localhost:8081
+VITE_FEATURE_LEADERBOARD=false
+VITE_FEATURE_INSTITUTIONS_LIST=false
+VITE_DEFAULT_INSTITUTION_ID=1
+VITE_DEFAULT_INSTITUTION_NAME=Universidad Demo
 ```
+
+##  Scripts
+
+| Comando             | Descripción                                |
+| ------------------- | ------------------------------------------ |
+| `npm run dev`       | Servidor de desarrollo (Vite, puerto 5173) |
+| `npm run build`     | Typecheck + bundle de producción           |
+| `npm run typecheck` | Solo `tsc -b` (sin emitir, para CI)        |
+| `npm run lint`      | ESLint sobre todo el repo                  |
+| `npm test`          | Vitest en modo CI (run-once)               |
+| `npm run test:watch`| Vitest en modo watch                       |
 
 ##  Funcionalidades
 
