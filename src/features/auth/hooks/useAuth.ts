@@ -84,26 +84,7 @@ export function useAuth() {
     navigate('/login', { replace: true })
   }, [navigate])
 
-  // Called once by AuthGuard on startup to hydrate accessToken + progress
-  const initSession = useCallback(async () => {
-    const { refreshToken } = useAuthStore.getState()
-    if (!refreshToken) throw new Error('No session')
-
-    const authData = await authService.refresh({ refreshToken })
-
-    useAuthStore.getState().setTokens({
-      accessToken: authData.accessToken,
-      refreshToken: authData.refreshToken,
-      xp: authData.xp,
-    })
-
-    try {
-      const progress = await progressService.getProgress()
-      useAuthStore.getState().setProgress(progress)
-    } catch { /* non-fatal */ }
-  }, [])
-
-  return { login, register, logout, initSession }
+  return { login, register, logout }
 }
 
 export function handleAuthError(

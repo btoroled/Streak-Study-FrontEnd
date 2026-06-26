@@ -1,4 +1,6 @@
+import { Mic } from 'lucide-react'
 import type { ReviewRating } from '../utils/studySession.utils'
+import { useVoiceRating } from '../hooks/useVoiceRating'
 
 interface Props {
   onRate: (rating: ReviewRating) => void
@@ -13,6 +15,8 @@ const OPTIONS: { value: ReviewRating; label: string; hint: string; cls: string }
 ]
 
 export default function DifficultyRating({ onRate, disabled }: Props) {
+  const { start, isListening, isSupported } = useVoiceRating(onRate)
+
   return (
     <div className="space-y-2">
       <p className="text-center text-xs text-white/40">¿Qué tan bien la recordaste?</p>
@@ -29,6 +33,24 @@ export default function DifficultyRating({ onRate, disabled }: Props) {
           </button>
         ))}
       </div>
+
+      {isSupported && (
+        <div className="flex justify-center pt-1">
+          <button
+            type="button"
+            disabled={disabled || isListening}
+            onClick={start}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors disabled:opacity-50 ${
+              isListening
+                ? 'border-brand-purple/60 text-brand-purple animate-pulse'
+                : 'border-white/15 text-white/50 hover:border-white/30 hover:text-white/80'
+            }`}
+          >
+            <Mic className="w-3.5 h-3.5" />
+            {isListening ? 'Escuchando…' : 'Responder por voz'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

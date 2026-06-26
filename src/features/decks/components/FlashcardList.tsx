@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import FlashcardItem from './FlashcardItem'
 import FlashcardForm from './FlashcardForm'
 import EmptyState from '@/shared/components/feedback/EmptyState'
+import Pagination from '@/shared/components/ui/Pagination'
 import mascotThinking from '@/assets/brand/mascot-thinking.png'
 import { Button } from '@/shared/components/ui/button'
 import { useFlashcards } from '@/features/decks/hooks/useFlashcards'
@@ -13,7 +14,7 @@ import type { FlashcardFormValues } from '@/features/decks/schemas/flashcard.sch
 interface Props { deckId: number }
 
 export default function FlashcardList({ deckId }: Props) {
-  const { data: cards = [], isLoading, createFlashcard, updateFlashcard, deleteFlashcard } = useFlashcards(deckId)
+  const { cards, cardCount, page, setPage, totalPages, isLoading, createFlashcard, updateFlashcard, deleteFlashcard } = useFlashcards(deckId)
   const [showCreate, setShowCreate] = useState(false)
   const [editing, setEditing] = useState<FlashcardResponse | null>(null)
   const [deleting, setDeleting] = useState<FlashcardResponse | null>(null)
@@ -42,7 +43,7 @@ export default function FlashcardList({ deckId }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-white/50">{cards.length} flashcard{cards.length !== 1 ? 's' : ''}</span>
+        <span className="text-sm text-white/50">{cardCount} flashcard{cardCount !== 1 ? 's' : ''}</span>
         <Button size="sm" onClick={() => setShowCreate(true)}>
           <Plus className="w-4 h-4 mr-1" /> Nueva flashcard
         </Button>
@@ -108,6 +109,8 @@ export default function FlashcardList({ deckId }: Props) {
           ))}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   )
 }
