@@ -43,15 +43,15 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       {/* Institution */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Institución
         </label>
         <div className="relative">
-          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           {resolver.mode === 'url-param' ? (
-            <div className="pl-10 pr-4 py-3 rounded-lg bg-[#1e1f2a] border border-[#2a2b38] text-sm text-[#f1f0f5]">
+            <div className="pl-10 pr-4 py-3 rounded-lg bg-surface-overlay border border-surface-border text-sm text-text-primary">
               {resolver.isLoading ? (
-                <span className="text-[#5e5c70]">Cargando…</span>
+                <span className="text-text-muted">Cargando…</span>
               ) : (
                 <span>{resolver.institutionName ?? `Institución #${resolver.institutionId}`}</span>
               )}
@@ -72,17 +72,17 @@ export default function RegisterForm() {
           )}
         </div>
         {errors.institutionId && (
-          <p className="text-xs text-[#ef4444]">{errors.institutionId.message}</p>
+          <p className="text-xs text-error">{errors.institutionId.message}</p>
         )}
       </div>
 
       {/* Full name */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Nombre completo
         </label>
         <div className="relative">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type="text"
             placeholder="Ana García"
@@ -93,17 +93,17 @@ export default function RegisterForm() {
           />
         </div>
         {errors.fullName && (
-          <p className="text-xs text-[#ef4444]">{errors.fullName.message}</p>
+          <p className="text-xs text-error">{errors.fullName.message}</p>
         )}
       </div>
 
       {/* Email */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Email
         </label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type="email"
             placeholder="tucorreo@universidad.edu"
@@ -114,17 +114,17 @@ export default function RegisterForm() {
           />
         </div>
         {errors.email && (
-          <p className="text-xs text-[#ef4444]">{errors.email.message}</p>
+          <p className="text-xs text-error">{errors.email.message}</p>
         )}
       </div>
 
       {/* Password */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Contraseña
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type={showPassword ? 'text' : 'password'}
             placeholder="Mínimo 8 caracteres"
@@ -136,7 +136,7 @@ export default function RegisterForm() {
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5e5c70] hover:text-[#9896a8] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
             tabIndex={-1}
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           >
@@ -144,17 +144,17 @@ export default function RegisterForm() {
           </button>
         </div>
         {errors.password && (
-          <p className="text-xs text-[#ef4444]">{errors.password.message}</p>
+          <p className="text-xs text-error">{errors.password.message}</p>
         )}
       </div>
 
       {/* Confirm password */}
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Confirmar contraseña
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type={showConfirm ? 'text' : 'password'}
             placeholder="Repite tu contraseña"
@@ -166,7 +166,7 @@ export default function RegisterForm() {
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5e5c70] hover:text-[#9896a8] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
             tabIndex={-1}
             aria-label={showConfirm ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           >
@@ -174,7 +174,7 @@ export default function RegisterForm() {
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="text-xs text-[#ef4444]">{errors.confirmPassword.message}</p>
+          <p className="text-xs text-error">{errors.confirmPassword.message}</p>
         )}
       </div>
 

@@ -9,9 +9,9 @@ export default function RecentAchievements() {
     <SectionCard title="Mis logros">
       {badges.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-4 text-center">
-          <Trophy className="w-8 h-8 text-[#5e5c70]" />
-          <p className="text-sm text-[#9896a8]">Aún no tienes logros.</p>
-          <p className="text-xs text-[#5e5c70]">¡Estudia para ganarlos!</p>
+          <Trophy className="w-8 h-8 text-text-muted" />
+          <p className="text-sm text-text-secondary">Aún no tienes logros.</p>
+          <p className="text-xs text-text-muted">¡Estudia para ganarlos!</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -24,8 +24,8 @@ export default function RecentAchievements() {
                   <Trophy className="w-3.5 h-3.5 text-[#a78bfa]" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-[#f1f0f5]">{def.name}</p>
-                  <p className="text-xs text-[#5e5c70]">{def.description}</p>
+                  <p className="text-xs font-medium text-text-primary">{def.name}</p>
+                  <p className="text-xs text-text-muted">{def.description}</p>
                 </div>
               </div>
             )

@@ -16,7 +16,7 @@ export default function BadgeCard({ id, name, icon, description, xpCost, categor
   const canBuy = !isUnlocked && category === 'purchase' && userXp >= xpCost
 
   return (
-    <div className={`relative bg-[#16171f] border rounded-xl p-4 text-center space-y-2.5 transition-all ${
+    <div className={`relative bg-surface-card border rounded-xl p-4 text-center space-y-2.5 transition-all ${
       isUnlocked ? 'border-[#f97316]/40' : 'border-white/8'
     }`}>
       {isUnlocked && (
@@ -36,7 +36,7 @@ export default function BadgeCard({ id, name, icon, description, xpCost, categor
         <div className={`relative w-16 h-16 rounded-full flex items-center justify-center text-3xl ${
           isUnlocked
             ? 'bg-gradient-to-br from-[#1e1f2a] to-[#16171f] ring-2 ring-[#f97316]/40'
-            : 'bg-[#1e1f2a] border border-[#2a2b38]'
+            : 'bg-surface-overlay border border-surface-border'
         }`}>
           {isUnlocked ? icon : <Lock className="w-6 h-6 text-white/20" />}
         </div>

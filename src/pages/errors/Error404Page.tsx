@@ -4,7 +4,7 @@ import { Button } from '@/shared/components/ui/button'
 export default function Error404Page() {
   const navigate = useNavigate()
   return (
-    <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-surface-base flex items-center justify-center p-4">
       <div className="text-center space-y-4 max-w-sm">
         <p className="text-7xl font-black text-white/10">404</p>
         <h1 className="text-xl font-bold text-white">Página no encontrada</h1>

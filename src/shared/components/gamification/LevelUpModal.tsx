@@ -26,7 +26,7 @@ export default function LevelUpModal({ open, level, name, onClose }: LevelUpModa
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.8, y: 20, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            className="relative w-full max-w-sm rounded-2xl bg-[#16171f] border border-[#2a2b38] p-8 text-center overflow-hidden"
+            className="relative w-full max-w-sm rounded-2xl bg-surface-card border border-surface-border p-8 text-center overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <Confetti count={60} duration={3.2} />

@@ -26,29 +26,29 @@ export default function TopBar() {
   const title = PAGE_TITLES[baseRoute] ?? 'StreakStudy'
 
   return (
-    <header className="h-14 bg-[#16171f] border-b border-[#2a2b38] flex items-center gap-4 px-4 shrink-0">
+    <header className="h-14 bg-surface-card border-b border-surface-border flex items-center gap-4 px-4 shrink-0">
       {/* Sidebar toggle (desktop) */}
       <button
         onClick={toggleSidebar}
-        className="hidden lg:flex text-[#9896a8] hover:text-[#f1f0f5] transition-colors"
+        className="hidden lg:flex text-text-secondary hover:text-text-primary transition-colors"
         aria-label="Toggle sidebar"
       >
         <Menu className="w-5 h-5" />
       </button>
 
       {/* Page title */}
-      <h1 className="text-sm font-semibold text-[#f1f0f5] flex-1">{title}</h1>
+      <h1 className="text-sm font-semibold text-text-primary flex-1">{title}</h1>
 
       {/* Right: notifications + streak + XP */}
       <div className="flex items-center gap-3">
         <NotificationBell />
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1e1f2a] border border-[#2a2b38]">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-overlay border border-surface-border">
           <Flame className="w-3.5 h-3.5 text-[#f97316]" />
-          <span className="text-xs font-semibold text-[#f1f0f5]">{currentStreak}</span>
+          <span className="text-xs font-semibold text-text-primary">{currentStreak}</span>
         </div>
-        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1e1f2a] border border-[#2a2b38]">
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-overlay border border-surface-border">
           <span className="text-xs text-[#a78bfa]">⚡</span>
-          <span className="text-xs font-semibold text-[#f1f0f5]">{xp} XP</span>
+          <span className="text-xs font-semibold text-text-primary">{xp} XP</span>
         </div>
       </div>
     </header>

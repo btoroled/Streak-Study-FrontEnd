@@ -11,11 +11,11 @@ const features = [
 
 export function AuthBrandPanel() {
   return (
-    <div className="hidden lg:flex flex-col justify-between w-[460px] shrink-0 bg-[#16171f] border-r border-[#2a2b38] p-12">
+    <div className="hidden lg:flex flex-col justify-between w-[460px] shrink-0 bg-surface-card border-r border-surface-border p-12">
       {/* Logo */}
       <div className="flex items-center gap-2.5">
         <img src={logoMark} alt="StreakStudy" className="w-9 h-9 object-contain" />
-        <span className="text-lg font-bold text-[#f1f0f5]">StreakStudy</span>
+        <span className="text-lg font-bold text-text-primary">StreakStudy</span>
       </div>
 
       {/* Center content */}
@@ -36,32 +36,32 @@ export function AuthBrandPanel() {
 
         {/* Tagline */}
         <div>
-          <h2 className="text-3xl font-bold text-[#f1f0f5] leading-tight">
+          <h2 className="text-3xl font-bold text-text-primary leading-tight">
             Learn.{' '}
             <span className="bg-gradient-to-r from-[#f97316] to-[#7c3aed] bg-clip-text text-transparent">
               Streak.
             </span>{' '}
             Grow.
           </h2>
-          <p className="text-[#9896a8] mt-2 text-sm leading-relaxed">
+          <p className="text-text-secondary mt-2 text-sm leading-relaxed">
             La plataforma que convierte el estudio diario en un hábito que no quieres romper.
           </p>
         </div>
 
         {/* Streak counter */}
-        <div className="flex items-center gap-4 p-4 rounded-xl bg-[#1e1f2a] border border-[#2a2b38]">
+        <div className="flex items-center gap-4 p-4 rounded-xl bg-surface-overlay border border-surface-border">
           <div className="text-4xl font-black text-[#f97316]">🔥</div>
           <div>
-            <p className="text-2xl font-bold text-[#f1f0f5]">247</p>
-            <p className="text-xs text-[#9896a8]">días de racha máxima en la plataforma</p>
+            <p className="text-2xl font-bold text-text-primary">247</p>
+            <p className="text-xs text-text-secondary">días de racha máxima en la plataforma</p>
           </div>
         </div>
 
         {/* Features */}
         <ul className="space-y-3">
           {features.map(({ icon: Icon, text }) => (
-            <li key={text} className="flex items-center gap-3 text-sm text-[#9896a8]">
-              <div className="w-7 h-7 rounded-md bg-[#1e1f2a] border border-[#2a2b38] flex items-center justify-center shrink-0">
+            <li key={text} className="flex items-center gap-3 text-sm text-text-secondary">
+              <div className="w-7 h-7 rounded-md bg-surface-overlay border border-surface-border flex items-center justify-center shrink-0">
                 <Icon className="w-3.5 h-3.5 text-[#a78bfa]" />
               </div>
               {text}
@@ -71,7 +71,7 @@ export function AuthBrandPanel() {
       </div>
 
       {/* Footer */}
-      <p className="text-xs text-[#5e5c70]">
+      <p className="text-xs text-text-muted">
         StreakStudy · Plataforma educativa gamificada
       </p>
     </div>

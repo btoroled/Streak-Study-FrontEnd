@@ -5,7 +5,7 @@ interface Props { job: AiGenerationJobResponse }
 
 export default function JobStatusCard({ job }: Props) {
   return (
-    <div className="bg-[#16171f] border border-white/8 rounded-xl p-4 space-y-2">
+    <div className="bg-surface-card border border-white/8 rounded-xl p-4 space-y-2">
       <div className="flex items-center gap-2">
         {job.status === 'COMPLETED' && <CheckCircle2 className="w-4 h-4 text-green-400" />}
         {job.status === 'FAILED' && <XCircle className="w-4 h-4 text-red-400" />}

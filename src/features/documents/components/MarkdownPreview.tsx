@@ -16,7 +16,7 @@ export default function MarkdownPreview({ documentId }: Props) {
   })
 
   return (
-    <div className="bg-[#16171f] border border-white/8 rounded-xl overflow-hidden">
+    <div className="bg-surface-card border border-white/8 rounded-xl overflow-hidden">
       <button
         className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/3 transition-colors"
         onClick={() => setOpen((v) => !v)}

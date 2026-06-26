@@ -24,7 +24,7 @@ export default function AchievementsPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header con mascota y progreso */}
-      <div className="flex items-center gap-4 bg-gradient-to-r from-[#f97316]/10 to-[#7c3aed]/10 border border-[#2a2b38] rounded-2xl p-5">
+      <div className="flex items-center gap-4 bg-gradient-to-r from-[#f97316]/10 to-[#7c3aed]/10 border border-surface-border rounded-2xl p-5">
         <img
           src={mascotCelebrate}
           alt=""
@@ -35,7 +35,7 @@ export default function AchievementsPage() {
           <p className="text-sm text-white/50 mt-0.5">
             {userBadges.length} de {badges.length} insignias desbloqueadas
           </p>
-          <div className="mt-2 h-2 rounded-full bg-[#2a2b38] overflow-hidden">
+          <div className="mt-2 h-2 rounded-full bg-surface-border overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${pct}%` }}
@@ -53,7 +53,7 @@ export default function AchievementsPage() {
           <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setBuying(null)} />
-            <motion.div className="relative z-10 w-full max-w-sm bg-[#16171f] border border-white/10 rounded-2xl p-6 shadow-2xl"
+            <motion.div className="relative z-10 w-full max-w-sm bg-surface-card border border-white/10 rounded-2xl p-6 shadow-2xl"
               initial={{ scale: 0.95, y: 16 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 16 }}>
               <BadgePurchaseDialog
                 badgeName={badge.name}

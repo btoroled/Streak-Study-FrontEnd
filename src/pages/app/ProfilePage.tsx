@@ -28,7 +28,7 @@ export default function ProfilePage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <h1 className="text-xl font-bold text-white">Mi perfil</h1>
 
-      <div className="bg-[#16171f] border border-white/8 rounded-xl p-5 space-y-5">
+      <div className="bg-surface-card border border-white/8 rounded-xl p-5 space-y-5">
         <ProfileHeader fullName={fullName} email={email} role={role} />
         <StatsPanel xp={xp} currentStreak={currentStreak} streakFreezes={streakFreezes} />
         <BadgesCollection userBadges={badges} />
