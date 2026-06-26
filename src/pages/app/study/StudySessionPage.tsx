@@ -87,6 +87,7 @@ export default function StudySessionPage() {
         <button
           className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
           onClick={() => navigate(-1)}
+          aria-label="Volver"
         >
           <ArrowLeft className="w-4 h-4" />
         </button>

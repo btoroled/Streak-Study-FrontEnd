@@ -62,7 +62,8 @@ export default function CoursesPage() {
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-base font-semibold text-white">Nuevo curso</h2>
                 <button className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
-                  onClick={() => setShowCreate(false)}>
+                  onClick={() => setShowCreate(false)}
+                  aria-label="Cerrar">
                   <X className="w-4 h-4" />
                 </button>
               </div>

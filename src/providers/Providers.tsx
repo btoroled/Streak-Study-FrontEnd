@@ -2,6 +2,7 @@ import { QueryProvider } from './QueryProvider'
 import { ThemeProvider } from './ThemeProvider'
 import { ToastProvider } from './ToastProvider'
 import InstallPrompt from '@/shared/components/feedback/InstallPrompt'
+import UpdatePrompt from '@/shared/components/feedback/UpdatePrompt'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -10,6 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ToastProvider>
           {children}
           <InstallPrompt />
+          <UpdatePrompt />
         </ToastProvider>
       </ThemeProvider>
     </QueryProvider>

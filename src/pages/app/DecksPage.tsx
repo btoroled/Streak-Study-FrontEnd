@@ -147,6 +147,7 @@ export default function DecksPage() {
                 <button
                   className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
                   onClick={() => setModal(null)}
+                  aria-label="Cerrar"
                 >
                   <X className="w-4 h-4" />
                 </button>
