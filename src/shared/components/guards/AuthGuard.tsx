@@ -1,42 +1,33 @@
-import { Suspense, useEffect } from 'react'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { Suspense } from 'react'
+import { Outlet, Navigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/store/auth.store'
 import { useSessionStore } from '@/store/session.store'
-import { useAuth } from '@/features/auth/hooks/useAuth'
 import LoadingScreen from '../feedback/LoadingScreen'
 import Sidebar from '../app-layout/Sidebar'
 import TopBar from '../app-layout/TopBar'
 import MobileNav from '../app-layout/MobileNav'
 
+/**
+ * Observa el estado de sesión hidratado por SessionInitProvider.
+ * El bootstrap vive arriba del router para que GuestGuard pueda reaccionar al mismo.
+ */
 export default function AuthGuard() {
-  const navigate = useNavigate()
   const location = useLocation()
   const refreshToken = useAuthStore((s) => s.refreshToken)
-  const { status, setStatus } = useSessionStore()
-  const { initSession } = useAuth()
+  const status = useSessionStore((s) => s.status)
 
-  useEffect(() => {
-    if (!refreshToken) {
-      navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`, { replace: true })
-      return
-    }
-    if (status !== 'idle') return
-
-    setStatus('loading')
-    initSession()
-      .then(() => setStatus('ready'))
-      .catch(() => {
-        setStatus('idle')
-        navigate('/login?session=expired', { replace: true })
-      })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  if (!refreshToken) return null
-  if (status === 'idle' || status === 'loading') return <LoadingScreen />
+  if (!refreshToken) {
+    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />
+  }
+  if (status === 'error') {
+    return <Navigate to="/login?session=expired" replace />
+  }
+  if (status === 'idle' || status === 'loading') {
+    return <LoadingScreen />
+  }
 
   return (
-    <div className="flex h-screen bg-[#0f0f14] overflow-hidden">
+    <div className="flex h-screen bg-surface-base overflow-hidden">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopBar />
