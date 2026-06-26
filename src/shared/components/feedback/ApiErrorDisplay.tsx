@@ -13,9 +13,9 @@ export default function ApiErrorDisplay({ error, onRetry }: ApiErrorDisplayProps
   return (
     <div className="flex flex-col items-center gap-3 py-10 text-center">
       <div className="w-12 h-12 rounded-full bg-[#ef4444]/10 flex items-center justify-center">
-        <AlertCircle className="w-6 h-6 text-[#ef4444]" />
+        <AlertCircle className="w-6 h-6 text-error" />
       </div>
-      <p className="text-sm text-[#9896a8] max-w-xs">{message}</p>
+      <p className="text-sm text-text-secondary max-w-xs">{message}</p>
       {onRetry && (
         <Button variant="outline" size="sm" onClick={onRetry}>
           Intentar de nuevo

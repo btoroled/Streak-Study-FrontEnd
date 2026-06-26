@@ -22,7 +22,7 @@ export default function FlashcardFlip({ card, flipped, onFlip }: Props) {
       >
         {/* Front */}
         <div
-          className="w-full min-h-52 bg-[#16171f] border border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center"
+          className="w-full min-h-52 bg-surface-card border border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center"
           style={{ backfaceVisibility: 'hidden' }}
         >
           <span className="text-xs font-medium text-white/35 uppercase tracking-widest mb-4">Pregunta</span>
@@ -32,7 +32,7 @@ export default function FlashcardFlip({ card, flipped, onFlip }: Props) {
 
         {/* Back */}
         <div
-          className="absolute inset-0 w-full min-h-52 bg-[#1e1f2a] border border-orange-500/30 rounded-2xl p-8 flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 w-full min-h-52 bg-surface-overlay border border-orange-500/30 rounded-2xl p-8 flex flex-col items-center justify-center text-center"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
           <span className="text-xs font-medium text-orange-400/60 uppercase tracking-widest mb-4">Respuesta</span>

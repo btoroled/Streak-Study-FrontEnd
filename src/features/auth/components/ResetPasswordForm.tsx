@@ -46,7 +46,7 @@ export default function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <p className="text-sm text-[#9896a8] text-center py-4">
+      <p className="text-sm text-text-secondary text-center py-4">
         Enlace inválido. <br />
         <a href="/forgot-password" className="text-[#7c3aed] hover:underline">
           Solicita uno nuevo
@@ -60,11 +60,11 @@ export default function ResetPasswordForm() {
       <input type="hidden" {...register('token')} />
 
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Nueva contraseña
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type={showPassword ? 'text' : 'password'}
             placeholder="Mínimo 8 caracteres"
@@ -76,7 +76,7 @@ export default function ResetPasswordForm() {
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5e5c70] hover:text-[#9896a8] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
             tabIndex={-1}
             aria-label={showPassword ? 'Ocultar' : 'Mostrar'}
           >
@@ -84,16 +84,16 @@ export default function ResetPasswordForm() {
           </button>
         </div>
         {errors.newPassword && (
-          <p className="text-xs text-[#ef4444]">{errors.newPassword.message}</p>
+          <p className="text-xs text-error">{errors.newPassword.message}</p>
         )}
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-xs font-medium text-[#9896a8] uppercase tracking-wide">
+        <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Confirmar contraseña
         </label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e5c70]" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <Input
             type={showConfirm ? 'text' : 'password'}
             placeholder="Repite tu contraseña"
@@ -105,7 +105,7 @@ export default function ResetPasswordForm() {
           <button
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5e5c70] hover:text-[#9896a8] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
             tabIndex={-1}
             aria-label={showConfirm ? 'Ocultar' : 'Mostrar'}
           >
@@ -113,7 +113,7 @@ export default function ResetPasswordForm() {
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="text-xs text-[#ef4444]">{errors.confirmPassword.message}</p>
+          <p className="text-xs text-error">{errors.confirmPassword.message}</p>
         )}
       </div>
 

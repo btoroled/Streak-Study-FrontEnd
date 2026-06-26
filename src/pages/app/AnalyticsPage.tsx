@@ -29,7 +29,7 @@ export default function AnalyticsPage() {
       {/* Métricas */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {METRICS.map(({ key, label, icon: Icon, color }) => (
-          <div key={key} className="bg-[#16171f] border border-white/8 rounded-xl p-4">
+          <div key={key} className="bg-surface-card border border-white/8 rounded-xl p-4">
             <Icon className="w-5 h-5" style={{ color }} />
             <p className="text-2xl font-black text-white mt-2">
               {stats.isLoading ? '—' : (stats.data?.[key] ?? 0)}

@@ -14,7 +14,7 @@ export default function StreakFreezeCard({ currentFreezes, userXp, onBuy, isLoad
   const canBuy = userXp >= STREAK_FREEZE_COST
 
   return (
-    <div className="bg-[#16171f] border border-white/8 rounded-xl p-5 space-y-4">
+    <div className="bg-surface-card border border-white/8 rounded-xl p-5 space-y-4">
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center flex-shrink-0">
           <Snowflake className="w-6 h-6 text-blue-400" />

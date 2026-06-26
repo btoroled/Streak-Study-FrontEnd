@@ -15,7 +15,7 @@ export default function CourseTable({ courses, canDelete, onDelete }: Props) {
   }
 
   return (
-    <div className="bg-[#16171f] border border-white/8 rounded-xl overflow-hidden">
+    <div className="bg-surface-card border border-white/8 rounded-xl overflow-hidden">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/8">

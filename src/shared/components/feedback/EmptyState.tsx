@@ -27,12 +27,12 @@ export default function EmptyState({ icon: Icon, mascot, title, description, act
           />
         </div>
       ) : Icon && (
-        <div className="w-14 h-14 rounded-2xl bg-[#1e1f2a] border border-[#2a2b38] flex items-center justify-center mb-4">
-          <Icon className="w-7 h-7 text-[#5e5c70]" />
+        <div className="w-14 h-14 rounded-2xl bg-surface-overlay border border-surface-border flex items-center justify-center mb-4">
+          <Icon className="w-7 h-7 text-text-muted" />
         </div>
       )}
-      <p className="text-[#f1f0f5] font-semibold text-base">{title}</p>
-      {description && <p className="text-sm text-[#9896a8] mt-1 max-w-sm">{description}</p>}
+      <p className="text-text-primary font-semibold text-base">{title}</p>
+      {description && <p className="text-sm text-text-secondary mt-1 max-w-sm">{description}</p>}
       {action && (
         <Button onClick={action.onClick} size="md" className="mt-4">
           {action.label}

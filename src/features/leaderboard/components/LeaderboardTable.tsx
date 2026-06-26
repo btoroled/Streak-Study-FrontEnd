@@ -10,7 +10,7 @@ export default function LeaderboardTable({ entries }: Props) {
   const userId = useAuthStore((s) => s.userId)
 
   return (
-    <div className="bg-[#16171f] border border-white/8 rounded-xl overflow-hidden">
+    <div className="bg-surface-card border border-white/8 rounded-xl overflow-hidden">
       {entries.map((entry, i) => {
         const isMe = entry.id === userId
         return (

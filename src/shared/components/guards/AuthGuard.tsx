@@ -36,7 +36,7 @@ export default function AuthGuard() {
   if (status === 'idle' || status === 'loading') return <LoadingScreen />
 
   return (
-    <div className="flex h-screen bg-[#0f0f14] overflow-hidden">
+    <div className="flex h-screen bg-surface-base overflow-hidden">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopBar />

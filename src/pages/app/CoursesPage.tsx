@@ -57,7 +57,7 @@ export default function CoursesPage() {
           <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCreate(false)} />
-            <motion.div className="relative z-10 w-full max-w-md bg-[#16171f] border border-white/10 rounded-2xl p-6 shadow-2xl"
+            <motion.div className="relative z-10 w-full max-w-md bg-surface-card border border-white/10 rounded-2xl p-6 shadow-2xl"
               initial={{ scale: 0.95, y: 16 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 16 }}>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-base font-semibold text-white">Nuevo curso</h2>
@@ -77,7 +77,7 @@ export default function CoursesPage() {
           <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setDeleting(null)} />
-            <motion.div className="relative z-10 w-full max-w-md bg-[#16171f] border border-white/10 rounded-2xl p-6 shadow-2xl"
+            <motion.div className="relative z-10 w-full max-w-md bg-surface-card border border-white/10 rounded-2xl p-6 shadow-2xl"
               initial={{ scale: 0.95, y: 16 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 16 }}>
               <CourseDeleteDialog
                 course={deleting}

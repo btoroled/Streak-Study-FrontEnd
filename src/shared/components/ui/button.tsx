@@ -14,9 +14,9 @@ const variants: Record<Variant, string> = {
   primary:
     'bg-gradient-to-r from-[#f97316] to-[#7c3aed] text-white font-semibold hover:opacity-90 active:opacity-80',
   ghost:
-    'text-[#9896a8] hover:text-[#f1f0f5] hover:bg-[#1e1f2a]',
+    'text-text-secondary hover:text-text-primary hover:bg-surface-overlay',
   outline:
-    'border border-[#2a2b38] text-[#9896a8] hover:border-[#7c3aed] hover:text-[#a78bfa]',
+    'border border-surface-border text-text-secondary hover:border-[#7c3aed] hover:text-[#a78bfa]',
 }
 
 const sizes: Record<Size, string> = {

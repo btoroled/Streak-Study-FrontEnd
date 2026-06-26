@@ -54,7 +54,7 @@ export default function FlashcardList({ deckId }: Props) {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="bg-[#1e1f2a] border border-orange-500/30 rounded-xl p-4"
+            className="bg-surface-overlay border border-orange-500/30 rounded-xl p-4"
           >
             <h3 className="text-sm font-semibold text-white mb-3">Nueva flashcard</h3>
             <FlashcardForm
@@ -78,7 +78,7 @@ export default function FlashcardList({ deckId }: Props) {
           {cards.map((card) => (
             <div key={card.id}>
               {editing?.id === card.id ? (
-                <div className="bg-[#1e1f2a] border border-orange-500/30 rounded-xl p-4">
+                <div className="bg-surface-overlay border border-orange-500/30 rounded-xl p-4">
                   <FlashcardForm
                     defaultValues={card}
                     onSubmit={handleUpdate}
@@ -87,7 +87,7 @@ export default function FlashcardList({ deckId }: Props) {
                   />
                 </div>
               ) : deleting?.id === card.id ? (
-                <div className="bg-[#1e1f2a] border border-red-500/30 rounded-xl p-4 space-y-3">
+                <div className="bg-surface-overlay border border-red-500/30 rounded-xl p-4 space-y-3">
                   <p className="text-sm text-white/70">¿Eliminar esta flashcard?</p>
                   <div className="flex gap-2">
                     <Button size="sm" variant="ghost" onClick={() => setDeleting(null)}>Cancelar</Button>

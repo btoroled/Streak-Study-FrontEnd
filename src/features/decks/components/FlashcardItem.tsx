@@ -17,7 +17,7 @@ export default function FlashcardItem({ card, onEdit, onDelete }: Props) {
   const diff = DIFF_STYLE[card.difficulty] ?? DIFF_STYLE.MEDIUM
 
   return (
-    <div className="bg-[#16171f] border border-white/8 rounded-xl p-4 space-y-3">
+    <div className="bg-surface-card border border-white/8 rounded-xl p-4 space-y-3">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0 space-y-2">
           <div>
