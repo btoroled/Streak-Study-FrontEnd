@@ -59,6 +59,8 @@ export default function RegisterForm() {
           ) : (
             <Input
               type="number"
+              inputMode="numeric"
+              pattern="[0-9]*"
               placeholder="ID de institución"
               error={!!errors.institutionId}
               className="pl-10"

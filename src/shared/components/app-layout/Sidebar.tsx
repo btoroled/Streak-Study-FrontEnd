@@ -5,6 +5,7 @@ import {
   Trophy, ShoppingBag, BarChart2, User, Flame, ChevronLeft, ChevronRight, LogOut,
 } from 'lucide-react'
 import logoMark from '@/assets/brand/logo-mark.png'
+import { prefetchByPath } from '@/router/lazyPages'
 import { LevelAvatar } from '@/shared/components/gamification/LevelAvatar'
 import { useUiStore } from '@/store/ui.store'
 import { useAuthStore } from '@/store/auth.store'
@@ -79,6 +80,7 @@ export default function Sidebar() {
           <NavLink
             key={to}
             to={to}
+            onMouseEnter={() => prefetchByPath[to]?.()}
             className={({ isActive }) =>
               cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative',

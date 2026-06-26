@@ -53,6 +53,7 @@ export default function DeckDetailPage() {
           <button
             className="mt-1 p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors flex-shrink-0"
             onClick={() => navigate('/decks')}
+            aria-label="Volver a mazos"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
@@ -100,6 +101,7 @@ export default function DeckDetailPage() {
                 <button
                   className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
                   onClick={() => setModal(null)}
+                  aria-label="Cerrar"
                 >
                   <X className="w-4 h-4" />
                 </button>
