@@ -9,8 +9,8 @@ interface SectionCardProps {
 
 export default function SectionCard({ title, children, className }: SectionCardProps) {
   return (
-    <div className={cn('bg-[#16171f] border border-[#2a2b38] rounded-xl p-4 lg:p-5', className)}>
-      {title && <h3 className="text-sm font-semibold text-[#f1f0f5] mb-3">{title}</h3>}
+    <div className={cn('bg-surface-card border border-surface-border rounded-xl p-4 lg:p-5', className)}>
+      {title && <h3 className="text-sm font-semibold text-text-primary mb-3">{title}</h3>}
       {children}
     </div>
   )

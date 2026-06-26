@@ -1,9 +1,11 @@
 import api from './api.client'
 import type { CreateFlashcardRequest, UpdateFlashcardRequest, FlashcardResponse, FlashcardDetailResponse, ReviewRating } from '@/types/flashcard.types'
+import type { PageResponse } from '@/types/api.types'
 
 export const flashcardsService = {
-  listByDeck: (deckId: number, signal?: AbortSignal) =>
-    api.get<FlashcardResponse[]>(`/flashcards/deck/${deckId}`, { signal }).then(r => r.data),
+  /** Flashcards del mazo, paginadas (20 por página por defecto en el backend). */
+  listByDeck: (deckId: number, page = 0, signal?: AbortSignal) =>
+    api.get<PageResponse<FlashcardResponse>>(`/flashcards/deck/${deckId}`, { params: { page }, signal }).then(r => r.data),
   /** Flashcards pendientes de repaso hoy (SM-2). */
   listDue: (deckId: number, signal?: AbortSignal) =>
     api.get<FlashcardResponse[]>(`/flashcards/deck/${deckId}/due`, { signal }).then(r => r.data),

@@ -15,7 +15,7 @@ export default function DeckCard({ deck, onEdit, onDelete }: Props) {
 
   return (
     <div
-      className="relative bg-[#16171f] border border-white/8 rounded-xl p-4 hover:border-orange-500/40 transition-colors cursor-pointer"
+      className="relative bg-surface-card border border-white/8 rounded-xl p-4 hover:border-orange-500/40 transition-colors cursor-pointer"
       onClick={() => navigate(`/decks/${deck.id}`)}
     >
       <div className="flex items-start justify-between gap-2">
@@ -42,7 +42,7 @@ export default function DeckCard({ deck, onEdit, onDelete }: Props) {
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-8 z-20 bg-[#1e1f2a] border border-white/10 rounded-xl shadow-xl overflow-hidden w-40">
+              <div className="absolute right-0 top-8 z-20 bg-surface-overlay border border-white/10 rounded-xl shadow-xl overflow-hidden w-40">
                 <button
                   className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/80 hover:bg-white/8 transition-colors"
                   onClick={() => { setMenuOpen(false); onEdit(deck) }}

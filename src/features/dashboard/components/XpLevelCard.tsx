@@ -9,11 +9,11 @@ export default function XpLevelCard() {
     <SectionCard>
       <div className="animate-pulse space-y-3">
         <div className="flex justify-between">
-          <div className="h-4 w-32 bg-[#2a2b38] rounded" />
-          <div className="h-4 w-20 bg-[#2a2b38] rounded" />
+          <div className="h-4 w-32 bg-surface-border rounded" />
+          <div className="h-4 w-20 bg-surface-border rounded" />
         </div>
-        <div className="h-2 bg-[#2a2b38] rounded-full" />
-        <div className="h-3 w-24 bg-[#2a2b38] rounded" />
+        <div className="h-2 bg-surface-border rounded-full" />
+        <div className="h-3 w-24 bg-surface-border rounded" />
       </div>
     </SectionCard>
   )
@@ -23,13 +23,13 @@ export default function XpLevelCard() {
       <div className="flex items-center gap-3 mb-3">
         <LevelAvatar level={levelInfo.level} size={44} showBadge />
         <div>
-          <p className="text-sm font-semibold text-[#f1f0f5]">{levelInfo.name}</p>
-          <p className="text-xs text-[#9896a8]">
+          <p className="text-sm font-semibold text-text-primary">{levelInfo.name}</p>
+          <p className="text-xs text-text-secondary">
             {levelInfo.xpToNext > 0 ? `${levelInfo.xpToNext} XP para el siguiente nivel` : 'Nivel máximo alcanzado 🏆'}
           </p>
         </div>
       </div>
-      <div className="h-2 rounded-full bg-[#2a2b38] overflow-hidden">
+      <div className="h-2 rounded-full bg-surface-border overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
@@ -37,7 +37,7 @@ export default function XpLevelCard() {
           className="h-full bg-gradient-to-r from-[#f97316] to-[#7c3aed] rounded-full"
         />
       </div>
-      <p className="text-xs text-[#5e5c70] mt-1">{xp} XP total</p>
+      <p className="text-xs text-text-muted mt-1">{xp} XP total</p>
     </SectionCard>
   )
 }

@@ -18,7 +18,7 @@ export default function NotificationBell() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { data: unread = 0 } = useUnreadCount()
-  const { list, markRead, markAllRead } = useNotifications(open)
+  const { items, isLoading, isFetchingMore, hasMore, loadMore, markRead, markAllRead } = useNotifications(open)
 
   useEffect(() => {
     if (!open) return
@@ -33,7 +33,7 @@ export default function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="relative text-[#9896a8] hover:text-[#f1f0f5] transition-colors p-1"
+        className="relative text-text-secondary hover:text-text-primary transition-colors p-1"
         aria-label="Notificaciones"
       >
         <Bell className="w-5 h-5" />
@@ -51,9 +51,9 @@ export default function NotificationBell() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-2 w-80 max-h-[420px] overflow-hidden flex flex-col rounded-xl bg-[#16171f] border border-[#2a2b38] shadow-2xl z-50"
+            className="absolute right-0 mt-2 w-80 max-h-[420px] overflow-hidden flex flex-col rounded-xl bg-surface-card border border-surface-border shadow-2xl z-50"
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[#2a2b38]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-surface-border">
               <span className="text-sm font-semibold text-white">Notificaciones</span>
               {unread > 0 && (
                 <button
@@ -66,18 +66,18 @@ export default function NotificationBell() {
             </div>
 
             <div className="overflow-y-auto">
-              {list.isLoading ? (
+              {isLoading ? (
                 <div className="p-4 space-y-2">
                   {[0, 1, 2].map((i) => <div key={i} className="h-12 bg-white/5 rounded-lg animate-pulse" />)}
                 </div>
-              ) : (list.data?.length ?? 0) === 0 ? (
+              ) : items.length === 0 ? (
                 <p className="text-sm text-white/40 text-center py-10">No tienes notificaciones</p>
               ) : (
                 list.data!.map((n) => (
                   <button
                     key={n.id}
                     onClick={() => !n.read && markRead.mutate(n.id)}
-                    className={`w-full text-left px-4 py-3 border-b border-[#2a2b38]/60 hover:bg-white/5 transition-colors ${
+                    className={`w-full text-left px-4 py-3 border-b border-surface-border/60 hover:bg-white/5 transition-colors ${
                       n.read ? 'opacity-60' : ''
                     }`}
                   >
@@ -88,9 +88,18 @@ export default function NotificationBell() {
                         <p className="text-xs text-white/50 mt-0.5">{n.message}</p>
                         <p className="text-[10px] text-white/30 mt-1">{timeAgo(n.createdAt)}</p>
                       </div>
-                    </div>
-                  </button>
-                ))
+                    </button>
+                  ))}
+                  {hasMore && (
+                    <button
+                      onClick={() => loadMore()}
+                      disabled={isFetchingMore}
+                      className="w-full text-center text-xs text-white/40 hover:text-white/70 py-2.5 transition-colors disabled:opacity-50"
+                    >
+                      {isFetchingMore ? 'Cargando…' : 'Cargar más'}
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </motion.div>

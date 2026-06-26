@@ -135,7 +135,7 @@ export default function DecksPage() {
               onClick={() => setModal(null)}
             />
             <motion.div
-              className="relative z-10 w-full max-w-md bg-[#16171f] border border-white/10 rounded-2xl p-6 shadow-2xl"
+              className="relative z-10 w-full max-w-md bg-surface-card border border-white/10 rounded-2xl p-6 shadow-2xl"
               initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 16 }}

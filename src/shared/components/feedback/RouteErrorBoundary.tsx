@@ -19,7 +19,7 @@ export default function RouteErrorBoundary() {
         : 'Error inesperado'
 
   return (
-    <div className="min-h-screen bg-[#0f0f14] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-surface-base flex items-center justify-center p-4">
       <div className="text-center space-y-4 max-w-sm">
         <img
           src={mascotThinking}

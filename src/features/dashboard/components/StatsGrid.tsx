@@ -6,19 +6,19 @@ function StatCard({ icon: Icon, label, value, color, loading }: {
   icon: ElementType; label: string; value: string | number; color: string; loading: boolean
 }) {
   if (loading) return (
-    <div className="bg-[#16171f] border border-[#2a2b38] rounded-xl p-4 animate-pulse">
-      <div className="w-8 h-8 rounded-lg bg-[#2a2b38] mb-3" />
-      <div className="h-6 w-12 bg-[#2a2b38] rounded mb-1" />
-      <div className="h-3 w-16 bg-[#2a2b38] rounded" />
+    <div className="bg-surface-card border border-surface-border rounded-xl p-4 animate-pulse">
+      <div className="w-8 h-8 rounded-lg bg-surface-border mb-3" />
+      <div className="h-6 w-12 bg-surface-border rounded mb-1" />
+      <div className="h-3 w-16 bg-surface-border rounded" />
     </div>
   )
   return (
-    <div className="bg-[#16171f] border border-[#2a2b38] rounded-xl p-4">
+    <div className="bg-surface-card border border-surface-border rounded-xl p-4">
       <div className={`w-8 h-8 rounded-lg ${color} flex items-center justify-center mb-3`}>
         <Icon className="w-4 h-4 text-white" />
       </div>
-      <p className="text-2xl font-bold text-[#f1f0f5]">{value}</p>
-      <p className="text-xs text-[#9896a8] mt-0.5">{label}</p>
+      <p className="text-2xl font-bold text-text-primary">{value}</p>
+      <p className="text-xs text-text-secondary mt-0.5">{label}</p>
     </div>
   )
 }

@@ -7,7 +7,7 @@ interface LoadingScreenProps {
 
 export default function LoadingScreen({ message = 'Cargando StreakStudy…' }: LoadingScreenProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0f0f14] gap-5">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-surface-base gap-5">
       <div className="relative flex items-center justify-center">
         {/* glow pulsante detrás del fénix */}
         <div
@@ -32,7 +32,7 @@ export default function LoadingScreen({ message = 'Cargando StreakStudy…' }: L
         ))}
       </div>
 
-      <p className="text-sm text-[#5e5c70]">{message}</p>
+      <p className="text-sm text-text-muted">{message}</p>
     </div>
   )
 }

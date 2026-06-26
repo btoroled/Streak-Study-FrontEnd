@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { flashcardsService } from '@/services/flashcards.service'
@@ -7,20 +8,25 @@ import type { CreateFlashcardRequest, UpdateFlashcardRequest } from '@/types/fla
 
 export function useFlashcards(deckId: number) {
   const qc = useQueryClient()
+  const [page, setPage] = useState(0)
 
   const query = useQuery({
-    queryKey: QK.flashcards(deckId),
-    queryFn: ({ signal }) => flashcardsService.listByDeck(deckId, signal),
+    queryKey: QK.flashcards(deckId, page),
+    queryFn: ({ signal }) => flashcardsService.listByDeck(deckId, page, signal),
     enabled: deckId > 0,
   })
 
-  const cardCount = query.data?.length ?? 0
+  const cards = query.data?.content ?? []
+  const cardCount = query.data?.totalElements ?? 0
+  const totalPages = query.data?.totalPages ?? 0
+
+  const invalidateAll = () => qc.invalidateQueries({ queryKey: QK.flashcardsRoot(deckId) })
 
   const createFlashcard = useMutation({
     mutationFn: (data: Omit<CreateFlashcardRequest, 'deckId'>) =>
       flashcardsService.create({ ...data, deckId }),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: QK.flashcards(deckId) })
+      invalidateAll()
       toast.success('Flashcard creada')
     },
     onError: (err) => toast.error(getErrorMessage(err)),
@@ -30,7 +36,7 @@ export function useFlashcards(deckId: number) {
     mutationFn: ({ id, data }: { id: number; data: UpdateFlashcardRequest }) =>
       flashcardsService.update(id, data),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: QK.flashcards(deckId) })
+      invalidateAll()
       toast.success('Flashcard actualizada')
     },
     onError: (err) => toast.error(getErrorMessage(err)),
@@ -39,11 +45,11 @@ export function useFlashcards(deckId: number) {
   const deleteFlashcard = useMutation({
     mutationFn: (id: number) => flashcardsService.remove(id),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: QK.flashcards(deckId) })
+      invalidateAll()
       toast.success('Flashcard eliminada')
     },
     onError: (err) => toast.error(getErrorMessage(err)),
   })
 
-  return { ...query, cardCount, createFlashcard, updateFlashcard, deleteFlashcard }
+  return { ...query, cards, cardCount, page, setPage, totalPages, createFlashcard, updateFlashcard, deleteFlashcard }
 }

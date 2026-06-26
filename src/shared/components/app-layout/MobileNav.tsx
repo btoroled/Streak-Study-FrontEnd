@@ -12,7 +12,7 @@ const items = [
 
 export default function MobileNav() {
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#16171f] border-t border-[#2a2b38]">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface-card border-t border-surface-border">
       <div className="flex">
         {items.map(({ to, icon: Icon, label }) => (
           <NavLink
@@ -21,7 +21,7 @@ export default function MobileNav() {
             className={({ isActive }) =>
               cn(
                 'flex-1 flex flex-col items-center gap-1 py-2 text-[10px] font-medium transition-colors',
-                isActive ? 'text-[#f97316]' : 'text-[#5e5c70]'
+                isActive ? 'text-[#f97316]' : 'text-text-muted'
               )
             }
           >
