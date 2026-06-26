@@ -1,6 +1,7 @@
 import { QueryProvider } from './QueryProvider'
 import { ThemeProvider } from './ThemeProvider'
 import { ToastProvider } from './ToastProvider'
+import { SessionInitProvider } from './SessionInitProvider'
 import InstallPrompt from '@/shared/components/feedback/InstallPrompt'
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -8,8 +9,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryProvider>
       <ThemeProvider>
         <ToastProvider>
-          {children}
-          <InstallPrompt />
+          <SessionInitProvider>
+            {children}
+            <InstallPrompt />
+          </SessionInitProvider>
         </ToastProvider>
       </ThemeProvider>
     </QueryProvider>

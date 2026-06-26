@@ -3,15 +3,13 @@ import { useAuthStore } from '@/store/auth.store'
 import { getUserLevel } from '@/lib/xp.utils'
 
 export function useDashboard() {
-  const { data: progress, isLoading, error, refetch } = useProgress()
-  const { xp, currentStreak, streakFreezes, badges, fullName, email } = useAuthStore()
-
-  // Use store snapshot while query loads (already synced on session init)
-  const displayXp = progress?.xp ?? xp
-  const displayStreak = progress?.currentStreak ?? currentStreak
-  const displayFreezes = progress?.streakFreezes ?? streakFreezes
-  const displayBadges = progress?.badges ?? badges
-  const levelInfo = getUserLevel(displayXp)
+  const { isLoading, error, refetch } = useProgress()
+  const xp = useAuthStore((s) => s.xp)
+  const currentStreak = useAuthStore((s) => s.currentStreak)
+  const streakFreezes = useAuthStore((s) => s.streakFreezes)
+  const badges = useAuthStore((s) => s.badges)
+  const fullName = useAuthStore((s) => s.fullName)
+  const email = useAuthStore((s) => s.email)
 
   const displayName = fullName ?? email?.split('@')[0] ?? 'Estudiante'
 
@@ -20,10 +18,10 @@ export function useDashboard() {
     error,
     refetch,
     displayName,
-    xp: displayXp,
-    currentStreak: displayStreak,
-    streakFreezes: displayFreezes,
-    badges: displayBadges,
-    levelInfo,
+    xp,
+    currentStreak,
+    streakFreezes,
+    badges,
+    levelInfo: getUserLevel(xp),
   }
 }

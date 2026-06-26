@@ -30,6 +30,7 @@ import Error403Page from '@/pages/errors/Error403Page'
 import Error404Page from '@/pages/errors/Error404Page'
 import Error500Page from '@/pages/errors/Error500Page'
 import RouteErrorBoundary from '@/shared/components/feedback/RouteErrorBoundary'
+import RoleGuard from '@/shared/components/guards/RoleGuard'
 
 export const router = createBrowserRouter([
   // Public routes — GuestGuard redirects authenticated users to /dashboard
@@ -44,7 +45,7 @@ export const router = createBrowserRouter([
       { path: '/reset-password', element: <ResetPasswordPage /> },
     ],
   },
-  // Protected routes — AuthGuard handles session init + unauthenticated redirect
+  // Protected routes — AuthGuard observa el status hidratado por SessionInitProvider
   {
     element: <AppLayout />,
     errorElement: <RouteErrorBoundary />,
@@ -58,7 +59,14 @@ export const router = createBrowserRouter([
       { path: '/documents', element: <DocumentsPage /> },
       { path: '/courses', element: <CoursesPage /> },
       { path: '/achievements', element: <AchievementsPage /> },
-      { path: '/store', element: <StorePage /> },
+      {
+        path: '/store',
+        element: (
+          <RoleGuard permission="view:store">
+            <StorePage />
+          </RoleGuard>
+        ),
+      },
       { path: '/leaderboard', element: <LeaderboardPage /> },
       { path: '/profile', element: <ProfilePage /> },
     ],

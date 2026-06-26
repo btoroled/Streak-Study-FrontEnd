@@ -35,7 +35,13 @@ axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 axiosInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const original = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
+    const original = error.config as
+      | (InternalAxiosRequestConfig & { _retry?: boolean })
+      | undefined
+
+    // Errores de red / timeout sin request configurado: no hay nada que reintentar.
+    if (!original) return Promise.reject(error)
+
     const status: number | undefined = error.response?.status
     const url = original.url ?? ''
     const isRefreshEndpoint = url.includes('/auth/refresh')
