@@ -35,3 +35,11 @@ export interface ResetPasswordRequest {
   token: string
   newPassword: string
 }
+
+export interface UserMeResponse {
+  userId: number
+  email: string
+  fullName: string
+  role: UserRole
+  institutionId: number
+}
