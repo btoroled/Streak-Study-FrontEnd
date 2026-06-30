@@ -10,7 +10,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryProvider>
       <ThemeProvider>
         <ToastProvider>
-          {children}
+          <SessionInitProvider>
+            {children}
+          </SessionInitProvider>
           <InstallPrompt />
           <UpdatePrompt />
         </ToastProvider>

@@ -73,7 +73,7 @@ export default function NotificationBell() {
               ) : items.length === 0 ? (
                 <p className="text-sm text-white/40 text-center py-10">No tienes notificaciones</p>
               ) : (
-                list.data!.map((n) => (
+                items.map((n) => (
                   <button
                     key={n.id}
                     onClick={() => !n.read && markRead.mutate(n.id)}
@@ -88,9 +88,9 @@ export default function NotificationBell() {
                         <p className="text-xs text-white/50 mt-0.5">{n.message}</p>
                         <p className="text-[10px] text-white/30 mt-1">{timeAgo(n.createdAt)}</p>
                       </div>
-                    </button>
-                  ))}
-                </>
+                    </div>
+                  </button>
+                ))
               )}
             </div>
           </motion.div>
