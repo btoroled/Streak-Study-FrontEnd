@@ -8,6 +8,13 @@ import { progressService } from '@/services/progress.service'
  * Hidrata la sesión al montar la app si hay refreshToken persistido.
  * Está por encima del router para que ambos guards (Auth, Guest) reaccionen
  * al mismo estado en lugar de duplicar la lógica de bootstrap.
+ *
+ * Flujo:
+ * 1. POST /auth/refresh → obtiene accessToken fresco y actualiza tokens en store.
+ * 2. GET  /auth/me      → revalida rol/email/fullName contra el backend.
+ *    - 401 → sesión inválida → logout forzado.
+ *    - otro error → se ignora; la sesión sigue válida vía refresh.
+ * 3. GET  /progress     → sincroniza XP/racha (no-fatal si falla).
  */
 export function SessionInitProvider({ children }: { children: React.ReactNode }) {
   const refreshToken = useAuthStore((s) => s.refreshToken)
@@ -30,6 +37,33 @@ export function SessionInitProvider({ children }: { children: React.ReactNode })
           refreshToken: authData.refreshToken,
           xp: authData.xp,
         })
+
+        // Revalidate profile against the backend
+        try {
+          const meData = await authService.me()
+          if (!cancelled) {
+            useAuthStore.getState().setAuth({
+              accessToken: authData.accessToken,
+              refreshToken: authData.refreshToken,
+              userId: meData.userId,
+              institutionId: meData.institutionId,
+              email: meData.email,
+              fullName: meData.fullName,
+              role: meData.role,
+              xp: authData.xp,
+            })
+          }
+        } catch (meError: unknown) {
+          const status = (meError as { response?: { status?: number } })?.response?.status
+          if (status === 401) {
+            if (!cancelled) {
+              useAuthStore.getState().logout()
+              setStatus('error')
+            }
+            return
+          }
+          // 404 or network error: endpoint may not exist yet — session still valid
+        }
 
         try {
           const progress = await progressService.getProgress()
