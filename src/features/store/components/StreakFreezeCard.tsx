@@ -1,17 +1,17 @@
 import { Snowflake } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 
-const STREAK_FREEZE_COST = 200
-
 interface Props {
   currentFreezes: number
   userXp: number
+  cost: number
+  description: string
   onBuy: () => void
   isLoading?: boolean
 }
 
-export default function StreakFreezeCard({ currentFreezes, userXp, onBuy, isLoading }: Props) {
-  const canBuy = userXp >= STREAK_FREEZE_COST
+export default function StreakFreezeCard({ currentFreezes, userXp, cost, description, onBuy, isLoading }: Props) {
+  const canBuy = userXp >= cost
 
   return (
     <div className="bg-surface-card border border-white/8 rounded-xl p-5 space-y-4">
@@ -21,12 +21,10 @@ export default function StreakFreezeCard({ currentFreezes, userXp, onBuy, isLoad
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-white">Congelador de racha</h3>
-          <p className="text-sm text-white/50 mt-0.5">
-            Protege tu racha por un día de inactividad
-          </p>
+          <p className="text-sm text-white/50 mt-0.5">{description}</p>
         </div>
         <div className="text-right flex-shrink-0">
-          <p className="text-sm font-bold text-orange-400">{STREAK_FREEZE_COST} XP</p>
+          <p className="text-sm font-bold text-orange-400">{cost} XP</p>
           {currentFreezes > 0 && (
             <p className="text-xs text-blue-400 mt-0.5">Tienes {currentFreezes}</p>
           )}
@@ -39,7 +37,7 @@ export default function StreakFreezeCard({ currentFreezes, userXp, onBuy, isLoad
         disabled={!canBuy}
         onClick={onBuy}
       >
-        {canBuy ? 'Comprar congelador' : `Necesitas ${STREAK_FREEZE_COST - userXp} XP más`}
+        {canBuy ? 'Comprar congelador' : `Necesitas ${cost - userXp} XP más`}
       </Button>
     </div>
   )
