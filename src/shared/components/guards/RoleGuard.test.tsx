@@ -66,6 +66,18 @@ describe('RoleGuard', () => {
     expect(screen.queryByText('FORBIDDEN')).not.toBeInTheDocument()
   })
 
+  it('renderiza un fallback personalizado en lugar de redirigir', () => {
+    renderWithRole(
+      'TEACHER',
+      <RoleGuard permission="view:store" fallback={<div>acceso denegado</div>}>
+        <div>tienda</div>
+      </RoleGuard>,
+    )
+    expect(screen.queryByText('tienda')).not.toBeInTheDocument()
+    expect(screen.queryByText('FORBIDDEN')).not.toBeInTheDocument()
+    expect(screen.getByText('acceso denegado')).toBeInTheDocument()
+  })
+
   it('respeta minRole por jerarquía', () => {
     renderWithRole(
       'INSTITUTION_ADMIN',
@@ -96,6 +108,17 @@ describe('RoleGuard', () => {
     expect(screen.getByText('student-only')).toBeInTheDocument()
   })
 
+  it('niega cuando el rol no coincide exactamente', () => {
+    renderWithRole(
+      'STUDENT',
+      <RoleGuard role="TEACHER">
+        <div>teacher-only</div>
+      </RoleGuard>,
+    )
+    expect(screen.queryByText('teacher-only')).not.toBeInTheDocument()
+    expect(screen.getByText('FORBIDDEN')).toBeInTheDocument()
+  })
+
   it('sin rol en el store → niega', () => {
     renderWithRole(
       null,
@@ -104,5 +127,15 @@ describe('RoleGuard', () => {
       </RoleGuard>,
     )
     expect(screen.getByText('FORBIDDEN')).toBeInTheDocument()
+  })
+
+  it('permite el acceso sin restricciones cuando no se especifica ningún check', () => {
+    renderWithRole(
+      'STUDENT',
+      <RoleGuard>
+        <div>siempre visible</div>
+      </RoleGuard>,
+    )
+    expect(screen.getByText('siempre visible')).toBeInTheDocument()
   })
 })
