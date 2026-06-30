@@ -18,7 +18,7 @@ export default function NotificationBell() {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { data: unread = 0 } = useUnreadCount()
-  const { items, isLoading, isFetchingMore, hasMore, loadMore, markRead, markAllRead } = useNotifications(open)
+  const { items, isLoading, markRead, markAllRead } = useNotifications(open)
 
   useEffect(() => {
     if (!open) return
@@ -90,15 +90,6 @@ export default function NotificationBell() {
                       </div>
                     </button>
                   ))}
-                  {hasMore && (
-                    <button
-                      onClick={() => loadMore()}
-                      disabled={isFetchingMore}
-                      className="w-full text-center text-xs text-white/40 hover:text-white/70 py-2.5 transition-colors disabled:opacity-50"
-                    >
-                      {isFetchingMore ? 'Cargando…' : 'Cargar más'}
-                    </button>
-                  )}
                 </>
               )}
             </div>
