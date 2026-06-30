@@ -40,6 +40,25 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    headers: {
+      // Vite dev: 'unsafe-inline' en script-src es necesario para el HMR de Vite.
+      // En producción la meta-CSP de index.html excluye 'unsafe-inline' de script-src.
+      'Content-Security-Policy': [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline'",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data: blob:",
+        "font-src 'self'",
+        "connect-src 'self' https: http://localhost:* ws://localhost:*",
+        "worker-src 'self' blob:",
+        "manifest-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+      ].join('; '),
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

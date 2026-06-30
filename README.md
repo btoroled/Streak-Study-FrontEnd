@@ -125,3 +125,40 @@ VITE_DEFAULT_INSTITUTION_NAME=Universidad Demo
 * Generación de contenido mediante IA
 * Gestión de documentos PDF
 
+## Seguridad
+
+### Content Security Policy (CSP)
+
+La aplicación define una CSP en dos lugares:
+
+- **Desarrollo** (`vite.config.ts` `server.headers`): incluye `'unsafe-inline'` en `script-src` y permite WebSockets de HMR (`ws://localhost:*`). Solo aplica al servidor de Vite, no a la build de producción.
+- **Producción** (`index.html` meta tag): excluye `'unsafe-inline'` de `script-src`. La build de Vite genera bundles con hash, por lo que no se necesitan scripts inline.
+
+Directivas clave:
+
+| Directiva | Valor | Motivo |
+|---|---|---|
+| `script-src` | `'self'` | Solo bundles locales; sin eval ni inline |
+| `style-src` | `'self' 'unsafe-inline'` | Framer-motion aplica estilos inline para animaciones |
+| `connect-src` | `'self' https: http://localhost:*` | API backend (prod via HTTPS, dev via localhost) |
+| `object-src` | `'none'` | Bloquea plugins (Flash, etc.) |
+| `base-uri` | `'self'` | Previene inyección de base URL |
+| `form-action` | `'self'` | Previene exfiltración via form submit |
+
+### Tradeoff: refreshToken en localStorage
+
+El `refreshToken` se persiste en `localStorage` como decisión consciente para este SPA académico.
+
+**Riesgos conocidos:**
+- Un ataque XSS exitoso podría leer el token desde `localStorage`.
+- Extensiones de navegador maliciosas tienen acceso a `localStorage`.
+
+**Mitigaciones aplicadas:**
+- La CSP bloquea scripts externos e inline, reduciendo la superficie de XSS.
+- El `accessToken` (de vida corta) vive **solo en memoria** — nunca se persiste.
+- Validación de entrada con Zod + React Hook Form en todos los formularios.
+- Sin `dangerouslySetInnerHTML` ni `innerHTML` directo en ningún componente.
+
+**Alternativa recomendada para producción real:**
+Usar una cookie `HttpOnly; Secure; SameSite=Strict` para el `refreshToken`, con un endpoint `/auth/refresh` que la lea del lado del servidor. Esto hace el token inaccesible desde JavaScript. La implementación actual es un tradeoff aceptable para un proyecto académico donde la simplicidad del despliegue importa.
+
