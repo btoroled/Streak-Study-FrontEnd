@@ -1,0 +1,2872 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "StreakStudy API",
+    "description" : "Plataforma de aprendizaje gamificada con IA",
+    "contact" : {
+      "name" : "Equipo StreakStudy",
+      "email" : "team@streakstudy.com"
+    },
+    "version" : "v1"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:56509",
+    "description" : "Generated server url"
+  } ],
+  "security" : [ {
+    "bearer-jwt" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "Store",
+    "description" : "Tienda de gamificación: catálogo y compras con XP"
+  }, {
+    "name" : "Rewards",
+    "description" : "Catálogo de recompensas por institución"
+  }, {
+    "name" : "Courses",
+    "description" : "Gestión de cursos"
+  }, {
+    "name" : "Health",
+    "description" : "Health check propio del API (independiente de Actuator)"
+  }, {
+    "name" : "Institutions",
+    "description" : "Gestión de instituciones (tenants)"
+  }, {
+    "name" : "Documents",
+    "description" : "Subida de PDFs y generación de contenido con IA"
+  }, {
+    "name" : "User progress",
+    "description" : "Progreso de estudio del usuario autenticado"
+  } ],
+  "paths" : {
+    "/api/v1/flashcards/{flashcardId}" : {
+      "put" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Actualizar flashcard",
+        "operationId" : "updateFlashcard",
+        "parameters" : [ {
+          "name" : "flashcardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateFlashcardRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlashcardResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/decks/{id}" : {
+      "get" : {
+        "tags" : [ "Decks" ],
+        "summary" : "Obtener deck por id",
+        "operationId" : "getById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeckResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Decks" ],
+        "summary" : "Actualizar deck",
+        "operationId" : "update",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateDeckRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeckResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Decks" ],
+        "summary" : "Eliminar deck",
+        "operationId" : "delete",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/push-token" : {
+      "post" : {
+        "tags" : [ "Push tokens" ],
+        "summary" : "Registrar/actualizar push token (upsert idempotente)",
+        "operationId" : "register",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterPushTokenRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PushTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Push tokens" ],
+        "summary" : "Eliminar un push token del usuario",
+        "operationId" : "delete_1",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeletePushTokenRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/progress/review" : {
+      "post" : {
+        "tags" : [ "User progress" ],
+        "summary" : "Registrar fin de un repaso (suma XP / actualiza racha)",
+        "operationId" : "finishReview",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FinishReviewRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/transcribe" : {
+      "post" : {
+        "tags" : [ "Transcription" ],
+        "summary" : "Transcribir audio a texto (proxy a Whisper)",
+        "operationId" : "transcribe",
+        "parameters" : [ {
+          "name" : "language",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "es"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "audio" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  }
+                },
+                "required" : [ "audio" ]
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TranscriptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/store/streak-freeze" : {
+      "post" : {
+        "tags" : [ "Store" ],
+        "summary" : "Comprar streak freeze (mecanismo legacy)",
+        "operationId" : "buyStreakFreeze",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/store/purchase" : {
+      "post" : {
+        "tags" : [ "Store" ],
+        "summary" : "Comprar un item gastando XP (errores: insufficient_xp, max_owned_reached, unknown_item)",
+        "operationId" : "purchase",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PurchaseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PurchaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/store/badges" : {
+      "post" : {
+        "tags" : [ "Store" ],
+        "summary" : "Comprar un badge con XP (mecanismo legacy)",
+        "operationId" : "buyBadge",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BadgePurchaseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/{id}/read" : {
+      "post" : {
+        "tags" : [ "Notifications" ],
+        "summary" : "Marcar una notificación como leída (idempotente)",
+        "operationId" : "markRead",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/read-all" : {
+      "post" : {
+        "tags" : [ "Notifications" ],
+        "summary" : "Marcar todas como leídas",
+        "operationId" : "markAllRead",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/institutions" : {
+      "get" : {
+        "tags" : [ "Institutions" ],
+        "summary" : "Listar instituciones activas",
+        "operationId" : "list",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/InstitutionSummaryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Institutions" ],
+        "summary" : "Crear institución (cross-tenant)",
+        "operationId" : "create",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/InstitutionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InstitutionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flashcards" : {
+      "post" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Crear flashcard",
+        "operationId" : "create_1",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateFlashcardRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlashcardResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flashcards/{id}/review" : {
+      "post" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Registrar repaso de una flashcard (aplica SM-2)",
+        "operationId" : "review",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReviewFlashcardRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlashcardResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flashcards/{id}/explain" : {
+      "post" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Explicación del tutor IA para una flashcard",
+        "operationId" : "explain",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExplainResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{documentId}/generate-flashcards" : {
+      "post" : {
+        "tags" : [ "Documents" ],
+        "summary" : "Disparar generación de flashcards/quizzes con IA (202 Accepted, async)",
+        "operationId" : "generateFlashcards",
+        "parameters" : [ {
+          "name" : "documentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GenerateFlashcardsRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AiGenerationJobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/upload" : {
+      "post" : {
+        "tags" : [ "Documents" ],
+        "summary" : "Subir un PDF para procesar (202 Accepted, procesamiento async)",
+        "operationId" : "upload",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  }
+                },
+                "required" : [ "file" ]
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DocumentUploadResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/decks" : {
+      "get" : {
+        "tags" : [ "Decks" ],
+        "summary" : "Listar decks",
+        "description" : "Filtra por nombre (contains, case-insensitive) si se pasa `search`.",
+        "operationId" : "list_1",
+        "parameters" : [ {
+          "name" : "search",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/DeckResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Decks" ],
+        "summary" : "Crear deck",
+        "operationId" : "create_2",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateDeckRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/decks/{id}/import" : {
+      "post" : {
+        "tags" : [ "Decks" ],
+        "summary" : "Importar (clonar) un deck compartido al perfil del usuario actual",
+        "operationId" : "importDeck",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeckResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses" : {
+      "get" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Listar cursos",
+        "operationId" : "list_2",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CourseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Crear curso",
+        "operationId" : "create_3",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCourseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses/{id}/leave" : {
+      "post" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Abandonar un curso (idempotente)",
+        "operationId" : "leave",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses/{id}/enroll" : {
+      "post" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Inscribirse a un curso (idempotente)",
+        "operationId" : "enroll",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Registrar usuario",
+        "operationId" : "register_1",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Renovar access token",
+        "operationId" : "refresh",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/password/reset" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Restablecer contraseña",
+        "operationId" : "resetPassword",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/password/forgot" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Solicitar recuperación de contraseña",
+        "operationId" : "forgotPassword",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Cerrar sesión",
+        "operationId" : "logout",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Iniciar sesión",
+        "operationId" : "login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses/{id}" : {
+      "get" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Obtener curso por id",
+        "operationId" : "get",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Eliminar curso (dueño o admin)",
+        "operationId" : "delete_2",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Actualizar curso (dueño o admin)",
+        "operationId" : "update_1",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateCourseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/stats" : {
+      "get" : {
+        "tags" : [ "Analytics" ],
+        "summary" : "Resumen de estadísticas del usuario",
+        "operationId" : "stats",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserStatsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/progress" : {
+      "get" : {
+        "tags" : [ "User progress" ],
+        "summary" : "Progreso del usuario actual (XP, racha, etc.)",
+        "operationId" : "getMyProgress",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserProgressResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/forecast" : {
+      "get" : {
+        "tags" : [ "Analytics" ],
+        "summary" : "Pronóstico de repasos próximos",
+        "operationId" : "forecast",
+        "parameters" : [ {
+          "name" : "days",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 14
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ForecastPoint"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/analytics/kpis" : {
+      "get" : {
+        "tags" : [ "Analytics" ],
+        "summary" : "KPIs agregados de estudio (Issue B.5)",
+        "operationId" : "analyticsKpis",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AnalyticsKpisResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/analytics/activity" : {
+      "get" : {
+        "tags" : [ "Analytics" ],
+        "summary" : "Heatmap de actividad del último año (relleno con 0s, Issue B.5)",
+        "operationId" : "analyticsActivity",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ActivityHeatmapResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/activity" : {
+      "get" : {
+        "tags" : [ "Analytics" ],
+        "summary" : "Actividad de repasos por día (heatmap)",
+        "operationId" : "activity",
+        "parameters" : [ {
+          "name" : "days",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 30
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ActivityPoint"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/store/catalog" : {
+      "get" : {
+        "tags" : [ "Store" ],
+        "summary" : "Catálogo de la tienda con precio en XP y unidades poseídas",
+        "operationId" : "catalog",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/StoreItemResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rewards" : {
+      "get" : {
+        "tags" : [ "Rewards" ],
+        "summary" : "Listar el catálogo de recompensas de la institución",
+        "operationId" : "getStoreCatalog",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/RewardItemResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/quizzes/{id}" : {
+      "get" : {
+        "tags" : [ "Quizzes" ],
+        "summary" : "Obtener quiz por id",
+        "operationId" : "getById_1",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuizResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Quizzes" ],
+        "summary" : "Eliminar quiz",
+        "operationId" : "delete_3",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/quizzes/deck/{deckId}" : {
+      "get" : {
+        "tags" : [ "Quizzes" ],
+        "summary" : "Listar quizzes por deck",
+        "operationId" : "listByDeck",
+        "parameters" : [ {
+          "name" : "deckId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/QuizResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications" : {
+      "get" : {
+        "tags" : [ "Notifications" ],
+        "summary" : "Listar notificaciones del usuario (máx 100, createdAt DESC)",
+        "operationId" : "list_3",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/NotificationResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/unread-count" : {
+      "get" : {
+        "tags" : [ "Notifications" ],
+        "summary" : "Contador de notificaciones no leídas",
+        "operationId" : "unreadCount",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "integer",
+                    "format" : "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leaderboard" : {
+      "get" : {
+        "tags" : [ "Leaderboard" ],
+        "summary" : "Ranking de estudiantes por XP de la institucion del usuario autenticado",
+        "operationId" : "getLeaderboard",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/LeaderboardUserResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/leaderboard/top" : {
+      "get" : {
+        "tags" : [ "Leaderboard" ],
+        "summary" : "Top N del leaderboard (scope global|weekly) con rank y posición del usuario actual",
+        "operationId" : "top",
+        "parameters" : [ {
+          "name" : "scope",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "global"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 50
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LeaderboardTopResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/institutions/{id}" : {
+      "get" : {
+        "tags" : [ "Institutions" ],
+        "summary" : "Obtener institución por id",
+        "operationId" : "getById_2",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InstitutionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flashcards/{id}" : {
+      "get" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Obtener flashcard por id",
+        "operationId" : "getById_3",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlashcardDetailResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Eliminar flashcard",
+        "operationId" : "delete_4",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/flashcards/deck/{deckId}" : {
+      "get" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Listar flashcards por deck (paginado)",
+        "operationId" : "listByDeck_1",
+        "parameters" : [ {
+          "name" : "deckId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "pageable",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/Pageable"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseFlashcardResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flashcards/deck/{deckId}/due" : {
+      "get" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Listar flashcards pendientes de repaso hoy (SM-2)",
+        "operationId" : "listDueByDeck",
+        "parameters" : [ {
+          "name" : "deckId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/FlashcardResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/flashcards/deck/{deckId}/due/count" : {
+      "get" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Contar flashcards pendientes de repaso hoy",
+        "operationId" : "countDueByDeck",
+        "parameters" : [ {
+          "name" : "deckId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "integer",
+                    "format" : "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents" : {
+      "get" : {
+        "tags" : [ "Documents" ],
+        "operationId" : "list_4",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/DocumentResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{documentId}" : {
+      "get" : {
+        "tags" : [ "Documents" ],
+        "summary" : "Detalle de un documento",
+        "operationId" : "getById_4",
+        "parameters" : [ {
+          "name" : "documentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DocumentResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Documents" ],
+        "operationId" : "delete_5",
+        "parameters" : [ {
+          "name" : "documentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{documentId}/status" : {
+      "get" : {
+        "tags" : [ "Documents" ],
+        "summary" : "Estado de procesamiento de un documento",
+        "operationId" : "getStatus",
+        "parameters" : [ {
+          "name" : "documentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DocumentStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{documentId}/markdown" : {
+      "get" : {
+        "tags" : [ "Documents" ],
+        "summary" : "Markdown extraído del documento",
+        "operationId" : "getMarkdown",
+        "parameters" : [ {
+          "name" : "documentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{documentId}/flashcards" : {
+      "get" : {
+        "tags" : [ "Documents" ],
+        "summary" : "Flashcards generadas de un documento",
+        "operationId" : "getFlashcards",
+        "parameters" : [ {
+          "name" : "documentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Flashcard"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/jobs/{jobId}" : {
+      "get" : {
+        "tags" : [ "Documents" ],
+        "summary" : "Estado de un job de generación con IA",
+        "operationId" : "getJobStatus",
+        "parameters" : [ {
+          "name" : "jobId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AiGenerationJobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me" : {
+      "get" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Obtener usuario autenticado",
+        "operationId" : "me",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health" : {
+      "get" : {
+        "tags" : [ "Health" ],
+        "summary" : "Health check del API (status UP + nombre + timestamp)",
+        "operationId" : "health",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : { }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "UpdateFlashcardRequest" : {
+        "type" : "object",
+        "properties" : {
+          "question" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 0
+          },
+          "difficulty" : {
+            "type" : "string",
+            "enum" : [ "EASY", "MEDIUM", "HARD" ]
+          },
+          "answer" : {
+            "type" : "string",
+            "maxLength" : 2000,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "answer", "question" ]
+      },
+      "FlashcardResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "question" : {
+            "type" : "string"
+          },
+          "answer" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "difficulty" : {
+            "type" : "string",
+            "enum" : [ "EASY", "MEDIUM", "HARD" ]
+          },
+          "nextReviewAt" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "UpdateDeckRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 0
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 2000,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "DeckResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createdByUserId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "ownerType" : {
+            "type" : "string",
+            "enum" : [ "PERSONAL", "INSTITUTION" ]
+          },
+          "importedFromDeckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "courseId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "RegisterPushTokenRequest" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string",
+            "minLength" : 1,
+            "pattern" : "^Expo(nent)?PushToken\\[.+\\]$"
+          },
+          "platform" : {
+            "type" : "string",
+            "enum" : [ "ios", "android" ]
+          },
+          "deviceName" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "platform", "token" ]
+      },
+      "PushTokenResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "token" : {
+            "type" : "string"
+          },
+          "platform" : {
+            "type" : "string",
+            "enum" : [ "ios", "android" ]
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "FinishReviewRequest" : {
+        "type" : "object",
+        "properties" : {
+          "reviewedCards" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "durationMinutes" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "TranscriptionResponse" : {
+        "type" : "object",
+        "properties" : {
+          "text" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PurchaseRequest" : {
+        "type" : "object",
+        "properties" : {
+          "item" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "item" ]
+      },
+      "PurchaseResponse" : {
+        "type" : "object",
+        "properties" : {
+          "item" : {
+            "type" : "string"
+          },
+          "newXp" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "ownedAfter" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "BadgePurchaseRequest" : {
+        "type" : "object",
+        "properties" : {
+          "badgeName" : {
+            "type" : "string",
+            "enum" : [ "STREAK_STARTER", "XP_COLLECTOR" ]
+          }
+        },
+        "required" : [ "badgeName" ]
+      },
+      "InstitutionRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 2
+          },
+          "code" : {
+            "type" : "string",
+            "maxLength" : 32,
+            "minLength" : 2,
+            "pattern" : "^[a-z0-9-]+$"
+          }
+        },
+        "required" : [ "code", "name" ]
+      },
+      "InstitutionResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "string"
+          },
+          "active" : {
+            "type" : "boolean"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "CreateFlashcardRequest" : {
+        "type" : "object",
+        "properties" : {
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "question" : {
+            "type" : "string",
+            "maxLength" : 500,
+            "minLength" : 0
+          },
+          "answer" : {
+            "type" : "string",
+            "minLength" : 1
+          },
+          "difficulty" : {
+            "type" : "string",
+            "enum" : [ "EASY", "MEDIUM", "HARD" ]
+          }
+        },
+        "required" : [ "answer", "deckId", "difficulty", "question" ]
+      },
+      "ReviewFlashcardRequest" : {
+        "type" : "object",
+        "properties" : {
+          "rating" : {
+            "type" : "string",
+            "enum" : [ "AGAIN", "HARD", "GOOD", "EASY" ]
+          }
+        },
+        "required" : [ "rating" ]
+      },
+      "ExplainResponse" : {
+        "type" : "object",
+        "properties" : {
+          "explanation" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GenerateFlashcardsRequest" : {
+        "type" : "object",
+        "properties" : {
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "generateFlashcards" : {
+            "type" : "boolean"
+          },
+          "generateMultipleChoice" : {
+            "type" : "boolean"
+          },
+          "generateTrueFalse" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "deckId" ]
+      },
+      "AiGenerationJobResponse" : {
+        "type" : "object",
+        "properties" : {
+          "jobId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "documentId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "RUNNING", "COMPLETED", "FAILED" ]
+          },
+          "totalInputTokens" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "totalOutputTokens" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "estimatedCostUsd" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "errorMessage" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DocumentUploadResponse" : {
+        "type" : "object",
+        "properties" : {
+          "documentId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "originalFilename" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "PROCESSING", "READY", "FAILED" ]
+          },
+          "duplicate" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "CreateDeckRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 0
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 2000,
+            "minLength" : 0
+          },
+          "ownerType" : {
+            "type" : "string",
+            "enum" : [ "PERSONAL", "INSTITUTION" ]
+          },
+          "courseId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "CreateCourseRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 2
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 2000,
+            "minLength" : 0
+          },
+          "code" : {
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "CourseResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "string"
+          },
+          "ownerId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "ownerName" : {
+            "type" : "string"
+          },
+          "studentsCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "decksCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "enrolled" : {
+            "type" : "boolean"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "RegisterRequest" : {
+        "type" : "object",
+        "properties" : {
+          "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "minLength" : 1
+          },
+          "password" : {
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 8
+          },
+          "fullName" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "email", "fullName", "institutionId", "password" ]
+      },
+      "AuthResponse" : {
+        "type" : "object",
+        "properties" : {
+          "accessToken" : {
+            "type" : "string"
+          },
+          "refreshToken" : {
+            "type" : "string"
+          },
+          "expiresIn" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string",
+            "enum" : [ "STUDENT", "TEACHER", "INSTITUTION_ADMIN", "SUPER_ADMIN" ]
+          },
+          "xp" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "RefreshTokenRequest" : {
+        "type" : "object",
+        "properties" : {
+          "refreshToken" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "refreshToken" ]
+      },
+      "ResetPasswordRequest" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string",
+            "minLength" : 1
+          },
+          "newPassword" : {
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 8
+          }
+        },
+        "required" : [ "newPassword", "token" ]
+      },
+      "ForgotPasswordRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "email" ]
+      },
+      "LoginRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "minLength" : 1
+          },
+          "password" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "email", "password" ]
+      },
+      "UpdateCourseRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 2
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 2000,
+            "minLength" : 0
+          },
+          "code" : {
+            "type" : "string",
+            "maxLength" : 40,
+            "minLength" : 0
+          }
+        }
+      },
+      "UserStatsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "xp" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "currentStreak" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "totalReviews" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "masteredCards" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "dueToday" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "UserProgressResponse" : {
+        "type" : "object",
+        "properties" : {
+          "xp" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "currentStreak" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "streakFreezes" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "badges" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          }
+        }
+      },
+      "ForecastPoint" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "due" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "AnalyticsKpisResponse" : {
+        "type" : "object",
+        "properties" : {
+          "totalReviews" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "reviewsLast7Days" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "reviewsLast30Days" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "averageAccuracy" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "averageSessionDurationSec" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "longestStreak" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "ActivityHeatmapResponse" : {
+        "type" : "object",
+        "properties" : {
+          "from" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "to" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "points" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/HeatmapPoint"
+            }
+          }
+        }
+      },
+      "HeatmapPoint" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "ActivityPoint" : {
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "reviews" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "StoreItemResponse" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "priceXp" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "owned" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "maxOwned" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "RewardItemResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "costInPoints" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "stock" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "QuizResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "question" : {
+            "type" : "string"
+          },
+          "quizType" : {
+            "type" : "string",
+            "enum" : [ "MULTIPLE_CHOICE", "TRUE_FALSE" ]
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "correctOptionIndex" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "NotificationResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "body" : {
+            "type" : "string"
+          },
+          "data" : {
+            "type" : "object",
+            "additionalProperties" : { }
+          },
+          "isRead" : {
+            "type" : "boolean"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "readAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "LeaderboardUserResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fullName" : {
+            "type" : "string"
+          },
+          "streak" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "points" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "LeaderboardEntry" : {
+        "type" : "object",
+        "properties" : {
+          "rank" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "xp" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "streak" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "level" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "isCurrentUser" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "LeaderboardTopResponse" : {
+        "type" : "object",
+        "properties" : {
+          "scope" : {
+            "type" : "string"
+          },
+          "generatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "entries" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/LeaderboardEntry"
+            }
+          },
+          "currentUser" : {
+            "$ref" : "#/components/schemas/LeaderboardEntry"
+          }
+        }
+      },
+      "InstitutionSummaryResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "FlashcardDetailResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "question" : {
+            "type" : "string"
+          },
+          "answer" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "difficulty" : {
+            "type" : "string",
+            "enum" : [ "EASY", "MEDIUM", "HARD" ]
+          }
+        }
+      },
+      "Pageable" : {
+        "type" : "object",
+        "properties" : {
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 1
+          },
+          "sort" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "PageResponseFlashcardResponse" : {
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FlashcardResponse"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "hasNext" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "DocumentResponse" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "originalFilename" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "PROCESSING", "READY", "FAILED" ]
+          },
+          "sizeBytes" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        }
+      },
+      "DocumentStatusResponse" : {
+        "type" : "object",
+        "properties" : {
+          "documentId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "originalFilename" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "PROCESSING", "READY", "FAILED" ]
+          },
+          "markdownAvailable" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Flashcard" : { },
+      "CurrentUserResponse" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string"
+          },
+          "xp" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "currentStreak" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "streakFreezes" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "badges" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          }
+        }
+      },
+      "DeletePushTokenRequest" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "token" ]
+      }
+    },
+    "securitySchemes" : {
+      "bearer-jwt" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}

@@ -60,16 +60,32 @@ src/
 - Vitest + Testing Library + jsdom. Setup en `src/test/setup.ts`.
 - Tests viven al lado del archivo bajo prueba: `Foo.tsx` + `Foo.test.tsx` / `useFoo.ts` + `useFoo.test.ts`.
 
+## Contrato de API (SPEC-002)
+
+El spec vive en `contracts/openapi.json` (copiado de `proyecto-1-streakstudy/docs/openapi.json`).
+Los tipos generados viven en `src/types/api.generated.ts` — **no editar a mano**.
+
+**Cuando el backend cambia el contrato:**
+1. Copiar el nuevo `docs/openapi.json` del backend a `contracts/openapi.json`.
+2. Ejecutar `npm run generate:api` para regenerar `api.generated.ts`.
+3. Si algún type file importa del generado y ahora falla, arreglarlo.
+4. Commit de `contracts/openapi.json` + `api.generated.ts` juntos.
+
+**CI** (`.github/workflows/contract-check.yml`) verifica en cada PR que:
+- `api.generated.ts` está en sincronía con `contracts/openapi.json`.
+- El typecheck del código fuente pasa contra los tipos del spec.
+
 ## Comandos
 
-| Comando             | Para qué                                |
-| ------------------- | --------------------------------------- |
-| `npm run dev`       | Servidor de desarrollo                  |
-| `npm run build`     | Typecheck + build de producción         |
-| `npm run typecheck` | Solo typecheck (sin emitir, para CI)    |
-| `npm run lint`      | ESLint                                  |
-| `npm test`          | Tests en CI (run-once)                  |
-| `npm run test:watch`| Tests en watch                          |
+| Comando               | Para qué                                         |
+| --------------------- | ------------------------------------------------ |
+| `npm run dev`         | Servidor de desarrollo                           |
+| `npm run build`       | Typecheck + build de producción                  |
+| `npm run typecheck`   | Solo typecheck (sin emitir, para CI)             |
+| `npm run generate:api`| Regenerar tipos desde `contracts/openapi.json`   |
+| `npm run lint`        | ESLint                                           |
+| `npm test`            | Tests en CI (run-once)                           |
+| `npm run test:watch`  | Tests en watch                                   |
 
 ## Convenciones de commit
 
