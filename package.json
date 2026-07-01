@@ -10,7 +10,8 @@
     "typecheck": "tsc -b --noEmit",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "generate:api": "openapi-typescript contracts/openapi.json -o src/types/api.generated.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -49,6 +50,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "jsdom": "^29.1.1",
+    "openapi-typescript": "^7.13.0",
     "postcss": "^8.5.15",
     "tailwindcss": "^4.3.0",
     "typescript": "~6.0.2",

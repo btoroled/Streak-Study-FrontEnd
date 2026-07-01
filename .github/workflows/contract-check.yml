@@ -1,0 +1,34 @@
+name: Contract Check (SPEC-002)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  contract-check:
+    name: Verify API contract types
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Regenerate API types from spec
+        run: npm run generate:api
+
+      - name: Fail if generated types differ from committed
+        run: |
+          git diff --exit-code src/types/api.generated.ts || \
+            (echo "api.generated.ts is out of sync with contracts/openapi.json. Run 'npm run generate:api' locally and commit the result." && exit 1)
+
+      - name: Type-check source against contract (excludes test files)
+        run: npx tsc -p tsconfig.contract.json --noEmit

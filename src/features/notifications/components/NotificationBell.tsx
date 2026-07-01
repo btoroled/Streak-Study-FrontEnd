@@ -76,16 +76,16 @@ export default function NotificationBell() {
                 items.map((n) => (
                   <button
                     key={n.id}
-                    onClick={() => !n.read && markRead.mutate(n.id)}
+                    onClick={() => !n.isRead && markRead.mutate(n.id)}
                     className={`w-full text-left px-4 py-3 border-b border-surface-border/60 hover:bg-white/5 transition-colors ${
-                      n.read ? 'opacity-60' : ''
+                      n.isRead ? 'opacity-60' : ''
                     }`}
                   >
                     <div className="flex items-start gap-2">
-                      {!n.read && <span className="w-2 h-2 rounded-full bg-[#f97316] mt-1.5 shrink-0" />}
+                      {!n.isRead && <span className="w-2 h-2 rounded-full bg-[#f97316] mt-1.5 shrink-0" />}
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-white">{n.title}</p>
-                        <p className="text-xs text-white/50 mt-0.5">{n.message}</p>
+                        <p className="text-xs text-white/50 mt-0.5">{n.body}</p>
                         <p className="text-[10px] text-white/30 mt-1">{timeAgo(n.createdAt)}</p>
                       </div>
                     </div>
