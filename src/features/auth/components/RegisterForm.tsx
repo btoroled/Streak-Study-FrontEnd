@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { Eye, EyeOff, User, Mail, Lock, Building2 } from 'lucide-react'
 import { Input } from '@/shared/components/ui/input'
 import { Button } from '@/shared/components/ui/button'
+import { institutionsService } from '@/services/institutions.service'
+import { QK } from '@/lib/query-keys'
 import { useAuth, handleAuthError } from '../hooks/useAuth'
 import { useInstitutionResolver } from '../hooks/useInstitutionResolver'
 import { registerSchema, type RegisterFormValues } from '../schemas/auth.schemas'
+
+// Nombre con el que el backend siembra la institución sentinel (InstitutionSeeder).
+// Solo se usa para ordenarla al final del selector — funcionalmente es una más.
+const NONE_INSTITUTION_NAME = 'Sin institución'
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -19,15 +26,31 @@ export default function RegisterForm() {
     handleSubmit,
     setValue,
     setError,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({ resolver: zodResolver(registerSchema) })
 
-  // Sync institutionId into the form whenever resolver resolves it
+  const selectedInstitutionId = useWatch({ control, name: 'institutionId' })
+
+  const institutionsQuery = useQuery({
+    queryKey: QK.institutions,
+    queryFn: () => institutionsService.list(),
+    enabled: resolver.mode === 'manual',
+    staleTime: 5 * 60 * 1000,
+    select: (list) =>
+      [...list].sort(
+        (a, b) =>
+          Number(a.name === NONE_INSTITUTION_NAME) - Number(b.name === NONE_INSTITUTION_NAME),
+      ),
+  })
+
+  // Sync institutionId into the form when it's fixed by an invite link (?iid=)
+  const urlInstitutionId = resolver.mode === 'url-param' ? resolver.institutionId : null
   useEffect(() => {
-    if (resolver.institutionId) {
-      setValue('institutionId', resolver.institutionId, { shouldValidate: false })
+    if (urlInstitutionId) {
+      setValue('institutionId', urlInstitutionId, { shouldValidate: false })
     }
-  }, [resolver.institutionId, setValue])
+  }, [urlInstitutionId, setValue])
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
@@ -46,9 +69,9 @@ export default function RegisterForm() {
         <label className="text-xs font-medium text-text-secondary uppercase tracking-wide">
           Institución
         </label>
-        <div className="relative">
-          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-          {resolver.mode === 'url-param' ? (
+        {resolver.mode === 'url-param' ? (
+          <div className="relative">
+            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             <div className="pl-10 pr-4 py-3 rounded-lg bg-surface-overlay border border-surface-border text-sm text-text-primary">
               {resolver.isLoading ? (
                 <span className="text-text-muted">Cargando…</span>
@@ -56,23 +79,36 @@ export default function RegisterForm() {
                 <span>{resolver.institutionName ?? `Institución #${resolver.institutionId}`}</span>
               )}
             </div>
-          ) : (
-            <Input
-              type="number"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              placeholder="ID de institución"
-              error={!!errors.institutionId}
-              className="pl-10"
-              value={resolver.institutionId}
-              onChange={(e) => {
-                const id = Number(e.target.value)
-                resolver.setInstitutionId(id)
-                setValue('institutionId', id, { shouldValidate: true })
-              }}
-            />
-          )}
-        </div>
+          </div>
+        ) : institutionsQuery.isLoading ? (
+          <p className="text-sm text-text-muted py-2">Cargando instituciones…</p>
+        ) : institutionsQuery.isError ? (
+          <p className="text-sm text-error py-2">
+            No se pudieron cargar las instituciones. Intenta de nuevo.
+          </p>
+        ) : (
+          <div role="radiogroup" aria-label="Institución" className="flex flex-wrap gap-2">
+            {(institutionsQuery.data ?? []).map((inst) => {
+              const isActive = selectedInstitutionId === inst.id
+              return (
+                <button
+                  key={inst.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={isActive}
+                  onClick={() => setValue('institutionId', inst.id, { shouldValidate: true })}
+                  className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                    isActive
+                      ? 'bg-brand-purple text-white font-semibold'
+                      : 'bg-surface-overlay border border-surface-border text-text-secondary hover:border-brand-purple/50'
+                  }`}
+                >
+                  {inst.name}
+                </button>
+              )
+            })}
+          </div>
+        )}
         {errors.institutionId && (
           <p className="text-xs text-error">{errors.institutionId.message}</p>
         )}
