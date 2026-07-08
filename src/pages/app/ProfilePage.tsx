@@ -2,6 +2,8 @@ import ProfileHeader from '@/features/profile/components/ProfileHeader'
 import StatsPanel from '@/features/profile/components/StatsPanel'
 import BadgesCollection from '@/features/profile/components/BadgesCollection'
 import SecuritySection from '@/features/profile/components/SecuritySection'
+import CreateUserSection from '@/features/team/components/CreateUserSection'
+import RoleGuard from '@/shared/components/guards/RoleGuard'
 import { useProfile } from '@/features/profile/hooks/useProfile'
 
 export default function ProfilePage() {
@@ -35,6 +37,11 @@ export default function ProfilePage() {
       </div>
 
       <SecuritySection />
+
+      {/* fallback={null}: sin él, un STUDENT sería redirigido a /403 en su propio perfil */}
+      <RoleGuard permission="manage:users" fallback={null}>
+        <CreateUserSection />
+      </RoleGuard>
     </div>
   )
 }
