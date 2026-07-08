@@ -22,6 +22,7 @@ const achievements = lazyPage(() => import('@/pages/app/AchievementsPage'))
 const store        = lazyPage(() => import('@/pages/app/StorePage'))
 const leaderboard  = lazyPage(() => import('@/pages/app/LeaderboardPage'))
 const profile      = lazyPage(() => import('@/pages/app/ProfilePage'))
+const admin        = lazyPage(() => import('@/pages/app/AdminPage'))
 
 export const DashboardPage = dashboard.Component
 export const AnalyticsPage = analytics.Component
@@ -35,6 +36,7 @@ export const AchievementsPage = achievements.Component
 export const StorePage = store.Component
 export const LeaderboardPage = leaderboard.Component
 export const ProfilePage = profile.Component
+export const AdminPage = admin.Component
 
 /**
  * Mapa pathname → función de prefetch. Para usar en onMouseEnter de los links
@@ -51,4 +53,5 @@ export const prefetchByPath: Record<string, () => Promise<unknown>> = {
   '/store':        store.prefetch,
   '/leaderboard':  leaderboard.prefetch,
   '/profile':      profile.prefetch,
+  '/admin':        admin.prefetch,
 }

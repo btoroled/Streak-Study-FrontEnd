@@ -5,12 +5,17 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AxiosError, AxiosHeaders } from 'axios'
 import CreateUserForm from './CreateUserForm'
 import { usersService } from '@/services/users.service'
+import { institutionsService } from '@/services/institutions.service'
 import { useAuthStore } from '@/store/auth.store'
 import { toast } from 'sonner'
 import type { UserRole } from '@/config/roles'
 
 vi.mock('@/services/users.service', () => ({
   usersService: { create: vi.fn() },
+}))
+
+vi.mock('@/services/institutions.service', () => ({
+  institutionsService: { list: vi.fn() },
 }))
 
 vi.mock('sonner', () => ({
@@ -57,6 +62,10 @@ async function fillAndSubmit() {
 describe('CreateUserForm', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.mocked(institutionsService.list).mockResolvedValue([
+      { id: 1, name: 'UTEC' },
+      { id: 2, name: 'PUCP' },
+    ])
   })
 
   it('TEACHER: el select de rol solo ofrece STUDENT y está deshabilitado', () => {
@@ -123,6 +132,56 @@ describe('CreateUserForm', () => {
     renderAs('TEACHER')
     await fillAndSubmit()
     expect(toast.error).toHaveBeenCalled()
+  })
+
+  it('SUPER_ADMIN: el select ofrece STUDENT, TEACHER e INSTITUTION_ADMIN', () => {
+    renderAs('SUPER_ADMIN')
+    const select = screen.getByLabelText<HTMLSelectElement>(/^rol/i)
+    expect(select).toBeEnabled()
+    const options = Array.from(select.options).map((o) => o.value)
+    expect(options).toEqual(['STUDENT', 'TEACHER', 'INSTITUTION_ADMIN'])
+  })
+
+  it('SUPER_ADMIN: muestra selector de institución y envía institutionId (B.9)', async () => {
+    vi.mocked(usersService.create).mockResolvedValue({
+      userId: 9,
+      institutionId: 2,
+      email: 'nuevo@x.com',
+      fullName: 'Nuevo Usuario',
+      role: 'INSTITUTION_ADMIN',
+    })
+    renderAs('SUPER_ADMIN')
+    await userEvent.selectOptions(screen.getByLabelText(/^rol/i), 'INSTITUTION_ADMIN')
+    await userEvent.selectOptions(await screen.findByLabelText(/institución/i), '2')
+    await fillAndSubmit()
+    expect(vi.mocked(usersService.create).mock.calls[0][0]).toEqual({
+      fullName: 'Nuevo Usuario',
+      email: 'nuevo@x.com',
+      password: 'password123',
+      role: 'INSTITUTION_ADMIN',
+      institutionId: 2,
+    })
+  })
+
+  it('SUPER_ADMIN: sin institución elegida muestra error local y no llama al servicio', async () => {
+    renderAs('SUPER_ADMIN')
+    await fillAndSubmit()
+    expect(await screen.findByText('Selecciona una institución')).toBeInTheDocument()
+    expect(usersService.create).not.toHaveBeenCalled()
+  })
+
+  it('TEACHER: no muestra selector de institución y el payload no incluye institutionId', async () => {
+    vi.mocked(usersService.create).mockResolvedValue({
+      userId: 9,
+      institutionId: 1,
+      email: 'nuevo@x.com',
+      fullName: 'Nuevo Usuario',
+      role: 'STUDENT',
+    })
+    renderAs('TEACHER')
+    expect(screen.queryByLabelText(/institución/i)).not.toBeInTheDocument()
+    await fillAndSubmit()
+    expect(vi.mocked(usersService.create).mock.calls[0][0]).not.toHaveProperty('institutionId')
   })
 
   it('validación local: password corta no llama al servicio', async () => {

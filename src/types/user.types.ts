@@ -19,13 +19,16 @@ export interface FinishReviewRequest {
   durationMinutes: number
 }
 
-// Alta de usuarios por TEACHER/INSTITUTION_ADMIN (POST /users).
-// Sin institutionId: el backend lo infiere del creador (TenantContext).
+// Alta de usuarios por TEACHER/INSTITUTION_ADMIN/SUPER_ADMIN (POST /users).
+// institutionId solo lo honra el backend cuando el creador es SUPER_ADMIN
+// (alta cross-tenant, B.9); para el resto se infiere de TenantContext y
+// mandarlo es un 400 (unexpected_institution_id).
 export interface CreateUserRequest {
   fullName: string
   email: string
   password: string
-  role: 'STUDENT' | 'TEACHER'
+  role: 'STUDENT' | 'TEACHER' | 'INSTITUTION_ADMIN'
+  institutionId?: number
 }
 
 export interface UserResponse {

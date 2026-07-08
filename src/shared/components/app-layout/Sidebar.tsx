@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard, LineChart, BookOpen, Layers, FileText, GraduationCap,
   Trophy, ShoppingBag, BarChart2, User, Flame, ChevronLeft, ChevronRight, LogOut,
+  ShieldCheck,
 } from 'lucide-react'
 import logoMark from '@/assets/brand/logo-mark.png'
 import { prefetchByPath } from '@/router/lazyPages'
@@ -29,6 +30,7 @@ export default function Sidebar() {
   const { sidebarOpen, toggleSidebar } = useUiStore()
   const { xp, currentStreak, fullName, email } = useAuthStore()
   const canViewStore = useRoleAccess('view:store')
+  const canViewAdmin = useRoleAccess('view:admin')
   const leaderboardEnabled = useFeatureFlag('LEADERBOARD')
   const { logout } = useAuth()
   const navigate = useNavigate()
@@ -40,6 +42,7 @@ export default function Sidebar() {
     ...navItems,
     ...(canViewStore ? [{ to: '/store', icon: ShoppingBag, label: 'Tienda' }] : []),
     ...(leaderboardEnabled ? [{ to: '/leaderboard', icon: BarChart2, label: 'Ranking' }] : []),
+    ...(canViewAdmin ? [{ to: '/admin', icon: ShieldCheck, label: 'Plataforma' }] : []),
     { to: '/profile', icon: User, label: 'Perfil' },
   ]
 
