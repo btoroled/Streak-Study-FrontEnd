@@ -20,4 +20,5 @@ export const QK = {
   documentMarkdown: (id: number) => ['document', id, 'markdown'] as const,
   aiJob: (id: number) => ['ai-job', id] as const,
   institution: (id: number) => ['institution', id] as const,
+  institutions: ['institutions'] as const,
 }

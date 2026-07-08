@@ -40,6 +40,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Crear usuario (TEACHER→STUDENT; INSTITUTION_ADMIN→STUDENT|TEACHER) */
+        post: operations["create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users/me/push-token": {
         parameters: {
             query?: never;
@@ -188,7 +205,7 @@ export interface paths {
         get: operations["list"];
         put?: never;
         /** Crear institución (cross-tenant) */
-        post: operations["create"];
+        post: operations["create_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -205,7 +222,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** Crear flashcard */
-        post: operations["create_1"];
+        post: operations["create_2"];
         delete?: never;
         options?: never;
         head?: never;
@@ -294,7 +311,7 @@ export interface paths {
         get: operations["list_1"];
         put?: never;
         /** Crear deck */
-        post: operations["create_2"];
+        post: operations["create_3"];
         delete?: never;
         options?: never;
         head?: never;
@@ -329,7 +346,7 @@ export interface paths {
         get: operations["list_2"];
         put?: never;
         /** Crear curso */
-        post: operations["create_3"];
+        post: operations["create_4"];
         delete?: never;
         options?: never;
         head?: never;
@@ -997,6 +1014,23 @@ export interface components {
             /** Format: date-time */
             createdAt?: string;
         };
+        CreateUserRequest: {
+            /** Format: email */
+            email: string;
+            password: string;
+            fullName: string;
+            /** @enum {string} */
+            role: "STUDENT" | "TEACHER" | "INSTITUTION_ADMIN" | "SUPER_ADMIN";
+        };
+        UserResponse: {
+            /** Format: int64 */
+            userId?: number;
+            /** Format: int64 */
+            institutionId?: number;
+            email?: string;
+            fullName?: string;
+            role?: string;
+        };
         RegisterPushTokenRequest: {
             token: string;
             /** @enum {string} */
@@ -1488,6 +1522,30 @@ export interface operations {
             };
         };
     };
+    create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateUserRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
     register: {
         parameters: {
             query?: never;
@@ -1707,7 +1765,7 @@ export interface operations {
             };
         };
     };
-    create: {
+    create_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -1731,7 +1789,7 @@ export interface operations {
             };
         };
     };
-    create_1: {
+    create_2: {
         parameters: {
             query?: never;
             header?: never;
@@ -1878,7 +1936,7 @@ export interface operations {
             };
         };
     };
-    create_2: {
+    create_3: {
         parameters: {
             query?: never;
             header?: never;
@@ -1944,7 +2002,7 @@ export interface operations {
             };
         };
     };
-    create_3: {
+    create_4: {
         parameters: {
             query?: never;
             header?: never;

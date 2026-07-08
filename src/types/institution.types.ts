@@ -1,3 +1,8 @@
+export interface InstitutionSummary {
+  id: number
+  name: string
+}
+
 export interface InstitutionRequest {
   name: string
   code: string

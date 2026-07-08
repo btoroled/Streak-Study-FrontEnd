@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { institutionsService } from '@/services/institutions.service'
@@ -13,10 +12,6 @@ interface UrlParamResult {
 
 interface ManualResult {
   mode: 'manual'
-  institutionId: number
-  institutionName: null
-  isLoading: false
-  setInstitutionId: (id: number) => void
 }
 
 export type InstitutionResolverResult = UrlParamResult | ManualResult
@@ -26,9 +21,6 @@ export function useInstitutionResolver(): InstitutionResolverResult {
   const iidParam = searchParams.get('iid')
   const iidFromUrl = iidParam !== null ? Number(iidParam) : null
   const isUrlMode = iidFromUrl !== null && !isNaN(iidFromUrl) && iidFromUrl > 0
-
-  const defaultId = Number(import.meta.env.VITE_DEFAULT_INSTITUTION_ID ?? 1)
-  const [manualId, setManualId] = useState(defaultId)
 
   const { data: institution, isLoading } = useQuery({
     queryKey: QK.institution(iidFromUrl ?? 0),
@@ -46,11 +38,6 @@ export function useInstitutionResolver(): InstitutionResolverResult {
     }
   }
 
-  return {
-    mode: 'manual',
-    institutionId: manualId,
-    institutionName: null,
-    isLoading: false,
-    setInstitutionId: setManualId,
-  }
+  // Modo manual: la selección vive en el form (selector de chips), no aquí.
+  return { mode: 'manual' }
 }
