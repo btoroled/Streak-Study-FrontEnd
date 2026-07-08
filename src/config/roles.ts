@@ -21,6 +21,7 @@ export type Permission =
   | 'view:store'
   | 'view:leaderboard'
   | 'view:profile'
+  | 'manage:users'
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   STUDENT: [
@@ -31,10 +32,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   TEACHER: [
     'view:dashboard', 'manage:deck', 'manage:flashcard', 'upload:document',
     'view:courses', 'create:course', 'view:leaderboard', 'view:profile',
+    'manage:users',
   ],
   INSTITUTION_ADMIN: [
     'view:dashboard', 'manage:deck', 'manage:flashcard', 'upload:document',
     'view:courses', 'create:course', 'delete:course', 'view:leaderboard', 'view:profile',
+    'manage:users',
   ],
   SUPER_ADMIN: [
     'view:dashboard', 'manage:deck', 'manage:flashcard', 'upload:document',
@@ -44,4 +47,14 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 
 export function hasPermission(role: UserRole, permission: Permission): boolean {
   return ROLE_PERMISSIONS[role]?.includes(permission) ?? false
+}
+
+// Espejo intencional de UserManagementService.ASSIGNABLE_ROLES del backend:
+// qué roles puede asignar cada rol al dar de alta usuarios (POST /users).
+// SUPER_ADMIN queda vacío hasta que el backend lo soporte (Issue B.9).
+export const ASSIGNABLE_ROLES: Record<UserRole, UserRole[]> = {
+  STUDENT: [],
+  TEACHER: ['STUDENT'],
+  INSTITUTION_ADMIN: ['STUDENT', 'TEACHER'],
+  SUPER_ADMIN: [],
 }

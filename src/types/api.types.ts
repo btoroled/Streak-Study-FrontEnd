@@ -32,6 +32,7 @@ export type ApiErrorCode =
   | 'forbidden'
   | 'not_found'
   | 'email_already_exists'
+  | 'invalid_role_assignment'
   | 'institution_code_already_exists'
   | 'badge_already_owned'
   | 'password_reset_token_expired'
