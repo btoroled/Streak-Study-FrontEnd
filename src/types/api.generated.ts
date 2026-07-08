@@ -49,7 +49,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Crear usuario (TEACHER→STUDENT; INSTITUTION_ADMIN→STUDENT|TEACHER) */
+        /** Crear usuario (TEACHER→STUDENT; INSTITUTION_ADMIN→STUDENT|TEACHER; SUPER_ADMIN→STUDENT|TEACHER|INSTITUTION_ADMIN en cualquier institución) */
         post: operations["create"];
         delete?: never;
         options?: never;
@@ -154,6 +154,23 @@ export interface paths {
         put?: never;
         /** Comprar un badge con XP (mecanismo legacy) */
         post: operations["buyBadge"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/quizzes/{id}/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Responder un quiz (valida server-side, revela la respuesta correcta solo en esta respuesta) */
+        post: operations["answer"];
         delete?: never;
         options?: never;
         head?: never;
@@ -951,6 +968,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Agregados de plataforma (usuarios, instituciones, decks, flashcards, reviews, tokens de IA) */
+        get: operations["stats_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/stats/institutions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Desglose de agregados por institución */
+        get: operations["institutionStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -1021,6 +1072,8 @@ export interface components {
             fullName: string;
             /** @enum {string} */
             role: "STUDENT" | "TEACHER" | "INSTITUTION_ADMIN" | "SUPER_ADMIN";
+            /** Format: int64 */
+            institutionId?: number;
         };
         UserResponse: {
             /** Format: int64 */
@@ -1068,6 +1121,19 @@ export interface components {
         BadgePurchaseRequest: {
             /** @enum {string} */
             badgeName: "STREAK_STARTER" | "XP_COLLECTOR";
+        };
+        AnswerQuizRequest: {
+            /** Format: int32 */
+            selectedOptionIndex?: number;
+        };
+        QuizAnswerResponse: {
+            /** Format: int64 */
+            quizId?: number;
+            /** Format: int32 */
+            selectedOptionIndex?: number;
+            /** Format: int32 */
+            correctOptionIndex?: number;
+            correct?: boolean;
         };
         InstitutionRequest: {
             name: string;
@@ -1295,8 +1361,6 @@ export interface components {
             /** @enum {string} */
             quizType?: "MULTIPLE_CHOICE" | "TRUE_FALSE";
             options?: string[];
-            /** Format: int32 */
-            correctOptionIndex?: number;
             /** Format: date-time */
             createdAt?: string;
         };
@@ -1415,6 +1479,36 @@ export interface components {
             /** Format: int32 */
             streakFreezes?: number;
             badges?: string[];
+        };
+        AdminStatsResponse: {
+            /** Format: int64 */
+            totalUsers?: number;
+            /** Format: int64 */
+            activeUsers?: number;
+            /** Format: int64 */
+            totalInstitutions?: number;
+            /** Format: int64 */
+            totalDecks?: number;
+            /** Format: int64 */
+            totalFlashcards?: number;
+            /** Format: int64 */
+            totalReviews?: number;
+            /** Format: int64 */
+            aiTokensUsed?: number;
+            usersByRole?: {
+                [key: string]: number;
+            };
+        };
+        InstitutionStatsRow: {
+            /** Format: int64 */
+            institutionId?: number;
+            name?: string;
+            /** Format: int64 */
+            users?: number;
+            /** Format: int64 */
+            decks?: number;
+            /** Format: int64 */
+            reviews?: number;
         };
         DeletePushTokenRequest: {
             token: string;
@@ -1704,6 +1798,32 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    answer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnswerQuizRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["QuizAnswerResponse"];
+                };
             };
         };
     };
@@ -2889,6 +3009,46 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["CurrentUserResponse"];
+                };
+            };
+        };
+    };
+    stats_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminStatsResponse"];
+                };
+            };
+        };
+    };
+    institutionStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InstitutionStatsRow"][];
                 };
             };
         };
