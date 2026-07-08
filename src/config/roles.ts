@@ -22,6 +22,7 @@ export type Permission =
   | 'view:leaderboard'
   | 'view:profile'
   | 'manage:users'
+  | 'view:admin'
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   STUDENT: [
@@ -42,6 +43,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   SUPER_ADMIN: [
     'view:dashboard', 'manage:deck', 'manage:flashcard', 'upload:document',
     'view:courses', 'create:course', 'delete:course', 'view:leaderboard', 'view:profile',
+    'manage:users', 'view:admin',
   ],
 }
 
@@ -51,10 +53,10 @@ export function hasPermission(role: UserRole, permission: Permission): boolean {
 
 // Espejo intencional de UserManagementService.ASSIGNABLE_ROLES del backend:
 // qué roles puede asignar cada rol al dar de alta usuarios (POST /users).
-// SUPER_ADMIN queda vacío hasta que el backend lo soporte (Issue B.9).
+// SUPER_ADMIN crea cross-tenant indicando institutionId (Issue B.9).
 export const ASSIGNABLE_ROLES: Record<UserRole, UserRole[]> = {
   STUDENT: [],
   TEACHER: ['STUDENT'],
   INSTITUTION_ADMIN: ['STUDENT', 'TEACHER'],
-  SUPER_ADMIN: [],
+  SUPER_ADMIN: ['STUDENT', 'TEACHER', 'INSTITUTION_ADMIN'],
 }

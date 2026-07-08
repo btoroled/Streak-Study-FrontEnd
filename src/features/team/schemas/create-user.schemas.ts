@@ -12,7 +12,16 @@ export const createUserSchema = z.object({
     .string()
     .min(8, 'Mínimo 8 caracteres')
     .max(100, 'Máximo 100 caracteres'),
-  role: z.enum(['STUDENT', 'TEACHER']),
+  role: z.enum(['STUDENT', 'TEACHER', 'INSTITUTION_ADMIN']),
 })
 
-export type CreateUserFormValues = z.infer<typeof createUserSchema>
+// SUPER_ADMIN crea cross-tenant (B.9): la institución destino es obligatoria.
+export const superAdminCreateUserSchema = createUserSchema.extend({
+  institutionId: z.number({ error: 'Selecciona una institución' }),
+})
+
+// institutionId es opcional en el tipo (solo SUPER_ADMIN lo completa); el
+// schema activo en el form decide si es obligatorio.
+export type CreateUserFormValues = z.infer<typeof createUserSchema> & {
+  institutionId?: number
+}

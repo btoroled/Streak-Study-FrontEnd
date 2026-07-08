@@ -21,4 +21,6 @@ export const QK = {
   aiJob: (id: number) => ['ai-job', id] as const,
   institution: (id: number) => ['institution', id] as const,
   institutions: ['institutions'] as const,
+  adminStats: ['admin', 'stats'] as const,
+  adminInstitutionStats: ['admin', 'stats', 'institutions'] as const,
 }

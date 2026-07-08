@@ -2,15 +2,23 @@ import { describe, it, expect } from 'vitest'
 import { hasPermission, ASSIGNABLE_ROLES } from './roles'
 
 describe('manage:users', () => {
-  it('TEACHER e INSTITUTION_ADMIN tienen el permiso (espejo del @PreAuthorize del backend)', () => {
+  it('TEACHER, INSTITUTION_ADMIN y SUPER_ADMIN tienen el permiso (espejo del @PreAuthorize del backend)', () => {
     expect(hasPermission('TEACHER', 'manage:users')).toBe(true)
     expect(hasPermission('INSTITUTION_ADMIN', 'manage:users')).toBe(true)
+    expect(hasPermission('SUPER_ADMIN', 'manage:users')).toBe(true)
   })
 
-  it('STUDENT y SUPER_ADMIN no tienen el permiso', () => {
+  it('STUDENT no tiene el permiso', () => {
     expect(hasPermission('STUDENT', 'manage:users')).toBe(false)
-    // SUPER_ADMIN queda fuera hasta que backend lo soporte (Issue B.9)
-    expect(hasPermission('SUPER_ADMIN', 'manage:users')).toBe(false)
+  })
+})
+
+describe('view:admin', () => {
+  it('solo SUPER_ADMIN puede ver el panel de administración', () => {
+    expect(hasPermission('SUPER_ADMIN', 'view:admin')).toBe(true)
+    expect(hasPermission('STUDENT', 'view:admin')).toBe(false)
+    expect(hasPermission('TEACHER', 'view:admin')).toBe(false)
+    expect(hasPermission('INSTITUTION_ADMIN', 'view:admin')).toBe(false)
   })
 })
 
@@ -23,8 +31,11 @@ describe('ASSIGNABLE_ROLES (espejo del UserManagementService del backend)', () =
     expect(ASSIGNABLE_ROLES.INSTITUTION_ADMIN).toEqual(['STUDENT', 'TEACHER'])
   })
 
-  it('STUDENT y SUPER_ADMIN no pueden crear a nadie', () => {
+  it('SUPER_ADMIN puede crear STUDENT, TEACHER e INSTITUTION_ADMIN (Issue B.9), nunca SUPER_ADMIN', () => {
+    expect(ASSIGNABLE_ROLES.SUPER_ADMIN).toEqual(['STUDENT', 'TEACHER', 'INSTITUTION_ADMIN'])
+  })
+
+  it('STUDENT no puede crear a nadie', () => {
     expect(ASSIGNABLE_ROLES.STUDENT).toEqual([])
-    expect(ASSIGNABLE_ROLES.SUPER_ADMIN).toEqual([])
   })
 })
