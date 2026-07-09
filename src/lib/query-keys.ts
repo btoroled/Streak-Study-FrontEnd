@@ -25,4 +25,5 @@ export const QK = {
   adminInstitutionStats: ['admin', 'stats', 'institutions'] as const,
   teacherCourses: ['teacher', 'courses'] as const,
   teacherCourseMetrics: (courseId: number) => ['teacher', 'courses', courseId, 'metrics'] as const,
+  teacherWeeklyReport: (courseId: number) => ['teacher', 'courses', courseId, 'weekly-report'] as const,
 }

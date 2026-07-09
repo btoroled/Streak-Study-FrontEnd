@@ -37,3 +37,28 @@ export interface TeacherCourseMetrics {
   topDecks: TeacherTopDeck[]
   students: TeacherStudentMetrics[]
 }
+
+export interface TeacherWeeklyTotals {
+  reviews: number
+  activeStudents: number
+  accuracy: number
+}
+
+export interface TeacherWeeklyStudentRow {
+  userId: number
+  fullName: string
+  reviews7d: number
+  reviewsPrevWeek: number
+  lastActivity: string | null
+  atRisk: boolean
+}
+
+export interface TeacherWeeklyReport {
+  courseId: number
+  weekStart: string
+  weekEnd: string
+  totals: TeacherWeeklyTotals
+  previousWeek: TeacherWeeklyTotals
+  students: TeacherWeeklyStudentRow[]
+  summary: string | null
+}
