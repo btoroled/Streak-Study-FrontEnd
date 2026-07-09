@@ -22,6 +22,18 @@ describe('view:admin', () => {
   })
 })
 
+describe('view:teacher-dashboard', () => {
+  it('TEACHER, INSTITUTION_ADMIN y SUPER_ADMIN pueden ver el dashboard de profesor', () => {
+    expect(hasPermission('TEACHER', 'view:teacher-dashboard')).toBe(true)
+    expect(hasPermission('INSTITUTION_ADMIN', 'view:teacher-dashboard')).toBe(true)
+    expect(hasPermission('SUPER_ADMIN', 'view:teacher-dashboard')).toBe(true)
+  })
+
+  it('STUDENT no tiene el permiso', () => {
+    expect(hasPermission('STUDENT', 'view:teacher-dashboard')).toBe(false)
+  })
+})
+
 describe('ASSIGNABLE_ROLES (espejo del UserManagementService del backend)', () => {
   it('TEACHER solo puede crear STUDENT', () => {
     expect(ASSIGNABLE_ROLES.TEACHER).toEqual(['STUDENT'])

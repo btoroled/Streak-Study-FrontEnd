@@ -24,6 +24,7 @@ import {
   LeaderboardPage,
   ProfilePage,
   AdminPage,
+  TeacherDashboardPage,
 } from './lazyPages'
 
 // Error pages
@@ -75,6 +76,14 @@ export const router = createBrowserRouter([
         element: (
           <RoleGuard permission="view:admin">
             <AdminPage />
+          </RoleGuard>
+        ),
+      },
+      {
+        path: '/teacher',
+        element: (
+          <RoleGuard permission="view:teacher-dashboard">
+            <TeacherDashboardPage />
           </RoleGuard>
         ),
       },
