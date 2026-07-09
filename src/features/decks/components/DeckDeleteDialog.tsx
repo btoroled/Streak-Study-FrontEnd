@@ -16,8 +16,8 @@ export default function DeckDeleteDialog({ deck, onConfirm, onCancel, isLoading 
         <div className="w-10 h-10 rounded-full bg-red-500/15 flex items-center justify-center flex-shrink-0">
           <AlertTriangle className="w-5 h-5 text-red-400" />
         </div>
-        <p className="text-sm text-white/70">
-          ¿Eliminar <span className="font-semibold text-white">"{deck.name}"</span>? Esta acción eliminará
+        <p className="text-sm text-text-secondary">
+          ¿Eliminar <span className="font-semibold text-text-primary">"{deck.name}"</span>? Esta acción eliminará
           todas las flashcards del mazo y no se puede deshacer.
         </p>
       </div>

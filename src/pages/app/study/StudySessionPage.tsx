@@ -24,10 +24,10 @@ export default function StudySessionPage() {
   if (phase === 'loading') {
     return (
       <div className="max-w-lg mx-auto space-y-4 animate-pulse">
-        <div className="h-4 bg-white/5 rounded-full" />
-        <div className="h-52 bg-white/5 rounded-2xl" />
+        <div className="h-4 bg-surface-hover rounded-full" />
+        <div className="h-52 bg-surface-hover rounded-2xl" />
         <div className="flex gap-3">
-          {[...Array(3)].map((_, i) => <div key={i} className="flex-1 h-10 bg-white/5 rounded-xl" />)}
+          {[...Array(3)].map((_, i) => <div key={i} className="flex-1 h-10 bg-surface-hover rounded-xl" />)}
         </div>
       </div>
     )
@@ -36,7 +36,7 @@ export default function StudySessionPage() {
   if (phase === 'error') {
     return (
       <div className="max-w-lg mx-auto text-center space-y-4 py-16">
-        <p className="text-white/60">Este mazo no tiene flashcards.</p>
+        <p className="text-text-secondary">Este mazo no tiene flashcards.</p>
         <button
           className="text-orange-400 text-sm hover:underline"
           onClick={() => navigate(`/decks/${id}`)}
@@ -55,8 +55,8 @@ export default function StudySessionPage() {
           alt=""
           className="w-28 h-28 object-contain mx-auto drop-shadow-xl animate-[float_4s_ease-in-out_infinite]"
         />
-        <h2 className="text-xl font-bold text-white">¡Todo al día! 🎉</h2>
-        <p className="text-white/60 text-sm">No tienes tarjetas para repasar hoy en este mazo. Vuelve mañana para mantener tu racha.</p>
+        <h2 className="text-xl font-bold text-text-primary">¡Todo al día! 🎉</h2>
+        <p className="text-text-secondary text-sm">No tienes tarjetas para repasar hoy en este mazo. Vuelve mañana para mantener tu racha.</p>
         <button
           className="text-orange-400 text-sm hover:underline"
           onClick={() => navigate('/study')}
@@ -85,7 +85,7 @@ export default function StudySessionPage() {
     <div className="max-w-lg mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <button
-          className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
+          className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
           onClick={() => navigate(-1)}
           aria-label="Volver"
         >
@@ -108,7 +108,7 @@ export default function StudySessionPage() {
           )}
 
           {!flipped && (
-            <p className="text-center text-xs text-white/30">
+            <p className="text-center text-xs text-text-muted">
               Toca la tarjeta para ver la respuesta
             </p>
           )}

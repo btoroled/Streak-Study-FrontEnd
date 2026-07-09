@@ -24,8 +24,8 @@ export default function ProfileHeader({ fullName, email, role }: Props) {
     <div className="flex items-center gap-4">
       <LevelAvatar level={levelInfo.level} size={64} showBadge alt={levelInfo.name} />
       <div>
-        <h2 className="text-lg font-bold text-white">{fullName ?? 'Usuario'}</h2>
-        <p className="text-sm text-white/50">{email}</p>
+        <h2 className="text-lg font-bold text-text-primary">{fullName ?? 'Usuario'}</h2>
+        <p className="text-sm text-text-secondary">{email}</p>
         <div className="flex items-center gap-2 mt-1">
           <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-400">
             {levelInfo.name}

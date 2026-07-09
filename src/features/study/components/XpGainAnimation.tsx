@@ -15,7 +15,7 @@ export default function XpGainAnimation({ xp }: Props) {
       <div className="text-5xl font-black bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
         +{xp}
       </div>
-      <div className="text-sm text-white/50 font-medium">XP ganado</div>
+      <div className="text-sm text-text-secondary font-medium">XP ganado</div>
     </motion.div>
   )
 }

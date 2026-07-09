@@ -33,10 +33,10 @@ export default function DeckDetailPage() {
   if (isLoading) {
     return (
       <div className="max-w-3xl mx-auto space-y-4">
-        <div className="h-8 w-64 bg-white/5 rounded-lg animate-pulse" />
-        <div className="h-4 w-40 bg-white/5 rounded-lg animate-pulse" />
+        <div className="h-8 w-64 bg-surface-hover rounded-lg animate-pulse" />
+        <div className="h-4 w-40 bg-surface-hover rounded-lg animate-pulse" />
         <div className="space-y-3 mt-6">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-white/5 animate-pulse" />)}
+          {[...Array(4)].map((_, i) => <div key={i} className="h-24 rounded-xl bg-surface-hover animate-pulse" />)}
         </div>
       </div>
     )
@@ -51,16 +51,16 @@ export default function DeckDetailPage() {
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
           <button
-            className="mt-1 p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors flex-shrink-0"
+            className="mt-1 p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors flex-shrink-0"
             onClick={() => navigate('/decks')}
             aria-label="Volver a mazos"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-white truncate">{deck.name}</h1>
+            <h1 className="text-xl font-bold text-text-primary truncate">{deck.name}</h1>
             {deck.description && (
-              <p className="text-sm text-white/50 mt-0.5">{deck.description}</p>
+              <p className="text-sm text-text-secondary mt-0.5">{deck.description}</p>
             )}
           </div>
         </div>
@@ -89,17 +89,17 @@ export default function DeckDetailPage() {
               onClick={() => setModal(null)}
             />
             <motion.div
-              className="relative z-10 w-full max-w-md bg-surface-card border border-white/10 rounded-2xl p-6 shadow-2xl"
+              className="relative z-10 w-full max-w-md bg-surface-card border border-surface-border rounded-2xl p-6 shadow-2xl"
               initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 16 }}
             >
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-base font-semibold text-white">
+                <h2 className="text-base font-semibold text-text-primary">
                   {modal === 'edit' ? 'Editar mazo' : 'Eliminar mazo'}
                 </h2>
                 <button
-                  className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
+                  className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
                   onClick={() => setModal(null)}
                   aria-label="Cerrar"
                 >
