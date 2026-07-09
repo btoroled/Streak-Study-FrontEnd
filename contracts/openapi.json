@@ -10,13 +10,16 @@
     "version" : "v1"
   },
   "servers" : [ {
-    "url" : "http://localhost:56509",
+    "url" : "http://localhost:49301",
     "description" : "Generated server url"
   } ],
   "security" : [ {
     "bearer-jwt" : [ ]
   } ],
   "tags" : [ {
+    "name" : "Users",
+    "description" : "Gestión de usuarios"
+  }, {
     "name" : "Store",
     "description" : "Tienda de gamificación: catálogo y compras con XP"
   }, {
@@ -25,6 +28,9 @@
   }, {
     "name" : "Courses",
     "description" : "Gestión de cursos"
+  }, {
+    "name" : "Admin",
+    "description" : "Dashboard de plataforma (SUPER_ADMIN)"
   }, {
     "name" : "Health",
     "description" : "Health check propio del API (independiente de Actuator)"
@@ -156,6 +162,35 @@
         "responses" : {
           "204" : {
             "description" : "No Content"
+          }
+        }
+      }
+    },
+    "/api/v1/users" : {
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "Crear usuario (TEACHER→STUDENT; INSTITUTION_ADMIN→STUDENT|TEACHER; SUPER_ADMIN→STUDENT|TEACHER|INSTITUTION_ADMIN en cualquier institución)",
+        "operationId" : "create",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateUserRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -338,6 +373,44 @@
         }
       }
     },
+    "/api/v1/quizzes/{id}/answer" : {
+      "post" : {
+        "tags" : [ "Quizzes" ],
+        "summary" : "Responder un quiz (valida server-side, revela la respuesta correcta solo en esta respuesta)",
+        "operationId" : "answer",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AnswerQuizRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuizAnswerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/notifications/{id}/read" : {
       "post" : {
         "tags" : [ "Notifications" ],
@@ -395,7 +468,7 @@
       "post" : {
         "tags" : [ "Institutions" ],
         "summary" : "Crear institución (cross-tenant)",
-        "operationId" : "create",
+        "operationId" : "create_1",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -424,7 +497,7 @@
       "post" : {
         "tags" : [ "Flashcards" ],
         "summary" : "Crear flashcard",
-        "operationId" : "create_1",
+        "operationId" : "create_2",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -621,7 +694,7 @@
       "post" : {
         "tags" : [ "Decks" ],
         "summary" : "Crear deck",
-        "operationId" : "create_2",
+        "operationId" : "create_3",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -698,7 +771,7 @@
       "post" : {
         "tags" : [ "Courses" ],
         "summary" : "Crear curso",
-        "operationId" : "create_3",
+        "operationId" : "create_4",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1755,6 +1828,47 @@
         }
       }
     },
+    "/api/v1/admin/stats" : {
+      "get" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Agregados de plataforma (usuarios, instituciones, decks, flashcards, reviews, tokens de IA)",
+        "operationId" : "stats_1",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminStatsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/stats/institutions" : {
+      "get" : {
+        "tags" : [ "Admin" ],
+        "summary" : "Desglose de agregados por institución",
+        "operationId" : "institutionStats",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/InstitutionStatsRow"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/health" : {
       "get" : {
         "tags" : [ "Health" ],
@@ -1884,6 +1998,57 @@
           }
         }
       },
+      "CreateUserRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "minLength" : 1
+          },
+          "password" : {
+            "type" : "string",
+            "maxLength" : 100,
+            "minLength" : 8
+          },
+          "fullName" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 0
+          },
+          "role" : {
+            "type" : "string",
+            "enum" : [ "STUDENT", "TEACHER", "INSTITUTION_ADMIN", "SUPER_ADMIN" ]
+          },
+          "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "email", "fullName", "password", "role" ]
+      },
+      "UserResponse" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "fullName" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string"
+          }
+        }
+      },
       "RegisterPushTokenRequest" : {
         "type" : "object",
         "properties" : {
@@ -1980,6 +2145,36 @@
           }
         },
         "required" : [ "badgeName" ]
+      },
+      "AnswerQuizRequest" : {
+        "type" : "object",
+        "properties" : {
+          "selectedOptionIndex" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          }
+        }
+      },
+      "QuizAnswerResponse" : {
+        "type" : "object",
+        "properties" : {
+          "quizId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "selectedOptionIndex" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "correctOptionIndex" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "correct" : {
+            "type" : "boolean"
+          }
+        }
       },
       "InstitutionRequest" : {
         "type" : "object",
@@ -2563,10 +2758,6 @@
               "type" : "string"
             }
           },
-          "correctOptionIndex" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -2847,6 +3038,70 @@
               "type" : "string"
             },
             "uniqueItems" : true
+          }
+        }
+      },
+      "AdminStatsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "totalUsers" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "activeUsers" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalInstitutions" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalDecks" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalFlashcards" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalReviews" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "aiTokensUsed" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "usersByRole" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "integer",
+              "format" : "int64"
+            }
+          }
+        }
+      },
+      "InstitutionStatsRow" : {
+        "type" : "object",
+        "properties" : {
+          "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "users" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "decks" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "reviews" : {
+            "type" : "integer",
+            "format" : "int64"
           }
         }
       },
