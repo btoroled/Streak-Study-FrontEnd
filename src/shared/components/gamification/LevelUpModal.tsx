@@ -44,8 +44,8 @@ export default function LevelUpModal({ open, level, name, onClose }: LevelUpModa
               <LevelAvatar level={level} size={120} showBadge alt={name} />
             </motion.div>
 
-            <h2 className="text-2xl font-black text-white">{name}</h2>
-            <p className="text-sm text-white/50 mt-1 mb-6">Nivel {level} alcanzado</p>
+            <h2 className="text-2xl font-black text-text-primary">{name}</h2>
+            <p className="text-sm text-text-secondary mt-1 mb-6">Nivel {level} alcanzado</p>
 
             <Button size="lg" className="w-full" onClick={onClose}>
               ¡Seguir estudiando!

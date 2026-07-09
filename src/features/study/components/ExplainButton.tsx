@@ -40,7 +40,7 @@ export default function ExplainButton({ flashcardId }: Props) {
                 <Sparkles className="w-3.5 h-3.5 text-[#a78bfa]" />
                 <span className="text-xs font-semibold text-[#a78bfa]">Tutor IA</span>
               </div>
-              <p className="text-sm text-white/80 leading-relaxed">{explain.data}</p>
+              <p className="text-sm text-text-secondary leading-relaxed">{explain.data}</p>
             </div>
           </motion.div>
         )}

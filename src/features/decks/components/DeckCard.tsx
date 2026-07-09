@@ -15,7 +15,7 @@ export default function DeckCard({ deck, onEdit, onDelete }: Props) {
 
   return (
     <div
-      className="relative bg-surface-card border border-white/8 rounded-xl p-4 hover:border-orange-500/40 transition-colors cursor-pointer"
+      className="relative bg-surface-card border border-surface-border rounded-xl p-4 hover:border-orange-500/40 transition-colors cursor-pointer"
       onClick={() => navigate(`/decks/${deck.id}`)}
     >
       <div className="flex items-start justify-between gap-2">
@@ -24,16 +24,16 @@ export default function DeckCard({ deck, onEdit, onDelete }: Props) {
             <BookOpen className="w-5 h-5 text-orange-400" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-semibold text-white truncate">{deck.name}</h3>
+            <h3 className="font-semibold text-text-primary truncate">{deck.name}</h3>
             {deck.description && (
-              <p className="text-sm text-white/50 truncate mt-0.5">{deck.description}</p>
+              <p className="text-sm text-text-secondary truncate mt-0.5">{deck.description}</p>
             )}
           </div>
         </div>
 
         <div className="relative flex-shrink-0" onClick={(e) => e.stopPropagation()}>
           <button
-            className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
+            className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
             onClick={() => setMenuOpen((v) => !v)}
           >
             <MoreVertical className="w-4 h-4" />
@@ -42,15 +42,15 @@ export default function DeckCard({ deck, onEdit, onDelete }: Props) {
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-8 z-20 bg-surface-overlay border border-white/10 rounded-xl shadow-xl overflow-hidden w-40">
+              <div className="absolute right-0 top-8 z-20 bg-surface-overlay border border-surface-border rounded-xl shadow-xl overflow-hidden w-40">
                 <button
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-white/80 hover:bg-white/8 transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface-hover transition-colors"
                   onClick={() => { setMenuOpen(false); onEdit(deck) }}
                 >
                   <Pencil className="w-4 h-4" /> Editar
                 </button>
                 <button
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-white/8 transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-surface-hover transition-colors"
                   onClick={() => { setMenuOpen(false); onDelete(deck) }}
                 >
                   <Trash2 className="w-4 h-4" /> Eliminar
@@ -61,7 +61,7 @@ export default function DeckCard({ deck, onEdit, onDelete }: Props) {
         </div>
       </div>
 
-      <div className="mt-3 text-xs text-white/35">
+      <div className="mt-3 text-xs text-text-muted">
         Creado {new Date(deck.createdAt).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' })}
       </div>
     </div>

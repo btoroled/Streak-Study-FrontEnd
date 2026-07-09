@@ -22,12 +22,12 @@ export default function FlashcardFlip({ card, flipped, onFlip }: Props) {
       >
         {/* Front */}
         <div
-          className="w-full min-h-52 bg-surface-card border border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center"
+          className="w-full min-h-52 bg-surface-card border border-surface-border rounded-2xl p-8 flex flex-col items-center justify-center text-center"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <span className="text-xs font-medium text-white/35 uppercase tracking-widest mb-4">Pregunta</span>
-          <p className="text-lg font-semibold text-white leading-relaxed">{card.question}</p>
-          <p className="text-xs text-white/30 mt-6">Toca para ver la respuesta</p>
+          <span className="text-xs font-medium text-text-muted uppercase tracking-widest mb-4">Pregunta</span>
+          <p className="text-lg font-semibold text-text-primary leading-relaxed">{card.question}</p>
+          <p className="text-xs text-text-muted mt-6">Toca para ver la respuesta</p>
         </div>
 
         {/* Back */}
@@ -36,7 +36,7 @@ export default function FlashcardFlip({ card, flipped, onFlip }: Props) {
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
           <span className="text-xs font-medium text-orange-400/60 uppercase tracking-widest mb-4">Respuesta</span>
-          <p className="text-lg text-white/90 leading-relaxed">{card.answer}</p>
+          <p className="text-lg text-text-primary leading-relaxed">{card.answer}</p>
         </div>
       </motion.div>
     </div>

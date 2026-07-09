@@ -15,7 +15,7 @@ export default function DeckSelector() {
     return (
       <div className="space-y-3">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-16 rounded-xl bg-white/5 animate-pulse" />
+          <div key={i} className="h-16 rounded-xl bg-surface-hover animate-pulse" />
         ))}
       </div>
     )
@@ -39,16 +39,16 @@ export default function DeckSelector() {
       {decks.map((deck) => (
         <div
           key={deck.id}
-          className="flex items-center justify-between gap-3 bg-surface-card border border-white/8 rounded-xl px-4 py-3 hover:border-orange-500/30 transition-colors"
+          className="flex items-center justify-between gap-3 bg-surface-card border border-surface-border rounded-xl px-4 py-3 hover:border-orange-500/30 transition-colors"
         >
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
               <BookOpen className="w-4 h-4 text-orange-400" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-white truncate">{deck.name}</p>
+              <p className="text-sm font-medium text-text-primary truncate">{deck.name}</p>
               {deck.description && (
-                <p className="text-xs text-white/40 truncate">{deck.description}</p>
+                <p className="text-xs text-text-muted truncate">{deck.description}</p>
               )}
             </div>
           </div>

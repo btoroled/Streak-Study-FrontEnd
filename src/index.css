@@ -45,6 +45,23 @@
   color-scheme: dark;
 }
 
+/* Tema claro (FE-3): mismos nombres de variable, marca (orange/purple/yellow/
+   violet) y estados (success/warning/error/info) sin cambios entre temas —
+   solo se reinterpretan las superficies y el texto. */
+.light {
+  color-scheme: light;
+
+  --color-surface-base: #ffffff;
+  --color-surface-card: #f7f7fa;
+  --color-surface-overlay: #eef0f4;
+  --color-surface-border: #e2e4ea;
+  --color-surface-hover: #eceef2;
+
+  --color-text-primary: #16171f;
+  --color-text-secondary: #52525b;
+  --color-text-muted: #8b8d98;
+}
+
 * {
   box-sizing: border-box;
 }
