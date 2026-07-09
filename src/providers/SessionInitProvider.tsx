@@ -17,12 +17,18 @@ import { progressService } from '@/services/progress.service'
  * 3. GET  /progress     → sincroniza XP/racha (no-fatal si falla).
  */
 export function SessionInitProvider({ children }: { children: React.ReactNode }) {
-  const refreshToken = useAuthStore((s) => s.refreshToken)
-  const status = useSessionStore((s) => s.status)
   const setStatus = useSessionStore((s) => s.setStatus)
 
+  // Deps vacías a propósito: este efecto solo debe correr una vez, al montar
+  // la app. Login/register/logout (useAuth.ts) manejan `status` directamente
+  // sin pasar por acá. Si `refreshToken` o `status` estuvieran en las deps,
+  // la rotación de refresh token (BE-1) o el propio setStatus('loading') de
+  // abajo cambian el valor observado a mitad de vuelo, React re-ejecuta el
+  // efecto, y la cleanup del run anterior cancela el flujo antes de que
+  // termine — la sesión nunca llega a 'ready' (queda colgada en "Cargando…").
   useEffect(() => {
-    if (!refreshToken || status !== 'idle') return
+    const refreshToken = useAuthStore.getState().refreshToken
+    if (!refreshToken || useSessionStore.getState().status !== 'idle') return
 
     let cancelled = false
     setStatus('loading')
@@ -79,7 +85,8 @@ export function SessionInitProvider({ children }: { children: React.ReactNode })
     })()
 
     return () => { cancelled = true }
-  }, [refreshToken, status, setStatus])
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- correr una sola vez al montar, ver comentario arriba
+  }, [])
 
   return <>{children}</>
 }
