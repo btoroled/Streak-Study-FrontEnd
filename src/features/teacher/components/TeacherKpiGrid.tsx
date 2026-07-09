@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion'
-import { Users, BookOpenCheck, Target, Flame } from 'lucide-react'
+import { Users, BookOpenCheck, Target, GraduationCap } from 'lucide-react'
 import type { TeacherCourseMetrics } from '@/types/teacher.types'
 
 const nf = new Intl.NumberFormat('es-PE')
 const pf = new Intl.NumberFormat('es-PE', { style: 'percent', maximumFractionDigits: 0 })
 
 interface KpiDef {
-  key: keyof Pick<TeacherCourseMetrics, 'activeStudents7d' | 'cardsStudied7d' | 'averageAccuracy' | 'currentStreakAvg'>
+  key: keyof Pick<TeacherCourseMetrics, 'activeStudents7d' | 'cardsStudied7d' | 'avgAccuracy7d' | 'studentsCount'>
   label: string
   icon: typeof Users
   accent: string
@@ -16,8 +16,8 @@ interface KpiDef {
 const KPIS: KpiDef[] = [
   { key: 'activeStudents7d', label: 'Alumnos activos (7 días)', icon: Users, accent: 'from-brand-purple to-brand-purple-light', format: nf.format },
   { key: 'cardsStudied7d', label: 'Tarjetas estudiadas', icon: BookOpenCheck, accent: 'from-brand-orange to-brand-orange-light', format: nf.format },
-  { key: 'averageAccuracy', label: 'Precisión promedio', icon: Target, accent: 'from-[#0ea5e9] to-[#38bdf8]', format: pf.format },
-  { key: 'currentStreakAvg', label: 'Racha promedio', icon: Flame, accent: 'from-[#eab308] to-brand-yellow', format: nf.format },
+  { key: 'avgAccuracy7d', label: 'Precisión promedio', icon: Target, accent: 'from-[#0ea5e9] to-[#38bdf8]', format: pf.format },
+  { key: 'studentsCount', label: 'Alumnos inscritos', icon: GraduationCap, accent: 'from-[#eab308] to-brand-yellow', format: nf.format },
 ]
 
 export default function TeacherKpiGrid({ metrics }: { metrics: TeacherCourseMetrics }) {

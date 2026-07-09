@@ -31,15 +31,19 @@ describe('useTeacherDashboard', () => {
   })
 
   it('BE-3 responde bien → usa los datos reales, isMock=false', async () => {
-    const realCourses = [{ id: 42, name: 'Curso real', code: 'REAL', studentsCount: 3 }]
+    const realCourses = [{
+      id: 42, name: 'Curso real', description: 'desc', code: 'REAL',
+      ownerId: 1, ownerName: 'Profe', studentsCount: 3, decksCount: 2,
+      enrolled: false, createdAt: '2026-01-01', updatedAt: '2026-01-01',
+    }]
     const realMetrics = {
       courseId: 42,
       courseName: 'Curso real',
+      studentsCount: 3,
       activeStudents7d: 3,
       cardsStudied7d: 10,
-      averageAccuracy: 0.9,
-      currentStreakAvg: 2,
-      weeklyActivity: [],
+      avgAccuracy7d: 0.9,
+      topDecks: [],
       students: [],
     }
     vi.mocked(teacherService.listCourses).mockResolvedValue(realCourses)

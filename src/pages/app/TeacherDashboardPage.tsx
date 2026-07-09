@@ -2,7 +2,7 @@ import { Info } from 'lucide-react'
 import PageHeader from '@/shared/components/layout/PageHeader'
 import SectionCard from '@/shared/components/layout/SectionCard'
 import TeacherKpiGrid from '@/features/teacher/components/TeacherKpiGrid'
-import WeeklyActivityChart from '@/features/teacher/components/WeeklyActivityChart'
+import TopDecksChart from '@/features/teacher/components/TopDecksChart'
 import StudentsTable from '@/features/teacher/components/StudentsTable'
 import { useTeacherDashboard } from '@/features/teacher/hooks/useTeacherDashboard'
 
@@ -51,8 +51,8 @@ export default function TeacherDashboardPage() {
         <div className="space-y-6">
           <TeacherKpiGrid metrics={metrics} />
 
-          <SectionCard title={`Actividad semanal — ${metrics.courseName}`}>
-            <WeeklyActivityChart data={metrics.weeklyActivity} />
+          <SectionCard title={`Mazos más repasados — ${metrics.courseName}`}>
+            <TopDecksChart topDecks={metrics.topDecks} />
           </SectionCard>
 
           <SectionCard title="Alumnos">
