@@ -1,4 +1,4 @@
-import type { TeacherCourseSummary, TeacherCourseMetrics } from '@/types/teacher.types'
+import type { TeacherCourseSummary, TeacherCourseMetrics, TeacherWeeklyReport } from '@/types/teacher.types'
 
 function daysAgo(days: number): string {
   const d = new Date()
@@ -47,5 +47,26 @@ export const MOCK_TEACHER_COURSE_METRICS: Record<number, TeacherCourseMetrics> =
       { userId: 7, fullName: 'Gabriela Ríos', lastActivity: daysAgo(6), weeklyScore: 3, currentStreak: 0, masteryPercent: 22 },
       { userId: 8, fullName: 'Hugo Campos', lastActivity: daysAgo(9), weeklyScore: 0, currentStreak: 0, masteryPercent: 15 },
     ],
+  },
+}
+
+export const MOCK_TEACHER_WEEKLY_REPORT: Record<number, TeacherWeeklyReport> = {
+  1: {
+    courseId: 1,
+    weekStart: daysAgo(6),
+    weekEnd: daysAgo(0),
+    totals: { reviews: 147, activeStudents: 6, accuracy: 0.81 },
+    previousWeek: { reviews: 118, activeStudents: 5, accuracy: 0.76 },
+    students: [
+      { userId: 1, fullName: 'Ana Torres', reviews7d: 42, reviewsPrevWeek: 35, lastActivity: daysAgo(0), atRisk: false },
+      { userId: 2, fullName: 'Bruno Salas', reviews7d: 31, reviewsPrevWeek: 28, lastActivity: daysAgo(0), atRisk: false },
+      { userId: 3, fullName: 'Camila Ruiz', reviews7d: 28, reviewsPrevWeek: 20, lastActivity: daysAgo(1), atRisk: false },
+      { userId: 4, fullName: 'Diego Vega', reviews7d: 19, reviewsPrevWeek: 15, lastActivity: daysAgo(1), atRisk: false },
+      { userId: 5, fullName: 'Elena Paredes', reviews7d: 15, reviewsPrevWeek: 12, lastActivity: daysAgo(2), atRisk: false },
+      { userId: 6, fullName: 'Fabio Mendoza', reviews7d: 9, reviewsPrevWeek: 8, lastActivity: daysAgo(3), atRisk: false },
+      { userId: 7, fullName: 'Gabriela Ríos', reviews7d: 3, reviewsPrevWeek: 0, lastActivity: daysAgo(6), atRisk: true },
+      { userId: 8, fullName: 'Hugo Campos', reviews7d: 0, reviewsPrevWeek: 0, lastActivity: daysAgo(9), atRisk: true },
+    ],
+    summary: 'El curso mostró una mejora esta semana: 147 repasos frente a 118 la semana anterior y la precisión subió de 76% a 81%. Ana Torres y Bruno Salas lideran en constancia. Gabriela Ríos y Hugo Campos llevan varios días sin actividad — conviene un recordatorio antes de que se atrasen más.',
   },
 }

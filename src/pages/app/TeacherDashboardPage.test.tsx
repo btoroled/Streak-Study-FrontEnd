@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import TeacherDashboardPage from './TeacherDashboardPage'
-import type { TeacherCourseMetrics, TeacherCourseSummary } from '@/types/teacher.types'
+import type { TeacherCourseMetrics, TeacherCourseSummary, TeacherWeeklyReport } from '@/types/teacher.types'
 
 const courses: TeacherCourseSummary[] = [
   {
@@ -25,9 +25,25 @@ const metrics: TeacherCourseMetrics = {
   ],
 }
 
+const weeklyReport: TeacherWeeklyReport = {
+  courseId: 1,
+  weekStart: '2026-07-01',
+  weekEnd: '2026-07-07',
+  totals: { reviews: 147, activeStudents: 6, accuracy: 0.81 },
+  previousWeek: { reviews: 118, activeStudents: 5, accuracy: 0.76 },
+  students: [
+    { userId: 7, fullName: 'Gabriela Ríos', reviews7d: 3, reviewsPrevWeek: 0, lastActivity: '2026-07-03', atRisk: true },
+  ],
+  summary: 'Resumen de ejemplo generado por IA.',
+}
+
 const mockUseTeacherDashboard = vi.fn()
+const mockUseTeacherWeeklyReport = vi.fn()
 vi.mock('@/features/teacher/hooks/useTeacherDashboard', () => ({
   useTeacherDashboard: () => mockUseTeacherDashboard(),
+}))
+vi.mock('@/features/teacher/hooks/useTeacherWeeklyReport', () => ({
+  useTeacherWeeklyReport: () => mockUseTeacherWeeklyReport(),
 }))
 
 function renderPage() {
@@ -39,16 +55,16 @@ function renderPage() {
 }
 
 describe('TeacherDashboardPage', () => {
-  it('muestra KPIs, alumno y aviso de datos de ejemplo cuando isMock=true', () => {
+  beforeEach(() => {
     mockUseTeacherDashboard.mockReturnValue({
-      courses,
-      activeCourseId: 1,
-      setSelectedCourseId: vi.fn(),
-      metrics,
-      isLoading: false,
-      isMock: true,
+      courses, activeCourseId: 1, setSelectedCourseId: vi.fn(), metrics, isLoading: false, isMock: true,
     })
+    mockUseTeacherWeeklyReport.mockReturnValue({
+      report: weeklyReport, isLoading: false, isMock: true,
+    })
+  })
 
+  it('muestra KPIs, alumno y aviso de datos de ejemplo cuando isMock=true', () => {
     renderPage()
 
     expect(screen.getByText(/datos de ejemplo/i)).toBeInTheDocument()
@@ -58,12 +74,7 @@ describe('TeacherDashboardPage', () => {
 
   it('no muestra el aviso de mock cuando isMock=false', () => {
     mockUseTeacherDashboard.mockReturnValue({
-      courses,
-      activeCourseId: 1,
-      setSelectedCourseId: vi.fn(),
-      metrics,
-      isLoading: false,
-      isMock: false,
+      courses, activeCourseId: 1, setSelectedCourseId: vi.fn(), metrics, isLoading: false, isMock: false,
     })
 
     renderPage()
@@ -73,16 +84,21 @@ describe('TeacherDashboardPage', () => {
 
   it('muestra skeleton mientras isLoading=true', () => {
     mockUseTeacherDashboard.mockReturnValue({
-      courses: [],
-      activeCourseId: null,
-      setSelectedCourseId: vi.fn(),
-      metrics: null,
-      isLoading: true,
-      isMock: false,
+      courses: [], activeCourseId: null, setSelectedCourseId: vi.fn(), metrics: null, isLoading: true, isMock: false,
     })
 
     renderPage()
 
     expect(screen.queryByText('Ana Torres')).not.toBeInTheDocument()
+  })
+
+  it('tab "Reporte semanal": muestra resumen, comparativa y alumnos en riesgo', () => {
+    renderPage()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reporte semanal' }))
+
+    expect(screen.getByText('Resumen de ejemplo generado por IA.')).toBeInTheDocument()
+    expect(screen.getByText('Gabriela Ríos')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /imprimir/i })).toBeInTheDocument()
   })
 })
