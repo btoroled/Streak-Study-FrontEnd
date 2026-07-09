@@ -1,30 +1,39 @@
 export interface TeacherCourseSummary {
   id: number
   name: string
+  description: string
   code: string
+  ownerId: number
+  ownerName: string | null
   studentsCount: number
+  decksCount: number
+  enrolled: boolean
+  createdAt: string
+  updatedAt: string
 }
 
-export interface TeacherWeeklyActivityPoint {
-  date: string
-  reviews: number
-}
-
-export interface TeacherStudentRow {
-  userId: number
+export interface TeacherTopDeck {
+  deckId: number
   name: string
-  lastActivityAt: string
-  xpWeekly: number
+  reviews7d: number
+}
+
+export interface TeacherStudentMetrics {
+  userId: number
+  fullName: string
+  lastActivity: string | null
+  weeklyScore: number
+  currentStreak: number
   masteryPercent: number
 }
 
 export interface TeacherCourseMetrics {
   courseId: number
   courseName: string
+  studentsCount: number
   activeStudents7d: number
   cardsStudied7d: number
-  averageAccuracy: number
-  currentStreakAvg: number
-  weeklyActivity: TeacherWeeklyActivityPoint[]
-  students: TeacherStudentRow[]
+  avgAccuracy7d: number
+  topDecks: TeacherTopDeck[]
+  students: TeacherStudentMetrics[]
 }

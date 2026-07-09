@@ -5,19 +5,23 @@ import TeacherDashboardPage from './TeacherDashboardPage'
 import type { TeacherCourseMetrics, TeacherCourseSummary } from '@/types/teacher.types'
 
 const courses: TeacherCourseSummary[] = [
-  { id: 1, name: 'Bases de Datos II', code: 'CS2031', studentsCount: 8 },
+  {
+    id: 1, name: 'Bases de Datos II', description: 'desc', code: 'CS2031',
+    ownerId: 1, ownerName: 'Profe', studentsCount: 8, decksCount: 5,
+    enrolled: false, createdAt: '2026-01-01', updatedAt: '2026-01-01',
+  },
 ]
 
 const metrics: TeacherCourseMetrics = {
   courseId: 1,
   courseName: 'Bases de Datos II',
+  studentsCount: 8,
   activeStudents7d: 6,
   cardsStudied7d: 342,
-  averageAccuracy: 0.81,
-  currentStreakAvg: 5,
-  weeklyActivity: [{ date: '2026-07-01', reviews: 20 }],
+  avgAccuracy7d: 0.81,
+  topDecks: [{ deckId: 1, name: 'Normalización', reviews7d: 120 }],
   students: [
-    { userId: 1, name: 'Ana Torres', lastActivityAt: '2026-07-08T00:00:00.000Z', xpWeekly: 420, masteryPercent: 78 },
+    { userId: 1, fullName: 'Ana Torres', lastActivity: '2026-07-08', weeklyScore: 42, currentStreak: 12, masteryPercent: 78 },
   ],
 }
 
@@ -49,7 +53,7 @@ describe('TeacherDashboardPage', () => {
 
     expect(screen.getByText(/datos de ejemplo/i)).toBeInTheDocument()
     expect(screen.getByText('Ana Torres')).toBeInTheDocument()
-    expect(screen.getByText(/Actividad semanal — Bases de Datos II/)).toBeInTheDocument()
+    expect(screen.getByText(/Mazos más repasados — Bases de Datos II/)).toBeInTheDocument()
   })
 
   it('no muestra el aviso de mock cuando isMock=false', () => {

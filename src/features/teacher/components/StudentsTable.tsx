@@ -1,30 +1,31 @@
 import { useMemo, useState } from 'react'
 import { ArrowUp, ArrowDown } from 'lucide-react'
 import Pagination from '@/shared/components/ui/Pagination'
-import type { TeacherStudentRow } from '@/types/teacher.types'
+import type { TeacherStudentMetrics } from '@/types/teacher.types'
 
 const PAGE_SIZE = 5
 
-type SortKey = 'lastActivityAt' | 'xpWeekly' | 'masteryPercent'
+type SortKey = 'lastActivity' | 'weeklyScore' | 'currentStreak' | 'masteryPercent'
 
 const COLUMNS: { key: SortKey; label: string }[] = [
-  { key: 'lastActivityAt', label: 'Última actividad' },
-  { key: 'xpWeekly', label: 'XP semanal' },
+  { key: 'lastActivity', label: 'Última actividad' },
+  { key: 'weeklyScore', label: 'Repasos semanales' },
+  { key: 'currentStreak', label: 'Racha' },
   { key: 'masteryPercent', label: '% dominio' },
 ]
 
 const dtf = new Intl.DateTimeFormat('es-PE', { day: 'numeric', month: 'short' })
 
-export default function StudentsTable({ students }: { students: TeacherStudentRow[] }) {
-  const [sortKey, setSortKey] = useState<SortKey>('xpWeekly')
+export default function StudentsTable({ students }: { students: TeacherStudentMetrics[] }) {
+  const [sortKey, setSortKey] = useState<SortKey>('weeklyScore')
   const [sortDesc, setSortDesc] = useState(true)
   const [page, setPage] = useState(0)
 
   const sorted = useMemo(() => {
     const copy = [...students]
     copy.sort((a, b) => {
-      const av = sortKey === 'lastActivityAt' ? new Date(a[sortKey]).getTime() : a[sortKey]
-      const bv = sortKey === 'lastActivityAt' ? new Date(b[sortKey]).getTime() : b[sortKey]
+      const av = sortKey === 'lastActivity' ? (a.lastActivity ? new Date(a.lastActivity).getTime() : 0) : a[sortKey]
+      const bv = sortKey === 'lastActivity' ? (b.lastActivity ? new Date(b.lastActivity).getTime() : 0) : b[sortKey]
       return sortDesc ? bv - av : av - bv
     })
     return copy
@@ -70,9 +71,12 @@ export default function StudentsTable({ students }: { students: TeacherStudentRo
           <tbody>
             {pageRows.map((row) => (
               <tr key={row.userId} className="border-b border-surface-border/60 last:border-0">
-                <td className="py-2.5 pr-3 text-text-primary font-medium">{row.name}</td>
-                <td className="py-2.5 pr-3 text-text-secondary">{dtf.format(new Date(row.lastActivityAt))}</td>
-                <td className="py-2.5 pr-3 text-text-secondary">{row.xpWeekly}</td>
+                <td className="py-2.5 pr-3 text-text-primary font-medium">{row.fullName}</td>
+                <td className="py-2.5 pr-3 text-text-secondary">
+                  {row.lastActivity ? dtf.format(new Date(row.lastActivity)) : '—'}
+                </td>
+                <td className="py-2.5 pr-3 text-text-secondary">{row.weeklyScore}</td>
+                <td className="py-2.5 pr-3 text-text-secondary">{row.currentStreak}</td>
                 <td className="py-2.5 pr-3 text-text-secondary">{row.masteryPercent}%</td>
               </tr>
             ))}
