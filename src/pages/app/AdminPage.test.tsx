@@ -31,6 +31,7 @@ function renderPage() {
     email: 'root@x.com',
     role: 'SUPER_ADMIN',
     xp: 0,
+    emailVerified: true,
   })
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return render(

@@ -37,6 +37,7 @@ export type ApiErrorCode =
   | 'unexpected_institution_id'
   | 'institution_inactive'
   | 'institution_code_already_exists'
+  | 'institution_domain_mismatch'
   | 'badge_already_owned'
   | 'password_reset_token_expired'
   | 'too_many_requests'

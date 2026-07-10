@@ -28,6 +28,7 @@ const AUTH_PAYLOAD = {
   email: 'x@y.com',
   role: 'STUDENT' as const,
   xp: 0,
+  emailVerified: true,
 }
 
 beforeEach(() => {

@@ -25,6 +25,7 @@ export function useAuth() {
         email: authData.email,
         role: authData.role,
         xp: authData.xp,
+        emailVerified: authData.emailVerified,
       })
 
       try {
@@ -56,6 +57,7 @@ export function useAuth() {
         fullName: data.fullName,
         role: authData.role,
         xp: authData.xp,
+        emailVerified: authData.emailVerified,
       })
 
       try {
@@ -115,6 +117,9 @@ export function handleAuthError(
     }
     case 'too_many_requests':
       toast.error('Demasiados intentos. Espera un momento e intenta de nuevo.')
+      break
+    case 'institution_domain_mismatch':
+      setFieldError?.('email', getErrorMessage(error))
       break
     default:
       toast.error(getErrorMessage(error))

@@ -22,6 +22,7 @@ const achievements = lazyPage(() => import('@/pages/app/AchievementsPage'))
 const store        = lazyPage(() => import('@/pages/app/StorePage'))
 const leaderboard  = lazyPage(() => import('@/pages/app/LeaderboardPage'))
 const profile      = lazyPage(() => import('@/pages/app/ProfilePage'))
+const verifyEmail  = lazyPage(() => import('@/pages/app/VerifyEmailPage'))
 const admin        = lazyPage(() => import('@/pages/app/AdminPage'))
 const teacher      = lazyPage(() => import('@/pages/app/TeacherDashboardPage'))
 
@@ -37,6 +38,7 @@ export const AchievementsPage = achievements.Component
 export const StorePage = store.Component
 export const LeaderboardPage = leaderboard.Component
 export const ProfilePage = profile.Component
+export const VerifyEmailPage = verifyEmail.Component
 export const AdminPage = admin.Component
 export const TeacherDashboardPage = teacher.Component
 
@@ -55,6 +57,7 @@ export const prefetchByPath: Record<string, () => Promise<unknown>> = {
   '/store':        store.prefetch,
   '/leaderboard':  leaderboard.prefetch,
   '/profile':      profile.prefetch,
+  '/verify-email': verifyEmail.prefetch,
   '/admin':        admin.prefetch,
   '/teacher':      teacher.prefetch,
 }

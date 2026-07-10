@@ -14,6 +14,7 @@ interface AuthState {
   email: string | null
   fullName: string | null
   role: UserRole | null
+  emailVerified: boolean
 
   // ── Progress (source of truth: GET /progress, snapshot persisted) ──
   xp: number
@@ -31,11 +32,13 @@ interface AuthState {
     fullName?: string
     role: UserRole
     xp: number
+    emailVerified: boolean
   }) => void
   setAccessToken: (token: string) => void
   /** Actualiza solo tokens + xp tras un refresh — no toca userId/institutionId/email/role. */
   setTokens: (payload: { accessToken: string; refreshToken: string; xp: number }) => void
   setProgress: (progress: UserProgressResponse) => void
+  setEmailVerified: (value: boolean) => void
   logout: () => void
   isAuthenticated: () => boolean
 }
@@ -50,6 +53,7 @@ export const useAuthStore = create<AuthState>()(
       email: null,
       fullName: null,
       role: null,
+      emailVerified: false,
       xp: 0,
       currentStreak: 0,
       streakFreezes: 0,
@@ -66,6 +70,7 @@ export const useAuthStore = create<AuthState>()(
           fullName: payload.fullName ?? state.fullName,
           role: payload.role,
           xp: payload.xp,
+          emailVerified: payload.emailVerified,
         })),
 
       setAccessToken: (token) => set({ accessToken: token }),
@@ -85,6 +90,8 @@ export const useAuthStore = create<AuthState>()(
           badges: progress.badges,
         }),
 
+      setEmailVerified: (value) => set({ emailVerified: value }),
+
       logout: () =>
         set({
           accessToken: null,
@@ -94,6 +101,7 @@ export const useAuthStore = create<AuthState>()(
           email: null,
           fullName: null,
           role: null,
+          emailVerified: false,
           xp: 0,
           currentStreak: 0,
           streakFreezes: 0,
@@ -111,6 +119,7 @@ export const useAuthStore = create<AuthState>()(
         email: state.email,
         fullName: state.fullName,
         role: state.role,
+        emailVerified: state.emailVerified,
         xp: state.xp,
         currentStreak: state.currentStreak,
         streakFreezes: state.streakFreezes,
