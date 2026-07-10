@@ -10,7 +10,7 @@
     "version" : "v1"
   },
   "servers" : [ {
-    "url" : "http://localhost:49301",
+    "url" : "http://localhost:57149",
     "description" : "Generated server url"
   } ],
   "security" : [ {
@@ -19,6 +19,9 @@
   "tags" : [ {
     "name" : "Users",
     "description" : "Gestión de usuarios"
+  }, {
+    "name" : "Study",
+    "description" : "Repaso semanal (BE-6)"
   }, {
     "name" : "Store",
     "description" : "Tienda de gamificación: catálogo y compras con XP"
@@ -31,6 +34,9 @@
   }, {
     "name" : "Admin",
     "description" : "Dashboard de plataforma (SUPER_ADMIN)"
+  }, {
+    "name" : "Teacher",
+    "description" : "Cursos y métricas del profesor"
   }, {
     "name" : "Health",
     "description" : "Health check propio del API (independiente de Actuator)"
@@ -247,7 +253,7 @@
     "/api/v1/users/me/progress/review" : {
       "post" : {
         "tags" : [ "User progress" ],
-        "summary" : "Registrar fin de un repaso (suma XP / actualiza racha)",
+        "summary" : "Registrar fin de un repaso (suma XP / actualiza racha; sin efecto si es modo práctica)",
         "operationId" : "finishReview",
         "requestBody" : {
           "content" : {
@@ -303,6 +309,25 @@
               "*/*" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/TranscriptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/study/weekly-review/session" : {
+      "post" : {
+        "tags" : [ "Study" ],
+        "summary" : "Iniciar sesión de repaso semanal",
+        "operationId" : "startWeeklyReviewSession",
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WeeklyReviewResponse"
                 }
               }
             }
@@ -522,10 +547,48 @@
         }
       }
     },
+    "/api/v1/flashcards/{id}/voice-answer" : {
+      "post" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Responder por voz: transcript → speech-eval → calificación SM-2",
+        "operationId" : "voiceAnswer",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VoiceAnswerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VoiceAnswerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/flashcards/{id}/review" : {
       "post" : {
         "tags" : [ "Flashcards" ],
-        "summary" : "Registrar repaso de una flashcard (aplica SM-2)",
+        "summary" : "Registrar repaso de una flashcard (aplica SM-2, o modo práctica sin persistir cambios)",
         "operationId" : "review",
         "parameters" : [ {
           "name" : "id",
@@ -852,6 +915,40 @@
         }
       }
     },
+    "/api/v1/auth/verify/resend" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Reenviar código de verificación de institución",
+        "operationId" : "resendVerification",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/verify/confirm" : {
+      "post" : {
+        "tags" : [ "Auth" ],
+        "summary" : "Confirmar código de verificación de institución",
+        "operationId" : "confirmVerification",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VerifyEmailRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
     "/api/v1/auth/register" : {
       "post" : {
         "tags" : [ "Auth" ],
@@ -998,6 +1095,44 @@
               "*/*" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/institutions/{id}/email-domain" : {
+      "patch" : {
+        "tags" : [ "Institutions" ],
+        "summary" : "Configurar dominio de correo institucional",
+        "operationId" : "updateEmailDomain",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateInstitutionEmailDomainRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InstitutionResponse"
                 }
               }
             }
@@ -1221,6 +1356,103 @@
                   "items" : {
                     "$ref" : "#/components/schemas/ActivityPoint"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teacher/courses" : {
+      "get" : {
+        "tags" : [ "Teacher" ],
+        "summary" : "Cursos del profesor autenticado",
+        "operationId" : "myCourses",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CourseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teacher/courses/{id}/weekly-report" : {
+      "get" : {
+        "tags" : [ "Teacher" ],
+        "summary" : "Reporte semanal del curso (comparativa, alumnos en riesgo, resumen IA)",
+        "operationId" : "weeklyReport",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WeeklyReportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/teacher/courses/{id}/metrics" : {
+      "get" : {
+        "tags" : [ "Teacher" ],
+        "summary" : "Métricas del curso (alumnos activos, precisión, top decks, por alumno)",
+        "operationId" : "courseMetrics",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CourseMetricsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/study/weekly-review" : {
+      "get" : {
+        "tags" : [ "Study" ],
+        "summary" : "Resumen de la semana + cards falladas/vencidas",
+        "operationId" : "weeklyReview",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WeeklyReviewResponse"
                 }
               }
             }
@@ -1564,6 +1796,34 @@
         }
       }
     },
+    "/api/v1/flashcards/deck/{deckId}/mastery" : {
+      "get" : {
+        "tags" : [ "Flashcards" ],
+        "summary" : "Nivel de dominio del usuario sobre un deck (mastered/total, Issue BE-Q3)",
+        "operationId" : "getMasteryByDeck",
+        "parameters" : [ {
+          "name" : "deckId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeckMasteryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/flashcards/deck/{deckId}/due" : {
       "get" : {
         "tags" : [ "Flashcards" ],
@@ -1809,6 +2069,34 @@
         }
       }
     },
+    "/api/v1/courses/{id}/coverage" : {
+      "get" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Cobertura del curso: dominio agregado de flashcards sobre todos sus decks (Issue BE-Q4)",
+        "operationId" : "getCoverage",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CourseCoverageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/me" : {
       "get" : {
         "tags" : [ "Auth" ],
@@ -1995,6 +2283,33 @@
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "masteryPercent" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "mastery" : {
+            "$ref" : "#/components/schemas/MasteryBreakdown"
+          },
+          "masteryLabel" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MasteryBreakdown" : {
+        "type" : "object",
+        "properties" : {
+          "new" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "learning" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "mastered" : {
+            "type" : "integer",
+            "format" : "int64"
           }
         }
       },
@@ -2099,6 +2414,9 @@
           "durationMinutes" : {
             "type" : "integer",
             "format" : "int32"
+          },
+          "practice" : {
+            "type" : "boolean"
           }
         }
       },
@@ -2107,6 +2425,45 @@
         "properties" : {
           "text" : {
             "type" : "string"
+          }
+        }
+      },
+      "Summary" : {
+        "type" : "object",
+        "properties" : {
+          "xpEarned" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "cardsStudied" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "accuracy" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "streakDays" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "bestDay" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "WeeklyReviewResponse" : {
+        "type" : "object",
+        "properties" : {
+          "summary" : {
+            "$ref" : "#/components/schemas/Summary"
+          },
+          "cards" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FlashcardResponse"
+            }
           }
         }
       },
@@ -2189,6 +2546,11 @@
             "maxLength" : 32,
             "minLength" : 2,
             "pattern" : "^[a-z0-9-]+$"
+          },
+          "emailDomain" : {
+            "type" : "string",
+            "maxLength" : 160,
+            "minLength" : 0
           }
         },
         "required" : [ "code", "name" ]
@@ -2212,6 +2574,9 @@
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "emailDomain" : {
+            "type" : "string"
           }
         }
       },
@@ -2238,12 +2603,43 @@
         },
         "required" : [ "answer", "deckId", "difficulty", "question" ]
       },
+      "VoiceAnswerRequest" : {
+        "type" : "object",
+        "properties" : {
+          "transcript" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "transcript" ]
+      },
+      "VoiceAnswerResponse" : {
+        "type" : "object",
+        "properties" : {
+          "isCorrect" : {
+            "type" : "boolean"
+          },
+          "similarity" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "feedback" : {
+            "type" : "string"
+          },
+          "review" : {
+            "$ref" : "#/components/schemas/FlashcardResponse"
+          }
+        }
+      },
       "ReviewFlashcardRequest" : {
         "type" : "object",
         "properties" : {
           "rating" : {
             "type" : "string",
             "enum" : [ "AGAIN", "HARD", "GOOD", "EASY" ]
+          },
+          "practice" : {
+            "type" : "boolean"
           }
         },
         "required" : [ "rating" ]
@@ -2419,6 +2815,16 @@
           }
         }
       },
+      "VerifyEmailRequest" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "code" ]
+      },
       "RegisterRequest" : {
         "type" : "object",
         "properties" : {
@@ -2475,6 +2881,9 @@
           "xp" : {
             "type" : "integer",
             "format" : "int32"
+          },
+          "emailVerified" : {
+            "type" : "boolean"
           }
         }
       },
@@ -2528,6 +2937,16 @@
           }
         },
         "required" : [ "email", "password" ]
+      },
+      "UpdateInstitutionEmailDomainRequest" : {
+        "type" : "object",
+        "properties" : {
+          "emailDomain" : {
+            "type" : "string",
+            "maxLength" : 160,
+            "minLength" : 0
+          }
+        }
       },
       "UpdateCourseRequest" : {
         "type" : "object",
@@ -2680,6 +3099,166 @@
             "format" : "date"
           },
           "reviews" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "StudentWeekly" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fullName" : {
+            "type" : "string"
+          },
+          "reviews7d" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "reviewsPrevWeek" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "lastActivity" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "atRisk" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Totals" : {
+        "type" : "object",
+        "properties" : {
+          "reviews" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "activeStudents" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "accuracy" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }
+      },
+      "WeeklyReportResponse" : {
+        "type" : "object",
+        "properties" : {
+          "courseId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "weekStart" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "weekEnd" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "totals" : {
+            "$ref" : "#/components/schemas/Totals"
+          },
+          "previousWeek" : {
+            "$ref" : "#/components/schemas/Totals"
+          },
+          "students" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StudentWeekly"
+            }
+          },
+          "summary" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CourseMetricsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "courseId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "courseName" : {
+            "type" : "string"
+          },
+          "studentsCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "activeStudents7d" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "cardsStudied7d" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "avgAccuracy7d" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "topDecks" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TopDeckRow"
+            }
+          },
+          "students" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/StudentMetrics"
+            }
+          }
+        }
+      },
+      "StudentMetrics" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fullName" : {
+            "type" : "string"
+          },
+          "lastActivity" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "weeklyScore" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "currentStreak" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "masteryPercent" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "TopDeckRow" : {
+        "type" : "object",
+        "properties" : {
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "reviews7d" : {
             "type" : "integer",
             "format" : "int64"
           }
@@ -2959,6 +3538,27 @@
           }
         }
       },
+      "DeckMasteryResponse" : {
+        "type" : "object",
+        "properties" : {
+          "deckId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalCards" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "masteredCards" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "masteryRatio" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }
+      },
       "DocumentResponse" : {
         "type" : "object",
         "properties" : {
@@ -3003,6 +3603,31 @@
         }
       },
       "Flashcard" : { },
+      "CourseCoverageResponse" : {
+        "type" : "object",
+        "properties" : {
+          "courseId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalDecks" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalCards" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "masteredCards" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "masteryRatio" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }
+      },
       "CurrentUserResponse" : {
         "type" : "object",
         "properties" : {
@@ -3038,6 +3663,9 @@
               "type" : "string"
             },
             "uniqueItems" : true
+          },
+          "emailVerified" : {
+            "type" : "boolean"
           }
         }
       },

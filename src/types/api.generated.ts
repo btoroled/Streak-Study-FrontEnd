@@ -84,7 +84,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Registrar fin de un repaso (suma XP / actualiza racha) */
+        /** Registrar fin de un repaso (suma XP / actualiza racha; sin efecto si es modo práctica) */
         post: operations["finishReview"];
         delete?: never;
         options?: never;
@@ -103,6 +103,23 @@ export interface paths {
         put?: never;
         /** Transcribir audio a texto (proxy a Whisper) */
         post: operations["transcribe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/study/weekly-review/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Iniciar sesión de repaso semanal */
+        post: operations["startWeeklyReviewSession"];
         delete?: never;
         options?: never;
         head?: never;
@@ -246,6 +263,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/flashcards/{id}/voice-answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Responder por voz: transcript → speech-eval → calificación SM-2 */
+        post: operations["voiceAnswer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/flashcards/{id}/review": {
         parameters: {
             query?: never;
@@ -255,7 +289,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Registrar repaso de una flashcard (aplica SM-2) */
+        /** Registrar repaso de una flashcard (aplica SM-2, o modo práctica sin persistir cambios) */
         post: operations["review"];
         delete?: never;
         options?: never;
@@ -404,6 +438,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/auth/verify/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reenviar código de verificación de institución */
+        post: operations["resendVerification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/verify/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirmar código de verificación de institución */
+        post: operations["confirmVerification"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/register": {
         parameters: {
             query?: never;
@@ -504,6 +572,23 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v1/institutions/{id}/email-domain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Configurar dominio de correo institucional */
+        patch: operations["updateEmailDomain"];
         trace?: never;
     };
     "/api/v1/courses/{id}": {
@@ -619,6 +704,74 @@ export interface paths {
         };
         /** Actividad de repasos por día (heatmap) */
         get: operations["activity"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/teacher/courses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cursos del profesor autenticado */
+        get: operations["myCourses"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/teacher/courses/{id}/weekly-report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reporte semanal del curso (comparativa, alumnos en riesgo, resumen IA) */
+        get: operations["weeklyReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/teacher/courses/{id}/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Métricas del curso (alumnos activos, precisión, top decks, por alumno) */
+        get: operations["courseMetrics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/study/weekly-review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Resumen de la semana + cards falladas/vencidas */
+        get: operations["weeklyReview"];
         put?: never;
         post?: never;
         delete?: never;
@@ -816,6 +969,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/flashcards/deck/{deckId}/mastery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Nivel de dominio del usuario sobre un deck (mastered/total, Issue BE-Q3) */
+        get: operations["getMasteryByDeck"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/flashcards/deck/{deckId}/due": {
         parameters: {
             query?: never;
@@ -951,6 +1121,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/courses/{id}/coverage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cobertura del curso: dominio agregado de flashcards sobre todos sus decks (Issue BE-Q4) */
+        get: operations["getCoverage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/me": {
         parameters: {
             query?: never;
@@ -1064,6 +1251,18 @@ export interface components {
             courseId?: number;
             /** Format: date-time */
             createdAt?: string;
+            /** Format: int32 */
+            masteryPercent?: number;
+            mastery?: components["schemas"]["MasteryBreakdown"];
+            masteryLabel?: string;
+        };
+        MasteryBreakdown: {
+            /** Format: int64 */
+            new?: number;
+            /** Format: int64 */
+            learning?: number;
+            /** Format: int64 */
+            mastered?: number;
         };
         CreateUserRequest: {
             /** Format: email */
@@ -1104,9 +1303,26 @@ export interface components {
             reviewedCards?: number;
             /** Format: int32 */
             durationMinutes?: number;
+            practice?: boolean;
         };
         TranscriptionResponse: {
             text?: string;
+        };
+        Summary: {
+            /** Format: int64 */
+            xpEarned?: number;
+            /** Format: int64 */
+            cardsStudied?: number;
+            /** Format: double */
+            accuracy?: number;
+            /** Format: int32 */
+            streakDays?: number;
+            /** Format: date */
+            bestDay?: string;
+        };
+        WeeklyReviewResponse: {
+            summary?: components["schemas"]["Summary"];
+            cards?: components["schemas"]["FlashcardResponse"][];
         };
         PurchaseRequest: {
             item: string;
@@ -1138,6 +1354,7 @@ export interface components {
         InstitutionRequest: {
             name: string;
             code: string;
+            emailDomain?: string;
         };
         InstitutionResponse: {
             /** Format: int64 */
@@ -1147,6 +1364,7 @@ export interface components {
             active?: boolean;
             /** Format: date-time */
             createdAt?: string;
+            emailDomain?: string;
         };
         CreateFlashcardRequest: {
             /** Format: int64 */
@@ -1156,9 +1374,20 @@ export interface components {
             /** @enum {string} */
             difficulty: "EASY" | "MEDIUM" | "HARD";
         };
+        VoiceAnswerRequest: {
+            transcript: string;
+        };
+        VoiceAnswerResponse: {
+            isCorrect?: boolean;
+            /** Format: double */
+            similarity?: number;
+            feedback?: string;
+            review?: components["schemas"]["FlashcardResponse"];
+        };
         ReviewFlashcardRequest: {
             /** @enum {string} */
             rating: "AGAIN" | "HARD" | "GOOD" | "EASY";
+            practice?: boolean;
         };
         ExplainResponse: {
             explanation?: string;
@@ -1227,6 +1456,9 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        VerifyEmailRequest: {
+            code: string;
+        };
         RegisterRequest: {
             /** Format: int64 */
             institutionId: number;
@@ -1249,6 +1481,7 @@ export interface components {
             role?: "STUDENT" | "TEACHER" | "INSTITUTION_ADMIN" | "SUPER_ADMIN";
             /** Format: int32 */
             xp?: number;
+            emailVerified?: boolean;
         };
         RefreshTokenRequest: {
             refreshToken: string;
@@ -1265,6 +1498,9 @@ export interface components {
             /** Format: email */
             email: string;
             password: string;
+        };
+        UpdateInstitutionEmailDomainRequest: {
+            emailDomain?: string;
         };
         UpdateCourseRequest: {
             name?: string;
@@ -1330,6 +1566,73 @@ export interface components {
             date?: string;
             /** Format: int64 */
             reviews?: number;
+        };
+        StudentWeekly: {
+            /** Format: int64 */
+            userId?: number;
+            fullName?: string;
+            /** Format: int64 */
+            reviews7d?: number;
+            /** Format: int64 */
+            reviewsPrevWeek?: number;
+            /** Format: date */
+            lastActivity?: string;
+            atRisk?: boolean;
+        };
+        Totals: {
+            /** Format: int64 */
+            reviews?: number;
+            /** Format: int64 */
+            activeStudents?: number;
+            /** Format: double */
+            accuracy?: number;
+        };
+        WeeklyReportResponse: {
+            /** Format: int64 */
+            courseId?: number;
+            /** Format: date */
+            weekStart?: string;
+            /** Format: date */
+            weekEnd?: string;
+            totals?: components["schemas"]["Totals"];
+            previousWeek?: components["schemas"]["Totals"];
+            students?: components["schemas"]["StudentWeekly"][];
+            summary?: string;
+        };
+        CourseMetricsResponse: {
+            /** Format: int64 */
+            courseId?: number;
+            courseName?: string;
+            /** Format: int64 */
+            studentsCount?: number;
+            /** Format: int64 */
+            activeStudents7d?: number;
+            /** Format: int64 */
+            cardsStudied7d?: number;
+            /** Format: double */
+            avgAccuracy7d?: number;
+            topDecks?: components["schemas"]["TopDeckRow"][];
+            students?: components["schemas"]["StudentMetrics"][];
+        };
+        StudentMetrics: {
+            /** Format: int64 */
+            userId?: number;
+            fullName?: string;
+            /** Format: date */
+            lastActivity?: string;
+            /** Format: int64 */
+            weeklyScore?: number;
+            /** Format: int32 */
+            currentStreak?: number;
+            /** Format: int32 */
+            masteryPercent?: number;
+        };
+        TopDeckRow: {
+            /** Format: int64 */
+            deckId?: number;
+            name?: string;
+            /** Format: int64 */
+            reviews7d?: number;
         };
         StoreItemResponse: {
             key?: string;
@@ -1445,6 +1748,16 @@ export interface components {
             totalPages?: number;
             hasNext?: boolean;
         };
+        DeckMasteryResponse: {
+            /** Format: int64 */
+            deckId?: number;
+            /** Format: int64 */
+            totalCards?: number;
+            /** Format: int64 */
+            masteredCards?: number;
+            /** Format: double */
+            masteryRatio?: number;
+        };
         DocumentResponse: {
             /** Format: int64 */
             id?: number;
@@ -1465,6 +1778,18 @@ export interface components {
             markdownAvailable?: boolean;
         };
         Flashcard: unknown;
+        CourseCoverageResponse: {
+            /** Format: int64 */
+            courseId?: number;
+            /** Format: int64 */
+            totalDecks?: number;
+            /** Format: int64 */
+            totalCards?: number;
+            /** Format: int64 */
+            masteredCards?: number;
+            /** Format: double */
+            masteryRatio?: number;
+        };
         CurrentUserResponse: {
             /** Format: int64 */
             userId?: number;
@@ -1479,6 +1804,7 @@ export interface components {
             /** Format: int32 */
             streakFreezes?: number;
             badges?: string[];
+            emailVerified?: boolean;
         };
         AdminStatsResponse: {
             /** Format: int64 */
@@ -1737,6 +2063,26 @@ export interface operations {
             };
         };
     };
+    startWeeklyReviewSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WeeklyReviewResponse"];
+                };
+            };
+        };
+    };
     buyStreakFreeze: {
         parameters: {
             query?: never;
@@ -1929,6 +2275,32 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["FlashcardResponse"];
+                };
+            };
+        };
+    };
+    voiceAnswer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VoiceAnswerRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["VoiceAnswerResponse"];
                 };
             };
         };
@@ -2190,6 +2562,46 @@ export interface operations {
             };
         };
     };
+    resendVerification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    confirmVerification: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmailRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     register_1: {
         parameters: {
             query?: never;
@@ -2324,6 +2736,32 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AuthResponse"];
+                };
+            };
+        };
+    };
+    updateEmailDomain: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateInstitutionEmailDomainRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InstitutionResponse"];
                 };
             };
         };
@@ -2516,6 +2954,90 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ActivityPoint"][];
+                };
+            };
+        };
+    };
+    myCourses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CourseResponse"][];
+                };
+            };
+        };
+    };
+    weeklyReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WeeklyReportResponse"];
+                };
+            };
+        };
+    };
+    courseMetrics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CourseMetricsResponse"];
+                };
+            };
+        };
+    };
+    weeklyReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["WeeklyReviewResponse"];
                 };
             };
         };
@@ -2797,6 +3319,28 @@ export interface operations {
             };
         };
     };
+    getMasteryByDeck: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                deckId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DeckMasteryResponse"];
+                };
+            };
+        };
+    };
     listDueByDeck: {
         parameters: {
             query?: never;
@@ -2989,6 +3533,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AiGenerationJobResponse"];
+                };
+            };
+        };
+    };
+    getCoverage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CourseCoverageResponse"];
                 };
             };
         };
