@@ -39,7 +39,15 @@ export const resetPasswordSchema = z
     path: ['confirmPassword'],
   })
 
+export const verifyEmailSchema = z.object({
+  code: z
+    .string()
+    .length(6, 'El código tiene 6 dígitos')
+    .regex(/^\d{6}$/, 'Solo números'),
+})
+
 export type LoginFormValues = z.infer<typeof loginSchema>
 export type RegisterFormValues = z.infer<typeof registerSchema>
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
+export type VerifyEmailFormValues = z.infer<typeof verifyEmailSchema>

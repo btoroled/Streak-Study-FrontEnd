@@ -29,10 +29,10 @@ describe('SessionInitProvider', () => {
   it('llega a status "ready" tras un refresh exitoso (regresión: el efecto no debe cancelarse a sí mismo)', async () => {
     vi.mocked(authService.refresh).mockResolvedValue({
       accessToken: 'access', refreshToken: 'new-refresh', expiresIn: 900,
-      userId: 1, institutionId: 1, email: 'a@a.com', role: 'TEACHER', xp: 10,
+      userId: 1, institutionId: 1, email: 'a@a.com', role: 'TEACHER', xp: 10, emailVerified: true,
     })
     vi.mocked(authService.me).mockResolvedValue({
-      userId: 1, email: 'a@a.com', fullName: 'Ana', role: 'TEACHER', institutionId: 1,
+      userId: 1, email: 'a@a.com', fullName: 'Ana', role: 'TEACHER', institutionId: 1, emailVerified: true,
     })
     vi.mocked(progressService.getProgress).mockResolvedValue({
       xp: 10, currentStreak: 2, streakFreezes: 0, badges: [],

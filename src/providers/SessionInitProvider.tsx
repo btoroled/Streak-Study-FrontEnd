@@ -57,6 +57,7 @@ export function SessionInitProvider({ children }: { children: React.ReactNode })
               fullName: meData.fullName,
               role: meData.role,
               xp: authData.xp,
+              emailVerified: meData.emailVerified,
             })
           }
         } catch (meError: unknown) {

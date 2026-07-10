@@ -17,6 +17,7 @@ function renderWithRole(role: UserRole | null, ui: React.ReactElement) {
       email: 'x@y.com',
       role,
       xp: 0,
+      emailVerified: true,
     })
   }
   return render(

@@ -43,6 +43,7 @@ function renderAs(role: UserRole) {
     email: 'creator@x.com',
     role,
     xp: 0,
+    emailVerified: true,
   })
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return render(
