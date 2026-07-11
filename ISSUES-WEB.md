@@ -14,12 +14,14 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Contexto**: `providers/ThemeProvider.tsx` envuelve `next-themes`, pero **ningún componente consume `useTheme`** — hoy no existe toggle funcional. El diseño es dark-first (tokens en `src/index.css`), así que activar modo claro implica definir los tokens light, no solo el switch. El toggle va en el **menú/sidebar**, no en la página de Perfil.
 
+**Estado: RESUELTO** — commit `aead9d3` (PR #75).
+
 **Tareas**
-- [ ] Definir variantes light de los tokens semánticos (`surface-base`, `surface-overlay`, `text-primary`, `text-secondary`, `surface-border`, …) en `src/index.css` bajo el selector de tema de next-themes
-- [ ] Componente `ThemeToggle` (sol/luna, lucide) en `shared/components/ui/`
-- [ ] Montarlo en el sidebar/menú de `AppLayout` (no en Perfil)
-- [ ] Persistencia del tema (next-themes ya usa localStorage — verificar que `attribute`/`defaultTheme` estén bien configurados en el provider)
-- [ ] Revisar pantallas clave en modo claro: login, dashboard, study, decks (contraste legible, sin hex hardcodeados que rompan)
+- [x] Definir variantes light de los tokens semánticos (`surface-base`, `surface-overlay`, `text-primary`, `text-secondary`, `surface-border`, …) — ya existían en `src/index.css` (bloque `.light`), no hubo que crearlas
+- [x] Componente `ThemeToggle` (sol/luna, lucide) en `shared/components/ui/`
+- [x] Montarlo en el sidebar de `Sidebar.tsx` (se sacó el toggle duplicado que había en `SecuritySection`/Perfil)
+- [x] Persistencia del tema — `attribute="class"` + `defaultTheme="dark"` ya estaban bien configurados en `ThemeProvider.tsx`
+- [x] Revisar pantallas clave en modo claro — de paso se encontraron y arreglaron 2 bugs de hex hardcodeado que rompían en claro: `Input` (placeholder) y `ToastProvider` (`theme="dark"` fijo + colores hardcodeados). Pendiente: los gráficos de Analytics (Recharts) siguen con hex hardcodeado — queda para W5.1.
 
 **Criterio de aceptación**
 - El toggle en el menú cambia el tema al instante, persiste tras recargar, y las pantallas principales son legibles en ambos modos.
@@ -37,7 +39,7 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 - [x] Sidebar consume la lista filtrada (antes tenía condicionales sueltos por sección)
 - [x] Matriz verificada: STUDENT ve Tienda pero no Plataforma; TEACHER sin Tienda; SUPER_ADMIN con Plataforma; Ranking respeta el feature flag
 - [x] 6 tests del filtrado (roles × flag × orden)
-- [ ] Cuando W7.1 aterrice: agregar el ítem "Mi clase" con su permission a `NAV_ITEMS`
+- [x] Cuando W7.1 aterrice: agregar el ítem "Mi clase" con su permission a `NAV_ITEMS` — revisado al cerrar W7.1: no hizo falta un ítem nuevo. El roster que trajo W7.1 es por-curso (`/courses/:id/roster`, sin una página "todas mis clases"), así que el ítem "Cursos" ya existente (`permission: 'view:courses'`) sigue siendo la entrada natural — desde ahí, TEACHER/ADMIN ven el ícono de "Gestionar clase" por fila (gateado con `manage:users`). Agregar un ítem "Mi clase" aparte hubiera sido un link duplicado sin destino propio.
 
 **Criterio de aceptación**
 - ✅ El menú se deriva del rol de la sesión desde una única config testeable; RoleGuard sigue cubriendo el acceso por URL directa.
@@ -115,11 +117,13 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Contexto**: solo frontend. Reglas mínimas en Zod + indicador visual en registro y reset.
 
+**Estado: RESUELTO** — commit `8f21e38` (PR #74).
+
 **Tareas**
-- [ ] Endurecer `registerSchema`/`resetSchema` (`features/auth/schemas/auth.schemas.ts`): mínimo 8, al menos una mayúscula, un número (alinear con lo que valide el backend para no divergir)
-- [ ] Componente `PasswordStrengthMeter` (débil/media/fuerte) que reacciona al valor con `useWatch`
-- [ ] Integrarlo en `RegisterForm` y `ResetPasswordForm`
-- [ ] Tests del cálculo de fuerza y de los mensajes de Zod
+- [x] Endurecer `registerSchema`/`resetSchema`: **no se agregó regex de mayúscula/número** — el backend solo exige `min(8)` (sin complejidad obligatoria), así que endurecer más el front habría rechazado registros que la API igual acepta (divergencia de contrato). Se mantuvo `min(8)` como único bloqueo.
+- [x] Componente `PasswordStrengthMeter` (débil/media/fuerte) que reacciona al valor con `useWatch` — puramente informativo, no bloquea el submit
+- [x] Integrarlo en `RegisterForm` y `ResetPasswordForm`
+- [x] Tests del cálculo de fuerza y de la reactividad en vivo
 
 **Criterio de aceptación**
 - El medidor cambia en vivo al tipear y el submit se bloquea con mensajes claros si no cumple las reglas.
@@ -134,12 +138,14 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Contexto**: hoy la sesión de estudio es flip + auto-calificación con click (`features/study/`: `FlashcardFlip`, `DifficultyRating`). Se quiere un modo donde el usuario **escribe la respuesta** antes de ver la solución.
 
+**Estado: RESUELTO** — commit `5a441a9` (PR #71).
+
 **Tareas**
-- [ ] Toggle de modo al iniciar sesión de estudio: "Clásico (flip)" / "Escrito"
-- [ ] En modo escrito: input de texto + botón comprobar; comparación normalizada (lowercase, sin acentos, trim) contra la respuesta de la carta
-- [ ] Match exacto → feedback correcto y sugerir rating EASY; no-match → mostrar la respuesta real y dejar que el usuario se auto-califique (la respuesta libre no siempre es comparable literalmente)
-- [ ] Mantener el mismo `useStudySession` y el mismo `POST review` (SM-2 no cambia); el modo solo altera la UI previa al rating
-- [ ] Tests de la normalización/comparación y del flujo match/no-match
+- [x] Toggle de modo al iniciar/durante la sesión de estudio: "Clásico" / "Escrito"
+- [x] En modo escrito (`WrittenAnswerCard`): input + "Comprobar"; comparación normalizada (`normalizeText`: minúsculas, sin tildes, trim) contra la respuesta real
+- [x] Match exacto → feedback correcto y EASY se resalta como sugerido (badge en `DifficultyRating`); no-match → muestra la respuesta correcta y el usuario se autocalifica igual que en modo clásico
+- [x] `useStudySession`/`POST review` sin cambios — el modo solo altera qué se renderiza antes de calificar
+- [x] Tests de `normalizeText`/`isAnswerMatch` (match exacto, tildes/mayúsculas, no-match, vacío)
 
 **Criterio de aceptación**
 - Sesión completa en modo escrito funciona end-to-end y el SM-2/XP se comporta igual que en modo clásico.
@@ -286,12 +292,14 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Contexto**: un TEACHER debe poder poblar su clase de tres formas: **QR/link de invitación** (el alumno se registra solo — ya existe el patrón `?iid=` en `useInstitutionResolver`, falta asociar el curso), **alta manual** (reusar `features/team/CreateUserForm`) e **import CSV** masivo. El roster y el import necesitan backend (B.14).
 
+**Estado: RESUELTO** — commit `655abf3` (PR #69), backend B.14 en `CS2031-DBP/proyecto-1-streakstudy` (PR #51).
+
 **Tareas**
-- [ ] Vista "Mi clase" por curso: roster de alumnos (nombre, email, estado)
-- [ ] Invitación QR: generar link de registro con institución+curso (`/register?iid=X&cid=Y`) y renderizar QR (lib ligera tipo `qrcode.react`); el registro con `cid` inscribe al alumno al curso
-- [ ] Alta manual: reusar `CreateUserForm` acotado a `role: STUDENT` con inscripción automática al curso
-- [ ] Import CSV: upload + preview de filas parseadas + resultado por fila (creado / error con motivo) según contrato de B.14
-- [ ] Gating con `RoleGuard` (TEACHER e INSTITUTION_ADMIN) y entrada en el menú (W1.2)
+- [x] Vista de roster por curso (`/courses/:id/roster`, `CourseRosterPage`): nombre y email de cada alumno inscripto
+- [x] Invitación QR: `useInstitutionResolver` extendido con `cid`, link `/register?iid=X&cid=Y` + QR con `qrcode.react` (generado en cliente, sin llamadas externas); el registro con `cid` inscribe al curso
+- [x] Alta manual: `CreateUserForm` con nuevas props `lockRoleToStudent`/`courseId`, reusado en un modal acotado a STUDENT
+- [x] Import CSV: upload + resultado por fila (creado / error) contra `POST /courses/:id/students/import`
+- [x] Gating con `RoleGuard permission="manage:users"` (cubre TEACHER/INSTITUTION_ADMIN/SUPER_ADMIN); entrada vía ícono en `CourseTable` desde "Cursos" — ver nota en W1.2 sobre por qué no se agregó un ítem de menú aparte
 
 **Criterio de aceptación**
 - Un profesor inscribe alumnos por los tres caminos y el roster refleja los tres orígenes.
