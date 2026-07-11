@@ -85,7 +85,19 @@ export function SessionInitProvider({ children }: { children: React.ReactNode })
       }
     })()
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+      // StrictMode (dev) monta -> desmonta -> vuelve a montar este efecto una
+      // vez. Si el cleanup dispara antes de que el fetch termine, el status
+      // queda en 'loading' y el segundo montaje real ve `status !== 'idle'`
+      // en la guarda de arriba y no hace nada — la sesión queda colgada en
+      // "Cargando..." para siempre (solo se ve en un F5, ya que este provider
+      // solo remonta en una recarga completa, no en navegación SPA). Resetear
+      // a 'idle' aquí permite que el remontaje real dispare el fetch de verdad.
+      if (useSessionStore.getState().status === 'loading') {
+        setStatus('idle')
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- correr una sola vez al montar, ver comentario arriba
   }, [])
 

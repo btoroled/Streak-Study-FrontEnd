@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, waitFor } from '@testing-library/react'
 import { SessionInitProvider } from './SessionInitProvider'
@@ -39,6 +40,31 @@ describe('SessionInitProvider', () => {
     })
 
     render(<SessionInitProvider><div>app</div></SessionInitProvider>)
+
+    await waitFor(() => expect(useSessionStore.getState().status).toBe('ready'))
+    expect(useAuthStore.getState().role).toBe('TEACHER')
+  })
+
+  it('llega a status "ready" bajo StrictMode (regresión: F5 se quedaba colgado en "Cargando…")', async () => {
+    vi.mocked(authService.refresh).mockResolvedValue({
+      accessToken: 'access', refreshToken: 'new-refresh', expiresIn: 900,
+      userId: 1, institutionId: 1, email: 'a@a.com', role: 'TEACHER', xp: 10, emailVerified: true,
+    })
+    vi.mocked(authService.me).mockResolvedValue({
+      userId: 1, email: 'a@a.com', fullName: 'Ana', role: 'TEACHER', institutionId: 1, emailVerified: true,
+    })
+    vi.mocked(progressService.getProgress).mockResolvedValue({
+      xp: 10, currentStreak: 2, streakFreezes: 0, badges: [],
+    })
+
+    // StrictMode monta -> desmonta -> vuelve a montar el efecto una vez en dev.
+    // Sin el reset a 'idle' en el cleanup, esto reproduce el status colgado
+    // en 'loading' que solo se veía en un F5 real del navegador.
+    render(
+      <StrictMode>
+        <SessionInitProvider><div>app</div></SessionInitProvider>
+      </StrictMode>
+    )
 
     await waitFor(() => expect(useSessionStore.getState().status).toBe('ready'))
     expect(useAuthStore.getState().role).toBe('TEACHER')

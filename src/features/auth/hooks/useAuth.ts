@@ -42,7 +42,7 @@ export function useAuth() {
   )
 
   const register = useCallback(
-    async (data: RegisterFormValues) => {
+    async (data: RegisterFormValues & { courseId?: number }) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword: _cp, ...registerData } = data
 

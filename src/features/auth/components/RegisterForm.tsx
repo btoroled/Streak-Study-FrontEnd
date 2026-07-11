@@ -10,6 +10,7 @@ import { QK } from '@/lib/query-keys'
 import { useAuth, handleAuthError } from '../hooks/useAuth'
 import { useInstitutionResolver } from '../hooks/useInstitutionResolver'
 import { registerSchema, type RegisterFormValues } from '../schemas/auth.schemas'
+import PasswordStrengthMeter from './PasswordStrengthMeter'
 
 // Nombre con el que el backend siembra la institución sentinel (InstitutionSeeder).
 // Solo se usa para ordenarla al final del selector — funcionalmente es una más.
@@ -31,6 +32,7 @@ export default function RegisterForm() {
   } = useForm<RegisterFormValues>({ resolver: zodResolver(registerSchema) })
 
   const selectedInstitutionId = useWatch({ control, name: 'institutionId' })
+  const passwordValue = useWatch({ control, name: 'password' }) ?? ''
 
   const institutionsQuery = useQuery({
     queryKey: QK.institutions,
@@ -54,7 +56,7 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
-      await doRegister(data)
+      await doRegister(resolver.courseId ? { ...data, courseId: resolver.courseId } : data)
     } catch (err) {
       handleAuthError(err, (field, msg) =>
         setError(field as keyof RegisterFormValues, { message: msg })
@@ -184,6 +186,7 @@ export default function RegisterForm() {
         {errors.password && (
           <p className="text-xs text-error">{errors.password.message}</p>
         )}
+        <PasswordStrengthMeter password={passwordValue} />
       </div>
 
       {/* Confirm password */}

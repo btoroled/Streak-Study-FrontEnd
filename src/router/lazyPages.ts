@@ -18,6 +18,7 @@ const decks        = lazyPage(() => import('@/pages/app/DecksPage'))
 const deckDetail   = lazyPage(() => import('@/pages/app/decks/DeckDetailPage'))
 const documents    = lazyPage(() => import('@/pages/app/DocumentsPage'))
 const courses      = lazyPage(() => import('@/pages/app/CoursesPage'))
+const courseRoster = lazyPage(() => import('@/pages/app/CourseRosterPage'))
 const achievements = lazyPage(() => import('@/pages/app/AchievementsPage'))
 const store        = lazyPage(() => import('@/pages/app/StorePage'))
 const leaderboard  = lazyPage(() => import('@/pages/app/LeaderboardPage'))
@@ -34,6 +35,7 @@ export const DecksPage = decks.Component
 export const DeckDetailPage = deckDetail.Component
 export const DocumentsPage = documents.Component
 export const CoursesPage = courses.Component
+export const CourseRosterPage = courseRoster.Component
 export const AchievementsPage = achievements.Component
 export const StorePage = store.Component
 export const LeaderboardPage = leaderboard.Component
@@ -53,6 +55,7 @@ export const prefetchByPath: Record<string, () => Promise<unknown>> = {
   '/decks':        decks.prefetch,
   '/documents':    documents.prefetch,
   '/courses':      courses.prefetch,
+  '/courses/:id/roster': courseRoster.prefetch,
   '/achievements': achievements.prefetch,
   '/store':        store.prefetch,
   '/leaderboard':  leaderboard.prefetch,

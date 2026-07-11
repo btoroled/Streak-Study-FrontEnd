@@ -13,22 +13,22 @@ export default function TopDecksChart({ topDecks }: { topDecks: TeacherTopDeck[]
     <div style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={chartData} layout="vertical" margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#2a2b38" horizontal={false} />
-          <XAxis type="number" allowDecimals={false} tick={{ fill: '#9896a8', fontSize: 11 }} axisLine={false} tickLine={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-surface-border)" horizontal={false} />
+          <XAxis type="number" allowDecimals={false} tick={{ fill: 'var(--color-text-secondary)', fontSize: 11 }} axisLine={false} tickLine={false} />
           <YAxis
             type="category"
             dataKey="name"
             width={140}
-            tick={{ fill: '#9896a8', fontSize: 11 }}
+            tick={{ fill: 'var(--color-text-secondary)', fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
           <Tooltip
-            cursor={{ fill: '#ffffff08' }}
-            contentStyle={{ background: '#1e1f2a', border: '1px solid #2a2b38', borderRadius: 8, color: '#fff' }}
-            labelStyle={{ color: '#9896a8' }}
+            cursor={{ fill: 'var(--color-surface-hover)' }}
+            contentStyle={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-surface-border)', borderRadius: 8, color: 'var(--color-text-primary)' }}
+            labelStyle={{ color: 'var(--color-text-secondary)' }}
           />
-          <Bar dataKey="reviews" fill="#f97316" radius={[0, 4, 4, 0]} />
+          <Bar dataKey="reviews" fill="var(--color-brand-orange)" radius={[0, 4, 4, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -1,17 +1,20 @@
 import { Toaster } from 'sonner'
+import { useTheme } from 'next-themes'
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const { resolvedTheme } = useTheme()
+
   return (
     <>
       {children}
       <Toaster
         position="top-right"
-        theme="dark"
+        theme={resolvedTheme === 'light' ? 'light' : 'dark'}
         toastOptions={{
           style: {
-            background: '#1e1f2a',
-            border: '1px solid #2a2b38',
-            color: '#f1f0f5',
+            background: 'var(--color-surface-overlay)',
+            border: '1px solid var(--color-surface-border)',
+            color: 'var(--color-text-primary)',
           },
         }}
       />

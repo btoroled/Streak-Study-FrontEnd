@@ -14,6 +14,7 @@ export const QK = {
   deckDue: (deckId: number) => ['decks', deckId, 'due'] as const,
   courses: ['courses'] as const,
   course: (id: number) => ['courses', id] as const,
+  courseRoster: (id: number) => ['courses', id, 'roster'] as const,
   rewards: ['rewards'] as const,
   storeCatalog: ['store', 'catalog'] as const,
   documentStatus: (id: number) => ['document', id, 'status'] as const,
