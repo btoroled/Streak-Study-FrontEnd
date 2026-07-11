@@ -30,18 +30,17 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Labels**: `epic:ux`, `priority:p1`
 
-**Contexto**: el sidebar debe mostrar solo las secciones que aplican al rol de la sesión (STUDENT / TEACHER / INSTITUTION_ADMIN / SUPER_ADMIN). La matriz de permisos ya existe en `config/roles.ts` (`hasPermission`); hoy el gating se hace por ruta (`RoleGuard`) pero el menú no se adapta de forma consistente.
+**Estado: RESUELTO (2026-07-10)** — commit `8b366ff`.
 
 **Tareas**
-- [ ] Definir los ítems del menú de forma declarativa: `{ label, icon, path, permission }` en `config/` (junto a rutas)
-- [ ] Filtrar los ítems con `hasPermission(role, permission)` al renderizar el sidebar
-- [ ] Verificar la matriz por rol: STUDENT no ve gestión de clase ni admin; TEACHER ve su gestión de clase (W7.1); INSTITUTION_ADMIN ve alta de usuarios; SUPER_ADMIN ve el panel de plataforma
-- [ ] Tests del filtrado del menú por rol (4 roles × secciones visibles)
+- [x] `config/navigation.ts`: `NAV_ITEMS` declarativos `{ to, icon, label, permission?, featureFlag? }` + `filterNavItems(role, isFlagEnabled)` puro
+- [x] Sidebar consume la lista filtrada (antes tenía condicionales sueltos por sección)
+- [x] Matriz verificada: STUDENT ve Tienda pero no Plataforma; TEACHER sin Tienda; SUPER_ADMIN con Plataforma; Ranking respeta el feature flag
+- [x] 6 tests del filtrado (roles × flag × orden)
+- [ ] Cuando W7.1 aterrice: agregar el ítem "Mi clase" con su permission a `NAV_ITEMS`
 
 **Criterio de aceptación**
-- Con sesiones de los 4 roles, el menú muestra exactamente las secciones permitidas y ninguna ruta oculta es alcanzable por URL directa (RoleGuard sigue cubriendo).
-
-**Depende de**: `config/roles.ts` existente; coordina con W7.1 para el ítem de clase.
+- ✅ El menú se deriva del rol de la sesión desde una única config testeable; RoleGuard sigue cubriendo el acceso por URL directa.
 
 ---
 
