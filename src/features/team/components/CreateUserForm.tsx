@@ -23,12 +23,22 @@ const ROLE_LABELS: Record<string, string> = {
   INSTITUTION_ADMIN: 'Admin de institución',
 }
 
-export default function CreateUserForm() {
+interface Props {
+  /** Acota el alta a STUDENT y oculta el selector de rol (roster de clase, Issue W7.1). */
+  lockRoleToStudent?: boolean
+  /** Inscribe al alumno creado en este curso (roster de clase, Issue W7.1). */
+  courseId?: number
+  onCreated?: () => void
+}
+
+export default function CreateUserForm({ lockRoleToStudent, courseId, onCreated }: Props = {}) {
   const [showPassword, setShowPassword] = useState(false)
   const currentRole = useAuthStore((s) => s.role)
-  const assignableRoles = currentRole ? ASSIGNABLE_ROLES[currentRole] : []
+  const assignableRoles = lockRoleToStudent
+    ? (['STUDENT'] as const)
+    : currentRole ? ASSIGNABLE_ROLES[currentRole] : []
   // SUPER_ADMIN crea cross-tenant (B.9): elige institución destino explícita.
-  const isSuperAdmin = currentRole === 'SUPER_ADMIN'
+  const isSuperAdmin = !lockRoleToStudent && currentRole === 'SUPER_ADMIN'
   const createUser = useCreateUser()
 
   const institutionsQuery = useQuery({
@@ -57,11 +67,15 @@ export default function CreateUserForm() {
     // Solo SUPER_ADMIN manda institutionId; para el resto el backend lo
     // infiere del creador y mandarlo es un 400 (unexpected_institution_id).
     const { institutionId, ...rest } = data
-    const payload = isSuperAdmin ? { ...rest, institutionId } : rest
+    const payload = {
+      ...(isSuperAdmin ? { ...rest, institutionId } : rest),
+      ...(courseId ? { courseId } : {}),
+    }
     try {
       const created = await createUser.mutateAsync(payload)
       toast.success(`Usuario ${created.email} creado`)
       reset({ role: data.role, fullName: '', email: '', password: '' })
+      onCreated?.()
     } catch (err) {
       handleCreateUserError(err, (field, msg) =>
         setError(field as keyof CreateUserFormValues, { message: msg }),

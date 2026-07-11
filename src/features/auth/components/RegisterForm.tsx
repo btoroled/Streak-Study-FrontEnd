@@ -54,7 +54,7 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
-      await doRegister(data)
+      await doRegister(resolver.courseId ? { ...data, courseId: resolver.courseId } : data)
     } catch (err) {
       handleAuthError(err, (field, msg) =>
         setError(field as keyof RegisterFormValues, { message: msg })

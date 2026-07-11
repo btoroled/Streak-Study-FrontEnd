@@ -5,6 +5,8 @@ export interface RegisterRequest {
   email: string
   password: string
   fullName: string
+  /** Inscribe al alumno en el curso indicado (invitación por link, Issue B.14/W7.1). */
+  courseId?: number
 }
 
 export interface LoginRequest {

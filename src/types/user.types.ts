@@ -29,6 +29,8 @@ export interface CreateUserRequest {
   password: string
   role: 'STUDENT' | 'TEACHER' | 'INSTITUTION_ADMIN'
   institutionId?: number
+  /** Inscribe al alumno en el curso indicado (Issue B.14/W7.1). */
+  courseId?: number
 }
 
 export interface UserResponse {
