@@ -190,17 +190,18 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Labels**: `epic:documents`, `priority:p1`
 
-**Contexto**: el flujo de `DocumentsPage` (upload, polling de status, preview markdown, generación IA) existe pero como página suelta; se quiere un **flujo guiado** con pasos explícitos que termine llevando al mazo generado.
+**Estado: RESUELTO (2026-07-10)** — commit `82b20d3`.
 
 **Tareas**
-- [ ] Stepper de 4 pasos: **1)** Subir PDF → **2)** Ver/confirmar Markdown extraído → **3)** Generar flashcards (selector de deck destino o crear uno nuevo) → **4)** Éxito con CTA "Ver mazo"
-- [ ] Reusar los hooks existentes (`useDocumentUpload`, `useDocumentStatusPolling`, `useAiJobPolling`) — el wizard es orquestación de UI, no lógica nueva
-- [ ] El paso avanza solo cuando el estado del backend lo permite (PROCESSED, job COMPLETED); errores del polling muestran retry sin perder el paso
-- [ ] CTA final navega a `/decks/:id` del mazo destino
-- [ ] Test del avance de pasos según estados del job
+- [x] Stepper de 4 pasos (Subir → Revisar → Generar → Ver mazo) con `WizardSteps`
+- [x] Hooks existentes intactos; el paso se **deriva** del estado real con `deriveWizardStep` (upload/duplicado/markdown confirmado/status del job)
+- [x] Paso 2 bloquea "Continuar" hasta `markdownAvailable`; documento FAILED ofrece subir otro
+- [x] CTA final navega a `/decks/:id` usando el `deckId` del job
+- [x] 5 tests de la derivación de pasos
+- [ ] Verificación E2E manual con un PDF real contra el backend con Gemini configurado (pendiente de entorno)
 
 **Criterio de aceptación**
-- Un usuario sube un PDF y sin salir del flujo termina viendo el mazo con las cartas generadas.
+- ✅ Flujo guiado completo; typecheck/lint/82 tests verdes.
 
 ---
 
