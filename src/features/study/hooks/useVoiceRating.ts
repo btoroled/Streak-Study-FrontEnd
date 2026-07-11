@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { ReviewRating } from '@/types/flashcard.types'
+import { normalizeText } from '../utils/studySession.utils'
 
 interface SpeechRecognitionAlternativeLike {
   transcript: string
@@ -35,18 +36,8 @@ const RATING_BY_PHRASE: Record<string, ReviewRating> = {
   facil: 'EASY',
 }
 
-const DIACRITICS_PATTERN = new RegExp('[\\u0300-\\u036f]', 'g')
-
-function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(DIACRITICS_PATTERN, '')
-    .trim()
-}
-
 function matchRating(transcript: string): ReviewRating | null {
-  const normalized = normalize(transcript)
+  const normalized = normalizeText(transcript)
   for (const [phrase, rating] of Object.entries(RATING_BY_PHRASE)) {
     if (normalized.includes(phrase)) return rating
   }
