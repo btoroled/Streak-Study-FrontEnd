@@ -170,16 +170,18 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Labels**: `epic:study`, `priority:p0`
 
-**Contexto**: el XP que muestra la UI no coincide con lo que otorga el backend. Sospechosos: el mirror Query → Store de `useProgress` (CLAUDE.md), sumas locales en `XpGainAnimation`/`StudyComplete` que duplican lo que luego llega del refetch de progress, o desfase entre `auth.store.xp` y el progress query.
+**Estado: RESUELTO (2026-07-10)** — commit `b2ad91d`.
+
+**Causa raíz**: `useStudySession` calculaba el XP de la sesión con una fórmula local (`computeXpGain = max(5, cartas × 2.5)`) que divergía siempre de la del backend (`reviewedCards + durationMinutes/10`). Con 10 cartas en 5 min, la UI anunciaba 25 XP y el server otorgaba 10.
 
 **Tareas**
-- [ ] Reproducir: sesión de N cartas anotando XP por response vs XP total mostrado al final vs `GET progress`
-- [ ] Trazar las tres fuentes de XP en el código (response del review, mirror del store, animaciones) y encontrar dónde divergen
-- [ ] Fix en la fuente única de verdad: la UI suma solo responses del backend; el total siempre viene de progress
-- [ ] Test de regresión del caso encontrado
+- [x] Trazar las fuentes de XP: el review por carta no otorga XP; solo `finishReview` lo hace → el delta del response es exacto
+- [x] Fix: `xpGained = xp_después − xp_antes` del response de `finishReview`; `computeXpGain` eliminado
+- [x] Si la sesión no se confirma (error de red), no se anuncia XP (el toast ya avisa)
+- [x] Tests de regresión del hook (delta correcto y caso de error)
 
 **Criterio de aceptación**
-- Tras una sesión, el XP del dashboard coincide exactamente con el acumulado que reporta el backend.
+- ✅ El XP anunciado en StudyComplete coincide exactamente con el delta que reporta el backend.
 
 ---
 
