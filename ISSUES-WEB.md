@@ -153,13 +153,13 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 **Contexto**: quitar el límite de mazos y desincentivar el farming: repasar el mismo mazo/carta repetidamente el mismo día otorga cada vez menos XP. La mecánica vive en el backend (B.13); el frontend no calcula XP, solo refleja lo que retorna el review.
 
 **Tareas**
-- [ ] Verificar que el frontend no asuma un XP fijo por review: `XpGainAnimation` y el mirror de progreso deben usar el XP **del response**, no una constante
-- [ ] Quitar cualquier copy/validación de límite de mazos en `features/decks` (no se encontró límite en el frontend — confirmar y cerrar)
-- [ ] Mostrar en `StudyComplete` el XP real ganado en la sesión (suma de responses)
-- [ ] Regenerar tipos cuando B.13 cambie el contrato
+- [x] Verificar que el frontend no asuma un XP fijo por review: `XpGainAnimation` y el mirror de progreso deben usar el XP **del response**, no una constante — confirmado, ya lo hacía desde el fix de W3.3 (`useStudySession.ts`: `xpGained = data.xp - before.xp`)
+- [x] Quitar cualquier copy/validación de límite de mazos en `features/decks` — confirmado: no existe ningún límite en el frontend (`grep` sin resultados), no había nada que cerrar
+- [x] Mostrar en `StudyComplete` el XP real ganado en la sesión (suma de responses) — confirmado, `StudyComplete`/`XpGainAnimation` reciben `xpGained` como prop, sin cálculo propio
+- [x] Regenerar tipos cuando B.13 cambie el contrato — B.13 no cambió `FinishReviewRequest`/`UserProgressResponse` (mismo shape, solo cambió el cálculo interno del backend), no hacía falta regenerar
 
 **Criterio de aceptación**
-- Repetir un mazo ya repasado muestra el XP reducido que dicta el backend, sin dobles conteos en la UI.
+- [x] Repetir un mazo ya repasado muestra el XP reducido que dicta el backend, sin dobles conteos en la UI — el backend decae el XP (test `shouldApplyDiminishingXpWhenManyReviewsAlreadyHappenedToday`, 436/436 verde) y el frontend siempre muestra el delta real del response, así que el decaimiento llega solo, sin cambios de frontend.
 
 **Depende de**: B.13 (bloqueante para la mecánica; la auditoría del frontend puede hacerse antes).
 
