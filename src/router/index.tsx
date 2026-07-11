@@ -19,6 +19,7 @@ import {
   DeckDetailPage,
   DocumentsPage,
   CoursesPage,
+  CourseRosterPage,
   AchievementsPage,
   StorePage,
   LeaderboardPage,
@@ -61,6 +62,14 @@ export const router = createBrowserRouter([
       { path: '/decks/:deckId', element: <DeckDetailPage /> },
       { path: '/documents', element: <DocumentsPage /> },
       { path: '/courses', element: <CoursesPage /> },
+      {
+        path: '/courses/:id/roster',
+        element: (
+          <RoleGuard permission="manage:users">
+            <CourseRosterPage />
+          </RoleGuard>
+        ),
+      },
       { path: '/achievements', element: <AchievementsPage /> },
       {
         path: '/store',

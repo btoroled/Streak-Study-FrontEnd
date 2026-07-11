@@ -404,6 +404,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/courses/{id}/students/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Alta masiva de alumnos por CSV (fullName,email), Issue B.14 */
+        post: operations["importStudents"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/courses/{id}/leave": {
         parameters: {
             query?: never;
@@ -1121,6 +1138,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/courses/{id}/students": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Roster de alumnos inscriptos (dueño o admin), Issue B.14 */
+        get: operations["roster"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/courses/{id}/coverage": {
         parameters: {
             query?: never;
@@ -1273,6 +1307,8 @@ export interface components {
             role: "STUDENT" | "TEACHER" | "INSTITUTION_ADMIN" | "SUPER_ADMIN";
             /** Format: int64 */
             institutionId?: number;
+            /** Format: int64 */
+            courseId?: number;
         };
         UserResponse: {
             /** Format: int64 */
@@ -1456,6 +1492,13 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        CsvImportRowResult: {
+            /** Format: int32 */
+            row?: number;
+            status?: string;
+            email?: string;
+            error?: string;
+        };
         VerifyEmailRequest: {
             code: string;
         };
@@ -1466,6 +1509,8 @@ export interface components {
             email: string;
             password: string;
             fullName: string;
+            /** Format: int64 */
+            courseId?: number;
         };
         AuthResponse: {
             accessToken?: string;
@@ -1778,6 +1823,12 @@ export interface components {
             markdownAvailable?: boolean;
         };
         Flashcard: unknown;
+        RosterStudentResponse: {
+            /** Format: int64 */
+            userId?: number;
+            fullName?: string;
+            email?: string;
+        };
         CourseCoverageResponse: {
             /** Format: int64 */
             courseId?: number;
@@ -2514,6 +2565,35 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["CourseResponse"];
+                };
+            };
+        };
+    };
+    importStudents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CsvImportRowResult"][];
                 };
             };
         };
@@ -3533,6 +3613,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AiGenerationJobResponse"];
+                };
+            };
+        };
+    };
+    roster: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RosterStudentResponse"][];
                 };
             };
         };

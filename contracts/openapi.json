@@ -10,7 +10,7 @@
     "version" : "v1"
   },
   "servers" : [ {
-    "url" : "http://localhost:57149",
+    "url" : "http://localhost:63185",
     "description" : "Generated server url"
   } ],
   "security" : [ {
@@ -852,6 +852,53 @@
               "*/*" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/courses/{id}/students/import" : {
+      "post" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Alta masiva de alumnos por CSV (fullName,email), Issue B.14",
+        "operationId" : "importStudents",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  }
+                },
+                "required" : [ "file" ]
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CsvImportRowResult"
+                  }
                 }
               }
             }
@@ -2069,6 +2116,37 @@
         }
       }
     },
+    "/api/v1/courses/{id}/students" : {
+      "get" : {
+        "tags" : [ "Courses" ],
+        "summary" : "Roster de alumnos inscriptos (dueño o admin), Issue B.14",
+        "operationId" : "roster",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/RosterStudentResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/courses/{id}/coverage" : {
       "get" : {
         "tags" : [ "Courses" ],
@@ -2336,6 +2414,10 @@
             "enum" : [ "STUDENT", "TEACHER", "INSTITUTION_ADMIN", "SUPER_ADMIN" ]
           },
           "institutionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "courseId" : {
             "type" : "integer",
             "format" : "int64"
           }
@@ -2815,6 +2897,24 @@
           }
         }
       },
+      "CsvImportRowResult" : {
+        "type" : "object",
+        "properties" : {
+          "row" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "error" : {
+            "type" : "string"
+          }
+        }
+      },
       "VerifyEmailRequest" : {
         "type" : "object",
         "properties" : {
@@ -2846,6 +2946,10 @@
             "type" : "string",
             "maxLength" : 120,
             "minLength" : 0
+          },
+          "courseId" : {
+            "type" : "integer",
+            "format" : "int64"
           }
         },
         "required" : [ "email", "fullName", "institutionId", "password" ]
@@ -3603,6 +3707,21 @@
         }
       },
       "Flashcard" : { },
+      "RosterStudentResponse" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fullName" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
       "CourseCoverageResponse" : {
         "type" : "object",
         "properties" : {
