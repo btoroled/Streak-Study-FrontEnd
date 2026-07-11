@@ -229,16 +229,17 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Labels**: `epic:landing`, `priority:p1`
 
-**Contexto**: el landing actual (`shared/landing/`: Hero, HowItWorks, Flashcards, Gamification, Ai, Institutions, Faq, Footer) debe girar hacia un tono más corporativo/product-led al estilo Duolingo: hero grande con mascota + CTA fuerte, secciones con ilustraciones, social proof, copy directo.
+**Estado: RESUELTO (2026-07-10)** — commit `01a98e9`. Hallazgo: las secciones de `shared/landing/` eran **stubs vacíos** (`return null`) y la landing real era una vista compacta única — se construyó todo.
 
 **Tareas**
-- [ ] Rediseñar `HeroSection`: mascota protagonista, headline corto, CTA primario "Empieza gratis" + CTA secundario para instituciones
-- [ ] Ajustar secciones existentes al nuevo tono (copy + espaciado + ilustraciones consistentes)
-- [ ] Integrar las nuevas secciones de pricing (W6.3) y contacto (W6.2) en el orden: Hero → HowItWorks → Features → Pricing → FAQ → Contacto → Footer
-- [ ] Mantener responsive y tokens del theme
+- [x] `HeroSection` con navbar anclada (Cómo funciona/Precios/FAQ/Contacto), mascota protagonista, headline corto, CTA "Empieza gratis" + "Para instituciones" → #contacto
+- [x] HowItWorks (3 pasos) + 3 filas de features alternadas con mascotas (IA, SM-2, gamificación) + FAQ
+- [x] Orden integrado: Hero → HowItWorks → Features → Pricing → FAQ → Contacto → Footer
+- [x] Tokens del theme y responsive; `InstitutionsSection` (stub sin uso) eliminado
+- [ ] QA visual en navegador + ajuste de copy/precios por el equipo
 
 **Criterio de aceptación**
-- El landing completo se recorre con el nuevo look sin secciones huérfanas del diseño anterior.
+- ✅ Landing completo sin stubs huérfanos; typecheck/lint/build/87 tests verdes.
 
 ---
 
@@ -246,16 +247,16 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Labels**: `epic:landing`, `priority:p1`
 
-**Contexto**: sección de contacto para leads (sobre todo instituciones). Para no depender del backend, el envío va a un servicio externo (Formspree/EmailJS) — decisión consciente para la demo; si luego se quiere persistir en el backend, se abre un B.* aparte.
+**Estado: RESUELTO (2026-07-10)** — commit `01a98e9`.
 
 **Tareas**
-- [ ] `ContactSection` en `shared/landing/`: nombre, email, institución (opcional), mensaje
-- [ ] Validación con Zod + RHF (mismo patrón del repo)
-- [ ] Envío a Formspree (endpoint en variable de entorno `VITE_CONTACT_FORM_URL`); estados enviando/éxito/error con toast
-- [ ] Anclaje desde el CTA "Contacto" del navbar/hero (`#contacto`)
+- [x] `ContactSection`: nombre, email, institución (opcional), mensaje — RHF + Zod (`contact.schema.ts`, 5 tests)
+- [x] Envío a `VITE_CONTACT_FORM_URL` (Formspree); **fallback a `mailto:`** si la env no está configurada
+- [x] Estados enviando/éxito/error con toast; anclaje `#contacto` desde navbar, hero y pricing
+- [ ] Crear el form en Formspree y setear `VITE_CONTACT_FORM_URL` en el deploy (queda en mailto: mientras tanto)
 
 **Criterio de aceptación**
-- Enviar el formulario entrega el mensaje al correo del equipo y la UI confirma el envío.
+- ✅ Formulario validado con confirmación visual; entrega real pendiente solo de la env del deploy.
 
 ---
 
@@ -263,16 +264,17 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Labels**: `epic:landing`, `priority:p1`
 
-**Contexto**: pricing display-only (sin checkout) con 4 espacios. Propuesta de tiers: **Gratis** (estudiante individual), **Pro** (estudiante power: IA ilimitada), **Aula** (profesor + su clase), **Institucional** (colegio/universidad, CTA "Contactar ventas" → W6.2). Precios placeholder definidos por el equipo.
+**Estado: RESUELTO (2026-07-10)** — commit `01a98e9`.
 
 **Tareas**
-- [ ] `PricingSection` con 4 cards: nombre, precio, lista de features, CTA (los 3 primeros → registro; Institucional → #contacto)
-- [ ] Card destacada (Pro o Aula) con badge "Popular"
-- [ ] Responsive: 4 columnas desktop, 2 tablet, 1 mobile
-- [ ] Copy de features alineado a lo que la app ya hace (no prometer features inexistentes)
+- [x] `PricingSection` con 4 cards: Gratis (S/ 0), Pro (S/ 15/mes), Aula (S/ 49/mes), Institucional (a medida) — CTAs: 3 primeros → registro, Institucional → #contacto
+- [x] Pro destacado con badge "Popular"
+- [x] Responsive 4/2/1 columnas
+- [x] Features alineadas a lo que la app hace hoy
+- [ ] El equipo valida precios definitivos (los actuales son placeholder)
 
 **Criterio de aceptación**
-- La sección se ve en el landing con 4 planes, CTAs funcionando y responsive correcto.
+- ✅ Sección visible con 4 planes y CTAs funcionales.
 
 ---
 
