@@ -5,6 +5,8 @@ import { useVoiceRating } from '../hooks/useVoiceRating'
 interface Props {
   onRate: (rating: ReviewRating) => void
   disabled?: boolean
+  /** Resalta esta opción como sugerida (ej. EASY tras un match exacto en modo escrito, Issue W3.1). */
+  suggestedRating?: ReviewRating
 }
 
 const OPTIONS: { value: ReviewRating; label: string; hint: string; cls: string }[] = [
@@ -14,7 +16,7 @@ const OPTIONS: { value: ReviewRating; label: string; hint: string; cls: string }
   { value: 'EASY',  label: 'Fácil',    hint: 'más tarde', cls: 'border-green-500/40 text-green-400 hover:bg-green-500/15' },
 ]
 
-export default function DifficultyRating({ onRate, disabled }: Props) {
+export default function DifficultyRating({ onRate, disabled, suggestedRating }: Props) {
   const { start, isListening, isSupported } = useVoiceRating(onRate)
 
   return (
@@ -26,8 +28,15 @@ export default function DifficultyRating({ onRate, disabled }: Props) {
             key={opt.value}
             disabled={disabled}
             onClick={() => onRate(opt.value)}
-            className={`flex flex-col items-center gap-0.5 py-2.5 rounded-xl text-sm font-medium border transition-colors disabled:opacity-50 ${opt.cls}`}
+            className={`relative flex flex-col items-center gap-0.5 py-2.5 rounded-xl text-sm font-medium border transition-colors disabled:opacity-50 ${opt.cls} ${
+              suggestedRating === opt.value ? 'ring-2 ring-offset-2 ring-offset-surface-base ring-current' : ''
+            }`}
           >
+            {suggestedRating === opt.value && (
+              <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-full bg-current text-[9px] font-semibold text-surface-base">
+                Sugerido
+              </span>
+            )}
             <span>{opt.label}</span>
             <span className="text-[10px] opacity-60">{opt.hint}</span>
           </button>

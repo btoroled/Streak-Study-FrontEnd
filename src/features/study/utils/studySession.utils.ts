@@ -19,3 +19,20 @@ export interface SessionCard {
   card: FlashcardResponse
   rating: ReviewRating | null
 }
+
+const DIACRITICS_PATTERN = new RegExp('[\\u0300-\\u036f]', 'g')
+
+/** lowercase + sin acentos + trim, para comparar respuestas de forma tolerante (Issue W3.1). */
+export function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(DIACRITICS_PATTERN, '')
+    .trim()
+}
+
+/** Match exacto tras normalizar — la respuesta libre no siempre es comparable literalmente (Issue W3.1). */
+export function isAnswerMatch(userAnswer: string, correctAnswer: string): boolean {
+  const normalizedUser = normalizeText(userAnswer)
+  return normalizedUser.length > 0 && normalizedUser === normalizeText(correctAnswer)
+}

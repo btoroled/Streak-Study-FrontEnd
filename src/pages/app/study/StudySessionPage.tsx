@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import FlashcardFlip from '@/features/study/components/FlashcardFlip'
+import WrittenAnswerCard from '@/features/study/components/WrittenAnswerCard'
 import DifficultyRating from '@/features/study/components/DifficultyRating'
 import ExplainButton from '@/features/study/components/ExplainButton'
 import StudyProgressBar from '@/features/study/components/StudyProgressBar'
@@ -10,6 +11,8 @@ import LevelUpModal from '@/shared/components/gamification/LevelUpModal'
 import { useStudySession } from '@/features/study/hooks/useStudySession'
 import mascotCelebrate from '@/assets/brand/mascot-celebrate.png'
 
+type StudyMode = 'flip' | 'written'
+
 export default function StudySessionPage() {
   const { deckId } = useParams<{ deckId: string }>()
   const id = Number(deckId)
@@ -17,9 +20,21 @@ export default function StudySessionPage() {
   const { phase, loadCards, current, currentIdx, total, flipped, flip, rate, restart, xpGained, levelUp, dismissLevelUp, streakExtended, isSubmitting } =
     useStudySession(id)
 
+  const [mode, setMode] = useState<StudyMode>('flip')
+  const [writtenChecked, setWrittenChecked] = useState(false)
+  const [writtenMatch, setWrittenMatch] = useState(false)
+
   useEffect(() => {
     loadCards()
   }, [loadCards])
+
+  // Nueva carta: el resultado del modo escrito de la anterior no debe arrastrarse.
+  useEffect(() => {
+    setWrittenChecked(false)
+    setWrittenMatch(false)
+  }, [current?.card.id])
+
+  const showRating = mode === 'flip' ? flipped : writtenChecked
 
   if (phase === 'loading') {
     return (
@@ -96,18 +111,45 @@ export default function StudySessionPage() {
         </div>
       </div>
 
+      <div className="flex justify-center">
+        <div className="inline-flex p-0.5 rounded-lg bg-surface-overlay border border-surface-border text-xs">
+          {(['flip', 'written'] as const).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+                mode === m ? 'bg-surface-card text-text-primary shadow-sm' : 'text-text-muted hover:text-text-secondary'
+              }`}
+            >
+              {m === 'flip' ? 'Clásico' : 'Escrito'}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {current && (
         <>
-          <FlashcardFlip card={current.card} flipped={flipped} onFlip={flip} />
+          {mode === 'flip' ? (
+            <FlashcardFlip card={current.card} flipped={flipped} onFlip={flip} />
+          ) : (
+            <WrittenAnswerCard
+              card={current.card}
+              onChecked={(isMatch) => { setWrittenMatch(isMatch); setWrittenChecked(true) }}
+            />
+          )}
 
-          {flipped && (
+          {showRating && (
             <>
-              <DifficultyRating onRate={rate} disabled={isSubmitting} />
+              <DifficultyRating
+                onRate={rate}
+                disabled={isSubmitting}
+                suggestedRating={mode === 'written' && writtenMatch ? 'EASY' : undefined}
+              />
               <ExplainButton flashcardId={current.card.id} />
             </>
           )}
 
-          {!flipped && (
+          {mode === 'flip' && !flipped && (
             <p className="text-center text-xs text-text-muted">
               Toca la tarjeta para ver la respuesta
             </p>
