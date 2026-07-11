@@ -5,7 +5,7 @@ import { flashcardsService } from '@/services/flashcards.service'
 import { progressService } from '@/services/progress.service'
 import { useAuthStore } from '@/store/auth.store'
 import { QK } from '@/lib/query-keys'
-import { shuffle, computeXpGain, formatDuration, type ReviewRating, type SessionCard } from '../utils/studySession.utils'
+import { shuffle, formatDuration, type ReviewRating, type SessionCard } from '../utils/studySession.utils'
 import { getUserLevel } from '@/lib/xp.utils'
 import type { FlashcardResponse } from '@/types/flashcard.types'
 
@@ -82,21 +82,27 @@ export function useStudySession(deckId: number) {
     if (next >= cards.length) {
       const reviewed = updated.length
       const duration = formatDuration(startedAt.current)
-      const xp = computeXpGain(reviewed)
-      setXpGained(xp)
       setPhase('complete')
 
-      const levelBefore = getUserLevel(useAuthStore.getState().xp).level
-      const streakBefore = useAuthStore.getState().currentStreak
-      const data = await finishMutation.mutateAsync({ reviewedCards: reviewed, durationMinutes: duration })
-      if (data) {
-        const after = getUserLevel(data.xp)
-        if (after.level > levelBefore) {
-          setLevelUp({ level: after.level, name: after.name })
+      // El XP mostrado es el delta real que otorga el backend (única fuente
+      // de verdad) — nada de fórmulas locales que divergen de la del server.
+      const before = useAuthStore.getState()
+      const levelBefore = getUserLevel(before.xp).level
+      const streakBefore = before.currentStreak
+      try {
+        const data = await finishMutation.mutateAsync({ reviewedCards: reviewed, durationMinutes: duration })
+        if (data) {
+          setXpGained(Math.max(0, data.xp - before.xp))
+          const after = getUserLevel(data.xp)
+          if (after.level > levelBefore) {
+            setLevelUp({ level: after.level, name: after.name })
+          }
+          if (data.currentStreak > streakBefore) {
+            setStreakExtended(data.currentStreak)
+          }
         }
-        if (data.currentStreak > streakBefore) {
-          setStreakExtended(data.currentStreak)
-        }
+      } catch {
+        // onError ya mostró el toast; sin confirmación no hay XP que anunciar.
       }
     } else {
       setCurrentIdx(next)

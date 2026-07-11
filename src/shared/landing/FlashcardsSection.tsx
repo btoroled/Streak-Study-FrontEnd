@@ -1,17 +1,25 @@
-import { Layers, Mic } from 'lucide-react'
+import FeatureRow from './_FeatureRow'
+import mascotReading from '@/assets/brand/mascot-reading.png'
 
 export default function FlashcardsSection() {
   return (
-    <div className="bg-surface-card border border-surface-border rounded-xl p-5">
-      <Layers className="w-6 h-6 text-brand-orange mb-3" />
-      <p className="text-sm font-semibold text-text-primary mb-1">Estudio espaciado (SM-2)</p>
-      <p className="text-xs text-text-secondary leading-relaxed">
-        El algoritmo decide cuándo repasar cada tarjeta para que se te quede de verdad.
-      </p>
-      <div className="flex items-center gap-1 mt-3 text-[11px] text-brand-purple-light">
-        <Mic className="w-3 h-3" />
-        <span>Responde por voz — próximamente</span>
-      </div>
-    </div>
+    <section className="max-w-5xl mx-auto px-6 py-14">
+      <FeatureRow
+        eyebrow="Repaso espaciado real"
+        title="Estudia solo lo que toca hoy"
+        image={mascotReading}
+        imageAlt="Mascota estudiando"
+        reverse
+      >
+        <p>
+          Usamos el algoritmo SM-2: cada tarjeta se reprograma según qué tan bien
+          la recuerdas. Nada de releer todo — solo lo que está por olvidarse.
+        </p>
+        <p>
+          Menos tiempo de estudio, más retención en el examen. Y puedes calificar
+          tus repasos con la voz, sin tocar el teclado.
+        </p>
+      </FeatureRow>
+    </section>
   )
 }
