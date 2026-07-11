@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Lock } from 'lucide-react'
@@ -9,6 +9,7 @@ import { Button } from '@/shared/components/ui/button'
 import { authService } from '@/services/auth.service'
 import { getErrorCode } from '@/lib/error.utils'
 import { resetPasswordSchema, type ResetPasswordFormValues } from '../schemas/auth.schemas'
+import PasswordStrengthMeter from './PasswordStrengthMeter'
 
 export default function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -20,11 +21,14 @@ export default function ResetPasswordForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { token },
   })
+
+  const passwordValue = useWatch({ control, name: 'newPassword' }) ?? ''
 
   const onSubmit = async (data: ResetPasswordFormValues) => {
     try {
@@ -86,6 +90,7 @@ export default function ResetPasswordForm() {
         {errors.newPassword && (
           <p className="text-xs text-error">{errors.newPassword.message}</p>
         )}
+        <PasswordStrengthMeter password={passwordValue} />
       </div>
 
       <div className="space-y-1.5">

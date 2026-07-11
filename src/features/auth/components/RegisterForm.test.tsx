@@ -101,4 +101,18 @@ describe('RegisterForm — selector de institución', () => {
     expect(screen.queryByRole('radio')).not.toBeInTheDocument()
     expect(institutionsService.list).not.toHaveBeenCalled()
   })
+
+  it('el medidor de fuerza reacciona en vivo al tipear la contraseña (Issue W2.4)', async () => {
+    renderForm()
+    await screen.findByRole('radio', { name: 'UTEC' })
+    const passwordInput = screen.getByPlaceholderText('Mínimo 8 caracteres')
+
+    expect(screen.queryByText(/Fuerza:/)).not.toBeInTheDocument()
+
+    await userEvent.type(passwordInput, 'abcdefgh')
+    expect(await screen.findByText('Fuerza: Débil')).toBeInTheDocument()
+
+    await userEvent.type(passwordInput, '123!XYZ')
+    expect(await screen.findByText('Fuerza: Fuerte')).toBeInTheDocument()
+  })
 })
