@@ -11,10 +11,6 @@ export function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-export function computeXpGain(reviewedCards: number): number {
-  return Math.max(5, Math.floor(reviewedCards * 2.5))
-}
-
 export function formatDuration(startMs: number): number {
   return Math.max(1, Math.ceil((Date.now() - startMs) / 60000))
 }
