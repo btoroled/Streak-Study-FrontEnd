@@ -71,7 +71,7 @@ export default function ContactSection() {
               <textarea
                 rows={4}
                 placeholder="¿En qué te podemos ayudar?"
-                className={`w-full px-4 py-3 rounded-lg text-sm bg-surface-overlay border text-text-primary placeholder-[#5e5c70] focus:outline-none focus:ring-2 transition-colors resize-none ${
+                className={`w-full px-4 py-3 rounded-lg text-sm bg-surface-overlay border text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 transition-colors resize-none ${
                   errors.message
                     ? 'border-error focus:ring-error/30'
                     : 'border-surface-border focus:border-brand-purple focus:ring-brand-purple/30'

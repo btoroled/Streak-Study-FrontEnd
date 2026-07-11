@@ -4,6 +4,7 @@ import { Flame, ChevronLeft, ChevronRight, LogOut } from 'lucide-react'
 import logoMark from '@/assets/brand/logo-mark.png'
 import { prefetchByPath } from '@/router/lazyPages'
 import { LevelAvatar } from '@/shared/components/gamification/LevelAvatar'
+import { ThemeToggle } from '@/shared/components/ui/ThemeToggle'
 import { useUiStore } from '@/store/ui.store'
 import { useAuthStore } from '@/store/auth.store'
 import { useAuth } from '@/features/auth/hooks/useAuth'
@@ -88,8 +89,10 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Bottom: XP card + logout */}
+      {/* Bottom: theme toggle + XP card + logout */}
       <div className="border-t border-surface-border p-3 space-y-2 shrink-0">
+        <ThemeToggle compact={!sidebarOpen} />
+
         {/* Streak + level mini-card */}
         <AnimatePresence>
           {sidebarOpen && (
