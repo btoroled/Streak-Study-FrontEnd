@@ -29,8 +29,8 @@ export default function StudyComplete({ total, xpGained, deckId, streakExtended,
         className="w-32 h-32 object-contain drop-shadow-2xl"
       />
       <div>
-        <h2 className="text-xl font-bold text-white">¡Sesión completada!</h2>
-        <p className="text-white/50 text-sm mt-1">Repasaste {total} flashcard{total !== 1 ? 's' : ''}</p>
+        <h2 className="text-xl font-bold text-text-primary">¡Sesión completada!</h2>
+        <p className="text-text-secondary text-sm mt-1">Repasaste {total} flashcard{total !== 1 ? 's' : ''}</p>
       </div>
 
       <XpGainAnimation xp={xpGained} />
@@ -59,7 +59,7 @@ export default function StudyComplete({ total, xpGained, deckId, streakExtended,
       </div>
 
       <button
-        className="text-xs text-white/30 hover:text-white/60 transition-colors"
+        className="text-xs text-text-muted hover:text-text-secondary transition-colors"
         onClick={() => navigate('/study')}
       >
         Estudiar otro mazo →

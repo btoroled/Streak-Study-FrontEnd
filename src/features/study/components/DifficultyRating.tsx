@@ -19,7 +19,7 @@ export default function DifficultyRating({ onRate, disabled }: Props) {
 
   return (
     <div className="space-y-2">
-      <p className="text-center text-xs text-white/40">¿Qué tan bien la recordaste?</p>
+      <p className="text-center text-xs text-text-muted">¿Qué tan bien la recordaste?</p>
       <div className="grid grid-cols-4 gap-2">
         {OPTIONS.map((opt) => (
           <button
@@ -43,7 +43,7 @@ export default function DifficultyRating({ onRate, disabled }: Props) {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors disabled:opacity-50 ${
               isListening
                 ? 'border-brand-purple/60 text-brand-purple animate-pulse'
-                : 'border-white/15 text-white/50 hover:border-white/30 hover:text-white/80'
+                : 'border-surface-border text-text-secondary hover:border-text-muted hover:text-text-primary'
             }`}
           >
             <Mic className="w-3.5 h-3.5" />

@@ -54,8 +54,9 @@ export default function HeroSection() {
             </span>
           </h1>
           <p className="text-base text-text-secondary max-w-md mx-auto md:mx-0 mb-8 leading-relaxed">
-            Flashcards con IA desde tus PDFs, repaso espaciado que funciona y rachas
-            que convierten estudiar en un juego. Para estudiantes, profes e instituciones.
+            Flashcards con IA desde tus PDFs, respuestas por voz, repaso espaciado que
+            funciona y rachas que convierten estudiar en un juego. Para estudiantes,
+            profes e instituciones.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
             <Button size="lg" onClick={() => navigate('/register')}>Empieza gratis</Button>

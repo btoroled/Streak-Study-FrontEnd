@@ -23,6 +23,7 @@ export type Permission =
   | 'view:profile'
   | 'manage:users'
   | 'view:admin'
+  | 'view:teacher-dashboard'
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   STUDENT: [
@@ -33,17 +34,17 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   TEACHER: [
     'view:dashboard', 'manage:deck', 'manage:flashcard', 'upload:document',
     'view:courses', 'create:course', 'view:leaderboard', 'view:profile',
-    'manage:users',
+    'manage:users', 'view:teacher-dashboard',
   ],
   INSTITUTION_ADMIN: [
     'view:dashboard', 'manage:deck', 'manage:flashcard', 'upload:document',
     'view:courses', 'create:course', 'delete:course', 'view:leaderboard', 'view:profile',
-    'manage:users',
+    'manage:users', 'view:teacher-dashboard',
   ],
   SUPER_ADMIN: [
     'view:dashboard', 'manage:deck', 'manage:flashcard', 'upload:document',
     'view:courses', 'create:course', 'delete:course', 'view:leaderboard', 'view:profile',
-    'manage:users', 'view:admin',
+    'manage:users', 'view:admin', 'view:teacher-dashboard',
   ],
 }
 

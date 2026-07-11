@@ -34,7 +34,7 @@ export default function FlashcardList({ deckId }: Props) {
     return (
       <div className="space-y-3">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-24 rounded-xl bg-white/5 animate-pulse" />
+          <div key={i} className="h-24 rounded-xl bg-surface-hover animate-pulse" />
         ))}
       </div>
     )
@@ -43,7 +43,7 @@ export default function FlashcardList({ deckId }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm text-white/50">{cardCount} flashcard{cardCount !== 1 ? 's' : ''}</span>
+        <span className="text-sm text-text-secondary">{cardCount} flashcard{cardCount !== 1 ? 's' : ''}</span>
         <Button size="sm" onClick={() => setShowCreate(true)}>
           <Plus className="w-4 h-4 mr-1" /> Nueva flashcard
         </Button>
@@ -57,7 +57,7 @@ export default function FlashcardList({ deckId }: Props) {
             exit={{ opacity: 0, y: -8 }}
             className="bg-surface-overlay border border-orange-500/30 rounded-xl p-4"
           >
-            <h3 className="text-sm font-semibold text-white mb-3">Nueva flashcard</h3>
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Nueva flashcard</h3>
             <FlashcardForm
               onSubmit={handleCreate}
               onCancel={() => setShowCreate(false)}
@@ -89,7 +89,7 @@ export default function FlashcardList({ deckId }: Props) {
                 </div>
               ) : deleting?.id === card.id ? (
                 <div className="bg-surface-overlay border border-red-500/30 rounded-xl p-4 space-y-3">
-                  <p className="text-sm text-white/70">¿Eliminar esta flashcard?</p>
+                  <p className="text-sm text-text-secondary">¿Eliminar esta flashcard?</p>
                   <div className="flex gap-2">
                     <Button size="sm" variant="ghost" onClick={() => setDeleting(null)}>Cancelar</Button>
                     <Button

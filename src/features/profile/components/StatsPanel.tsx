@@ -5,9 +5,9 @@ interface Props {
 }
 
 const STAT = ({ label, value, suffix = '' }: { label: string; value: number; suffix?: string }) => (
-  <div className="bg-surface-card border border-white/8 rounded-xl p-4 text-center">
-    <p className="text-2xl font-black text-white">{value.toLocaleString()}{suffix}</p>
-    <p className="text-xs text-white/40 mt-0.5">{label}</p>
+  <div className="bg-surface-card border border-surface-border rounded-xl p-4 text-center">
+    <p className="text-2xl font-black text-text-primary">{value.toLocaleString()}{suffix}</p>
+    <p className="text-xs text-text-muted mt-0.5">{label}</p>
   </div>
 )
 

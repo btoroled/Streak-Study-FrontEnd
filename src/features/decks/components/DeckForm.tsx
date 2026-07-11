@@ -23,24 +23,24 @@ export default function DeckForm({ defaultValues, onSubmit, onCancel, isLoading 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-1.5">
-        <label className="block text-sm font-medium text-white/70">Nombre del mazo</label>
+        <label className="block text-sm font-medium text-text-secondary">Nombre del mazo</label>
         <input
           type="text"
           placeholder="Ej. Biología molecular"
-          className="w-full bg-[#1a1b26] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-orange-500/60"
+          className="w-full bg-surface-overlay border border-surface-border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-orange-500/60"
           {...register('name')}
         />
         {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-1.5">
-        <label className="block text-sm font-medium text-white/70">
-          Descripción <span className="text-white/30">(opcional)</span>
+        <label className="block text-sm font-medium text-text-secondary">
+          Descripción <span className="text-text-muted">(opcional)</span>
         </label>
         <textarea
           rows={3}
           placeholder="¿De qué trata este mazo?"
-          className="w-full bg-[#1a1b26] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-orange-500/60 resize-none"
+          className="w-full bg-surface-overlay border border-surface-border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-orange-500/60 resize-none"
           {...register('description')}
         />
         {errors.description && <p className="text-xs text-red-400">{errors.description.message}</p>}

@@ -30,29 +30,29 @@ export default function FlashcardForm({ defaultValues, onSubmit, onCancel, isLoa
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-1.5">
-        <label className="block text-sm font-medium text-white/70">Pregunta</label>
+        <label className="block text-sm font-medium text-text-secondary">Pregunta</label>
         <textarea
           rows={3}
           placeholder="¿Cuál es la función del ribosoma?"
-          className="w-full bg-[#1a1b26] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-orange-500/60 resize-none"
+          className="w-full bg-surface-overlay border border-surface-border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-orange-500/60 resize-none"
           {...register('question')}
         />
         {errors.question && <p className="text-xs text-red-400">{errors.question.message}</p>}
       </div>
 
       <div className="space-y-1.5">
-        <label className="block text-sm font-medium text-white/70">Respuesta</label>
+        <label className="block text-sm font-medium text-text-secondary">Respuesta</label>
         <textarea
           rows={3}
           placeholder="Síntesis de proteínas a partir de ARNm"
-          className="w-full bg-[#1a1b26] border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-orange-500/60 resize-none"
+          className="w-full bg-surface-overlay border border-surface-border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-orange-500/60 resize-none"
           {...register('answer')}
         />
         {errors.answer && <p className="text-xs text-red-400">{errors.answer.message}</p>}
       </div>
 
       <div className="space-y-1.5">
-        <label className="block text-sm font-medium text-white/70">Dificultad</label>
+        <label className="block text-sm font-medium text-text-secondary">Dificultad</label>
         <Controller
           name="difficulty"
           control={control}
@@ -66,7 +66,7 @@ export default function FlashcardForm({ defaultValues, onSubmit, onCancel, isLoa
                   className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-colors ${
                     field.value === d.value
                       ? 'border-orange-500 bg-orange-500/15 text-orange-400'
-                      : 'border-white/10 text-white/50 hover:border-white/20'
+                      : 'border-surface-border text-text-secondary hover:border-text-muted'
                   }`}
                 >
                   {d.label}

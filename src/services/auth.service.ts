@@ -1,5 +1,5 @@
 import api from './api.client'
-import type { LoginRequest, RegisterRequest, AuthResponse, ForgotPasswordRequest, ResetPasswordRequest, RefreshTokenRequest, UserMeResponse } from '@/types/auth.types'
+import type { LoginRequest, RegisterRequest, AuthResponse, ForgotPasswordRequest, ResetPasswordRequest, RefreshTokenRequest, UserMeResponse, VerifyEmailRequest } from '@/types/auth.types'
 
 export const authService = {
   login: (data: LoginRequest) =>
@@ -22,4 +22,10 @@ export const authService = {
 
   resetPassword: (data: ResetPasswordRequest) =>
     api.post('/auth/password/reset', data),
+
+  resendVerification: () =>
+    api.post('/auth/verify/resend'),
+
+  confirmVerification: (data: VerifyEmailRequest) =>
+    api.post('/auth/verify/confirm', data),
 }

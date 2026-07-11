@@ -59,10 +59,10 @@ export default function DecksPage() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <div className="h-8 w-48 bg-white/5 rounded-lg animate-pulse" />
+        <div className="h-8 w-48 bg-surface-hover rounded-lg animate-pulse" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-28 rounded-xl bg-white/5 animate-pulse" />
+            <div key={i} className="h-28 rounded-xl bg-surface-hover animate-pulse" />
           ))}
         </div>
       </div>
@@ -77,8 +77,8 @@ export default function DecksPage() {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white">Mazos</h1>
-          <p className="text-sm text-white/50 mt-0.5">{decks.length} mazo{decks.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-xl font-bold text-text-primary">Mazos</h1>
+          <p className="text-sm text-text-secondary mt-0.5">{decks.length} mazo{decks.length !== 1 ? 's' : ''}</p>
         </div>
         <Button onClick={() => setModal({ type: 'create' })}>
           <Plus className="w-4 h-4 mr-1" /> Nuevo mazo
@@ -135,17 +135,17 @@ export default function DecksPage() {
               onClick={() => setModal(null)}
             />
             <motion.div
-              className="relative z-10 w-full max-w-md bg-surface-card border border-white/10 rounded-2xl p-6 shadow-2xl"
+              className="relative z-10 w-full max-w-md bg-surface-card border border-surface-border rounded-2xl p-6 shadow-2xl"
               initial={{ scale: 0.95, y: 16 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 16 }}
             >
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-base font-semibold text-white">
+                <h2 className="text-base font-semibold text-text-primary">
                   {modal.type === 'create' ? 'Nuevo mazo' : modal.type === 'edit' ? 'Editar mazo' : 'Eliminar mazo'}
                 </h2>
                 <button
-                  className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-colors"
+                  className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
                   onClick={() => setModal(null)}
                   aria-label="Cerrar"
                 >

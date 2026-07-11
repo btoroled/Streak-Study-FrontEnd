@@ -17,7 +17,9 @@ export const ROUTES = {
   STORE: '/store',
   LEADERBOARD: '/leaderboard',
   PROFILE: '/profile',
+  VERIFY_EMAIL: '/verify-email',
   ADMIN: '/admin',
+  TEACHER: '/teacher',
   // Errors
   FORBIDDEN: '/403',
   NOT_FOUND: '/404',

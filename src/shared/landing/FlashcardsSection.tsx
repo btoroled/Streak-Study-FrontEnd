@@ -15,7 +15,10 @@ export default function FlashcardsSection() {
           Usamos el algoritmo SM-2: cada tarjeta se reprograma según qué tan bien
           la recuerdas. Nada de releer todo — solo lo que está por olvidarse.
         </p>
-        <p>Menos tiempo de estudio, más retención en el examen.</p>
+        <p>
+          Menos tiempo de estudio, más retención en el examen. Y puedes calificar
+          tus repasos con la voz, sin tocar el teclado.
+        </p>
       </FeatureRow>
     </section>
   )

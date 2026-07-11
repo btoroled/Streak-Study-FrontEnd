@@ -21,6 +21,7 @@ export interface AuthResponse {
   email: string
   role: UserRole
   xp: number
+  emailVerified: boolean
 }
 
 export interface RefreshTokenRequest {
@@ -42,4 +43,9 @@ export interface UserMeResponse {
   fullName: string
   role: UserRole
   institutionId: number
+  emailVerified: boolean
+}
+
+export interface VerifyEmailRequest {
+  code: string
 }

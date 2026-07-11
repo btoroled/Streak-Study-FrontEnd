@@ -22,7 +22,7 @@ export default function Pagination({ page, totalPages, onPageChange }: Props) {
       >
         <ChevronLeft className="w-4 h-4" />
       </Button>
-      <span className="text-xs text-white/50">
+      <span className="text-xs text-text-secondary">
         Página {page + 1} de {totalPages}
       </span>
       <Button
