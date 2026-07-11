@@ -1,10 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  LayoutDashboard, LineChart, BookOpen, Layers, FileText, GraduationCap,
-  Trophy, ShoppingBag, BarChart2, User, Flame, ChevronLeft, ChevronRight, LogOut,
-  ShieldCheck,
-} from 'lucide-react'
+import { Flame, ChevronLeft, ChevronRight, LogOut } from 'lucide-react'
 import logoMark from '@/assets/brand/logo-mark.png'
 import { prefetchByPath } from '@/router/lazyPages'
 import { LevelAvatar } from '@/shared/components/gamification/LevelAvatar'
@@ -12,39 +8,20 @@ import { useUiStore } from '@/store/ui.store'
 import { useAuthStore } from '@/store/auth.store'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { getUserLevel } from '@/lib/xp.utils'
-import { useRoleAccess } from '@/hooks/useRoleAccess'
-import { useFeatureFlag } from '@/hooks/useFeatureFlag'
+import { filterNavItems } from '@/config/navigation'
+import { FEATURES } from '@/config/featureFlags'
 import { cn } from '@/lib/cn'
-
-const navItems = [
-  { to: '/dashboard',    icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/analytics',    icon: LineChart,       label: 'Analítica' },
-  { to: '/study',        icon: BookOpen,        label: 'Estudiar' },
-  { to: '/decks',        icon: Layers,          label: 'Mazos' },
-  { to: '/documents',    icon: FileText,        label: 'Documentos' },
-  { to: '/courses',      icon: GraduationCap,   label: 'Cursos' },
-  { to: '/achievements', icon: Trophy,          label: 'Logros' },
-]
 
 export default function Sidebar() {
   const { sidebarOpen, toggleSidebar } = useUiStore()
-  const { xp, currentStreak, fullName, email } = useAuthStore()
-  const canViewStore = useRoleAccess('view:store')
-  const canViewAdmin = useRoleAccess('view:admin')
-  const leaderboardEnabled = useFeatureFlag('LEADERBOARD')
+  const { xp, currentStreak, fullName, email, role } = useAuthStore()
   const { logout } = useAuth()
   const navigate = useNavigate()
   const levelInfo = getUserLevel(xp)
 
   const displayName = fullName ?? email ?? 'Usuario'
 
-  const allNavItems = [
-    ...navItems,
-    ...(canViewStore ? [{ to: '/store', icon: ShoppingBag, label: 'Tienda' }] : []),
-    ...(leaderboardEnabled ? [{ to: '/leaderboard', icon: BarChart2, label: 'Ranking' }] : []),
-    ...(canViewAdmin ? [{ to: '/admin', icon: ShieldCheck, label: 'Plataforma' }] : []),
-    { to: '/profile', icon: User, label: 'Perfil' },
-  ]
+  const allNavItems = filterNavItems(role, (flag) => FEATURES[flag])
 
   return (
     <motion.aside
@@ -88,7 +65,7 @@ export default function Sidebar() {
               cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative',
                 isActive
-                  ? 'bg-surface-hover text-text-primary before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:rounded-full before:bg-[#f97316]'
+                  ? 'bg-surface-hover text-text-primary before:absolute before:left-0 before:top-2 before:bottom-2 before:w-0.5 before:rounded-full before:bg-brand-orange'
                   : 'text-text-secondary hover:bg-surface-overlay hover:text-text-primary'
               )
             }
@@ -124,7 +101,7 @@ export default function Sidebar() {
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs text-text-secondary">{levelInfo.name}</span>
-                <span className="text-xs text-[#f97316] font-semibold flex items-center gap-1">
+                <span className="text-xs text-brand-orange font-semibold flex items-center gap-1">
                   <Flame className="w-3 h-3" />{currentStreak}
                 </span>
               </div>
@@ -133,7 +110,7 @@ export default function Sidebar() {
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.round(levelInfo.progress * 100)}%` }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
-                  className="h-full bg-gradient-to-r from-[#f97316] to-[#7c3aed] rounded-full"
+                  className="h-full bg-linear-to-r from-brand-orange to-brand-purple rounded-full"
                 />
               </div>
               <p className="text-xs text-text-muted">{xp} XP</p>

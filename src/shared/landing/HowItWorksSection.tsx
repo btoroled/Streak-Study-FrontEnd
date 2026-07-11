@@ -1,38 +1,35 @@
-import { Upload, Sparkles, Flame } from 'lucide-react'
+import { FileUp, Sparkles, Flame } from 'lucide-react'
 
-const steps = [
+const STEPS = [
   {
-    icon: Upload,
-    title: 'Sube tus apuntes',
-    desc: 'Un PDF de clase, un resumen o tus propios apuntes.',
+    icon: FileUp,
+    title: '1. Sube tu PDF',
+    desc: 'Apuntes de clase, diapositivas o el capítulo del libro — lo que tengas.',
   },
   {
     icon: Sparkles,
-    title: 'La IA genera tus flashcards',
-    desc: 'Preguntas y respuestas listas para estudiar, sin escribir nada a mano.',
+    title: '2. La IA crea tus flashcards',
+    desc: 'Extraemos el contenido y generamos tarjetas de estudio en segundos.',
   },
   {
     icon: Flame,
-    title: 'Estudia y mantén tu racha',
-    desc: 'Repetición espaciada (SM-2), XP, niveles y racha diaria te hacen volver.',
+    title: '3. Estudia y mantén la racha',
+    desc: 'El repaso espaciado te dice qué estudiar hoy. Cada día suma XP y racha.',
   },
 ]
 
 export default function HowItWorksSection() {
   return (
-    <section className="w-full max-w-4xl mx-auto px-6 py-14">
-      <h2 className="text-2xl font-bold text-text-primary text-center mb-2">Cómo funciona</h2>
-      <p className="text-sm text-text-secondary text-center mb-10">Tres pasos, sin fricción.</p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {steps.map(({ icon: Icon, title, desc }, i) => (
-          <div key={title} className="relative bg-surface-card border border-surface-border rounded-xl p-5">
-            <span className="absolute -top-3 -left-3 w-7 h-7 rounded-full bg-gradient-to-br from-brand-orange to-brand-purple text-white text-xs font-bold flex items-center justify-center">
-              {i + 1}
-            </span>
-            <Icon className="w-6 h-6 text-brand-orange mb-3" />
-            <p className="text-sm font-semibold text-text-primary mb-1">{title}</p>
-            <p className="text-xs text-text-secondary leading-relaxed">{desc}</p>
+    <section id="como-funciona" className="max-w-5xl mx-auto px-6 py-16 scroll-mt-16">
+      <h2 className="text-3xl font-black text-text-primary text-center mb-10">Cómo funciona</h2>
+      <div className="grid md:grid-cols-3 gap-4">
+        {STEPS.map(({ icon: Icon, title, desc }) => (
+          <div key={title} className="bg-surface-card border border-surface-border rounded-2xl p-6 text-center">
+            <div className="w-11 h-11 rounded-xl bg-brand-purple/15 flex items-center justify-center mx-auto mb-4">
+              <Icon className="w-5 h-5 text-brand-purple" />
+            </div>
+            <h3 className="text-base font-bold text-text-primary mb-1.5">{title}</h3>
+            <p className="text-sm text-text-secondary leading-relaxed">{desc}</p>
           </div>
         ))}
       </div>

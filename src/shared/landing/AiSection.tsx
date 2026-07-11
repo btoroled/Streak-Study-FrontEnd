@@ -1,13 +1,21 @@
-import { Sparkles } from 'lucide-react'
+import FeatureRow from './_FeatureRow'
+import mascotThinking from '@/assets/brand/mascot-thinking.png'
 
 export default function AiSection() {
   return (
-    <div className="bg-surface-card border border-surface-border rounded-xl p-5">
-      <Sparkles className="w-6 h-6 text-brand-purple-light mb-3" />
-      <p className="text-sm font-semibold text-text-primary mb-1">IA desde tus PDFs</p>
-      <p className="text-xs text-text-secondary leading-relaxed">
-        Sube un documento y genera flashcards automáticamente, sin escribir nada a mano.
-      </p>
-    </div>
+    <section className="max-w-5xl mx-auto px-6 py-14">
+      <FeatureRow
+        eyebrow="IA que estudia contigo"
+        title="De PDF a flashcards en un click"
+        image={mascotThinking}
+        imageAlt="Mascota pensando"
+      >
+        <p>
+          Sube tus apuntes y la IA extrae los conceptos clave, los convierte en
+          tarjetas de pregunta y respuesta, y las deja en el mazo que elijas.
+        </p>
+        <p>Y si fallas una tarjeta, el tutor IA te explica el concepto al instante.</p>
+      </FeatureRow>
+    </section>
   )
 }
