@@ -6,8 +6,10 @@ interface Props {
   days?: number
 }
 
+// Vacío usa el token de superficie (cambia entre temas); el resto es la marca
+// (naranja/violeta), que a propósito no cambia entre temas (Issue W5.1).
 function colorFor(reviews: number): string {
-  if (reviews === 0) return '#1e1f2a'
+  if (reviews === 0) return 'var(--color-surface-overlay)'
   if (reviews < 3) return '#7c3aed66'
   if (reviews < 6) return '#f9731699'
   if (reviews < 10) return '#f97316cc'
@@ -41,9 +43,9 @@ export default function ActivityHeatmap({ data, days = 35 }: Props) {
           />
         ))}
       </div>
-      <div className="flex items-center gap-1.5 mt-3 text-xs text-white/40">
+      <div className="flex items-center gap-1.5 mt-3 text-xs text-text-muted">
         <span>Menos</span>
-        {['#1e1f2a', '#7c3aed66', '#f9731699', '#f97316cc', '#f97316'].map((c) => (
+        {['var(--color-surface-overlay)', '#7c3aed66', '#f9731699', '#f97316cc', '#f97316'].map((c) => (
           <div key={c} className="w-3 h-3 rounded-sm" style={{ backgroundColor: c }} />
         ))}
         <span>Más</span>

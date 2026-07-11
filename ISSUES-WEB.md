@@ -219,10 +219,12 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Contexto**: `AnalyticsPage` necesita ajuste visual: colores alineados a los tokens del theme y layout de dos columnas — **actividad** a un lado y **repasos** al otro.
 
+**Estado: RESUELTO**
+
 **Tareas**
-- [ ] Reemplazar colores ad-hoc de los charts por tokens semánticos (`brand-purple`, `brand-orange`, escala del heatmap coherente con el theme)
-- [ ] Grid responsive de 2 columnas (actividad | repasos); colapsa a 1 columna en mobile
-- [ ] Revisar contraste en ambos temas cuando W1.1 aterrice
+- [x] Reemplazar colores ad-hoc de los charts por tokens semánticos — `AnalyticsPage`, `TopDecksChart` y `ActivityHeatmap` (grid/ejes/tooltip/barras de Recharts + celda vacía del heatmap) ahora usan `var(--color-*)` en vez de hex fijo; también se sacaron los `text-white`/`border-white/8` sueltos por los tokens `text-primary`/`text-secondary`/`surface-border`. La escala de intensidad del heatmap (violeta→naranja con alfa) se dejó igual: es la marca, no cambia entre temas.
+- [x] Grid responsive de 2 columnas (actividad | repasos), colapsa a 1 en mobile (`grid grid-cols-1 lg:grid-cols-2`)
+- [x] Revisado en ambos temas ahora que W1.1 aterrizó — sin hex fijo que se quede oscuro/blanco al cambiar de tema
 
 **Criterio de aceptación**
 - En desktop se ven las dos columnas lado a lado con la paleta del theme; en mobile apila sin romperse.
