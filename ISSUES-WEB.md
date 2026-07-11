@@ -51,17 +51,24 @@ Backlog de mejoras para **este repo** (`proyecto-2-frontend-streakstudy`), detec
 
 **Labels**: `epic:auth`, `priority:p0`
 
-**Contexto**: el selector de institución no carga opciones. Afecta al registro (`RegisterForm` → `institutionsService.list()`, solo en `mode === 'manual'`) y/o al alta de usuarios (`features/team/CreateUserForm`). Hipótesis a validar primero: `GET /institutions` exige auth y el registro es público → el query falla con 401 silencioso. Además, ninguna UI debe permitir crear SUPER_ADMIN: el front ya lo excluye (`ASSIGNABLE_ROLES` en `config/roles.ts:57` no incluye SUPER_ADMIN como asignable), pero hay que verificar que el backend lo rechace (B.9 dice "nunca SUPER_ADMIN") y que el registro público no lo permita por payload manipulado.
+**Estado: RESUELTO (2026-07-10)** — diagnóstico completo y fix en backend, rama `fix/w21-institucion-plataforma-reservada` (commit `958fb74`).
+
+**Hallazgos de la investigación**
+- `GET /institutions` **es público** y funciona (hipótesis del 401 descartada); `RegisterForm` ya tenía estados de loading/error correctos.
+- El "no cargan" que vio el equipo es ambiental: el servidor desplegado está caído (IP inalcanzable) — no es bug del código.
+- **Riesgo de deploy detectado**: la DB local tenía columnas legacy `points`/`streak` con `NOT NULL` que el código actual ya no mapea (`ddl-auto=update` nunca borra columnas) → **todo INSERT de usuarios falla y el seeder crashea el boot**. Si la DB de producción tiene el mismo drift, al redeployar correr: `ALTER TABLE users DROP COLUMN points; ALTER TABLE users DROP COLUMN streak;`
+- El registro siempre crea STUDENT y `POST /users` ya rechazaba `role: SUPER_ADMIN` (403). **Pero** la institución sentinel "Plataforma (SUPER_ADMIN)" se listaba públicamente y aceptaba registros → cualquiera podía meterse al tenant de administración global.
 
 **Tareas**
-- [ ] Reproducir: registro en modo manual y alta de usuario como SUPER_ADMIN; capturar el error real del query (network tab / `institutionsQuery.error`)
-- [ ] Si es 401 en registro público → coordinar con backend que `GET /institutions` sea público (o endpoint público reducido `{id, name}`); si es otra causa, arreglar donde corresponda
-- [ ] Mostrar estado de error en el selector (hoy falla silencioso): mensaje + retry, no dropdown vacío
-- [ ] Test manual/API: `POST /users` y `POST /auth/register` con `role: SUPER_ADMIN` en el payload → debe rechazar (403/400); si el backend lo acepta, abrir issue backend
-- [ ] Test del estado de error del selector
+- [x] Reproducir con backend local: listado, registro normal, registro forzado a la plataforma, alta SUPER_ADMIN
+- [x] Backend: `listActive()` excluye la institución con code `plataforma` (`Institution.PLATFORM_CODE`)
+- [x] Backend: `register` rechaza el `institutionId` de la plataforma → `403 reserved_institution` (aunque el id venga a mano)
+- [x] Tests unitarios de ambos comportamientos (TDD; suite completa del backend 437/437 verde)
+- [ ] Al redeployar: verificar drift de esquema en la DB de producción (ver arriba)
+- [ ] Merge de la rama del backend + redeploy
 
 **Criterio de aceptación**
-- El selector de institución carga en registro y en alta de usuarios; ante fallo muestra error accionable; es imposible crear un SUPER_ADMIN desde cualquier flujo (UI y API).
+- ✅ El listado público no incluye la Plataforma; registro forzado a ella → 403; registro normal → 201; imposible crear SUPER_ADMIN por API.
 
 ---
 
