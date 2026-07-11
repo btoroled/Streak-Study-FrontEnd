@@ -19,3 +19,18 @@ class MemoryStorage implements Storage {
 if (typeof globalThis.localStorage === 'undefined') {
   Object.defineProperty(globalThis, 'localStorage', { value: new MemoryStorage(), writable: false })
 }
+
+// Polyfill mínimo de matchMedia — jsdom no lo implementa y next-themes
+// (ThemeToggle, Issue W1.1) lo consulta al montar incluso con enableSystem=false.
+if (typeof window !== 'undefined' && typeof window.matchMedia === 'undefined') {
+  window.matchMedia = (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+  }) as unknown as MediaQueryList
+}
