@@ -12,6 +12,7 @@ import { useStudySession } from '@/features/study/hooks/useStudySession'
 import mascotCelebrate from '@/assets/brand/mascot-celebrate.png'
 
 type StudyMode = 'flip' | 'written'
+type WrittenResult = { cardId: number; isMatch: boolean }
 
 export default function StudySessionPage() {
   const { deckId } = useParams<{ deckId: string }>()
@@ -21,20 +22,16 @@ export default function StudySessionPage() {
     useStudySession(id)
 
   const [mode, setMode] = useState<StudyMode>('flip')
-  const [writtenChecked, setWrittenChecked] = useState(false)
-  const [writtenMatch, setWrittenMatch] = useState(false)
+  const [writtenResult, setWrittenResult] = useState<WrittenResult | null>(null)
 
   useEffect(() => {
     loadCards()
   }, [loadCards])
 
-  // Nueva carta: el resultado del modo escrito de la anterior no debe arrastrarse.
-  useEffect(() => {
-    setWrittenChecked(false)
-    setWrittenMatch(false)
-  }, [current?.card.id])
-
-  const showRating = mode === 'flip' ? flipped : writtenChecked
+  const currentWrittenResult = writtenResult?.cardId === current?.card.id
+    ? writtenResult
+    : null
+  const showRating = mode === 'flip' ? flipped : currentWrittenResult !== null
 
   if (phase === 'loading') {
     return (
@@ -133,8 +130,9 @@ export default function StudySessionPage() {
             <FlashcardFlip card={current.card} flipped={flipped} onFlip={flip} />
           ) : (
             <WrittenAnswerCard
+              key={current.card.id}
               card={current.card}
-              onChecked={(isMatch) => { setWrittenMatch(isMatch); setWrittenChecked(true) }}
+              onChecked={(isMatch) => setWrittenResult({ cardId: current.card.id, isMatch })}
             />
           )}
 
@@ -143,7 +141,7 @@ export default function StudySessionPage() {
               <DifficultyRating
                 onRate={rate}
                 disabled={isSubmitting}
-                suggestedRating={mode === 'written' && writtenMatch ? 'EASY' : undefined}
+                suggestedRating={mode === 'written' && currentWrittenResult?.isMatch ? 'EASY' : undefined}
               />
               <ExplainButton flashcardId={current.card.id} />
             </>

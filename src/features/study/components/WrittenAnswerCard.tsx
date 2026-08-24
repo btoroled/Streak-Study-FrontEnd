@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Check, X } from 'lucide-react'
 import { Input } from '@/shared/components/ui/input'
 import { Button } from '@/shared/components/ui/button'
@@ -14,13 +14,6 @@ export default function WrittenAnswerCard({ card, onChecked }: Props) {
   const [value, setValue] = useState('')
   const [checked, setChecked] = useState(false)
   const [isMatch, setIsMatch] = useState(false)
-
-  // Nueva carta: limpiar el input y el resultado de la anterior.
-  useEffect(() => {
-    setValue('')
-    setChecked(false)
-    setIsMatch(false)
-  }, [card.id])
 
   const handleCheck = () => {
     if (!value.trim()) return
