@@ -8,13 +8,13 @@ export const authService = {
   register: (data: RegisterRequest) =>
     api.post<AuthResponse>('/auth/register', data).then(r => r.data),
 
-  refresh: (data: RefreshTokenRequest) =>
+  refresh: (data?: RefreshTokenRequest) =>
     api.post<AuthResponse>('/auth/refresh', data).then(r => r.data),
 
   me: () =>
     api.get<UserMeResponse>('/auth/me').then(r => r.data),
 
-  logout: (data: RefreshTokenRequest) =>
+  logout: (data?: RefreshTokenRequest) =>
     api.post('/auth/logout', data),
 
   forgotPassword: (data: ForgotPasswordRequest) =>

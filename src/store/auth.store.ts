@@ -7,8 +7,12 @@ interface AuthState {
   // ── In-memory only (never persisted — security) ──
   accessToken: string | null
 
-  // ── Persisted via localStorage ──
+  // Legacy migration only. Never persisted after this version.
   refreshToken: string | null
+  // Non-sensitive marker; the real refresh token lives in an HttpOnly cookie.
+  hasSession: boolean
+
+  // ── Persisted via localStorage ──
   userId: number | null
   institutionId: number | null
   email: string | null
@@ -25,7 +29,7 @@ interface AuthState {
   // ── Actions ──
   setAuth: (payload: {
     accessToken: string
-    refreshToken: string
+    refreshToken?: string | null
     userId: number
     institutionId: number
     email: string
@@ -36,7 +40,7 @@ interface AuthState {
   }) => void
   setAccessToken: (token: string) => void
   /** Actualiza solo tokens + xp tras un refresh — no toca userId/institutionId/email/role. */
-  setTokens: (payload: { accessToken: string; refreshToken: string; xp: number }) => void
+  setTokens: (payload: { accessToken: string; xp: number }) => void
   setProgress: (progress: UserProgressResponse) => void
   setEmailVerified: (value: boolean) => void
   logout: () => void
@@ -48,6 +52,7 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       accessToken: null,
       refreshToken: null,
+      hasSession: false,
       userId: null,
       institutionId: null,
       email: null,
@@ -62,7 +67,8 @@ export const useAuthStore = create<AuthState>()(
       setAuth: (payload) =>
         set((state) => ({
           accessToken: payload.accessToken,
-          refreshToken: payload.refreshToken,
+          refreshToken: null,
+          hasSession: true,
           userId: payload.userId,
           institutionId: payload.institutionId,
           email: payload.email,
@@ -78,7 +84,8 @@ export const useAuthStore = create<AuthState>()(
       setTokens: (payload) =>
         set({
           accessToken: payload.accessToken,
-          refreshToken: payload.refreshToken,
+          refreshToken: null,
+          hasSession: true,
           xp: payload.xp,
         }),
 
@@ -96,6 +103,7 @@ export const useAuthStore = create<AuthState>()(
         set({
           accessToken: null,
           refreshToken: null,
+          hasSession: false,
           userId: null,
           institutionId: null,
           email: null,
@@ -108,12 +116,12 @@ export const useAuthStore = create<AuthState>()(
           badges: [],
         }),
 
-      isAuthenticated: () => get().refreshToken !== null,
+      isAuthenticated: () => get().hasSession,
     }),
     {
       name: 'streakstudy-auth',
       partialize: (state) => ({
-        refreshToken: state.refreshToken,
+        hasSession: state.hasSession,
         userId: state.userId,
         institutionId: state.institutionId,
         email: state.email,

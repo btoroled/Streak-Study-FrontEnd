@@ -14,10 +14,10 @@ import MobileNav from '../app-layout/MobileNav'
  */
 export default function AuthGuard() {
   const location = useLocation()
-  const refreshToken = useAuthStore((s) => s.refreshToken)
+  const hasSession = useAuthStore((s) => s.hasSession)
   const status = useSessionStore((s) => s.status)
 
-  if (!refreshToken) {
+  if (!hasSession) {
     return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />
   }
   if (status === 'error') {

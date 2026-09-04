@@ -5,7 +5,7 @@ import { authService } from '@/services/auth.service'
 import { progressService } from '@/services/progress.service'
 
 /**
- * Hidrata la sesión al montar la app si hay refreshToken persistido.
+ * Hidrata la sesión al montar la app si existe una cookie de sesión.
  * Está por encima del router para que ambos guards (Auth, Guest) reaccionen
  * al mismo estado en lugar de duplicar la lógica de bootstrap.
  *
@@ -27,20 +27,20 @@ export function SessionInitProvider({ children }: { children: React.ReactNode })
   // efecto, y la cleanup del run anterior cancela el flujo antes de que
   // termine — la sesión nunca llega a 'ready' (queda colgada en "Cargando…").
   useEffect(() => {
-    const refreshToken = useAuthStore.getState().refreshToken
-    if (!refreshToken || useSessionStore.getState().status !== 'idle') return
+    const { hasSession, refreshToken } = useAuthStore.getState()
+    if ((!hasSession && !refreshToken) || useSessionStore.getState().status !== 'idle') return
 
     let cancelled = false
     setStatus('loading')
 
     ;(async () => {
       try {
-        const authData = await authService.refresh({ refreshToken })
+        // `refreshToken` solo puede existir durante la migración desde localStorage.
+        const authData = await authService.refresh(refreshToken ? { refreshToken } : undefined)
         if (cancelled) return
 
         useAuthStore.getState().setTokens({
           accessToken: authData.accessToken,
-          refreshToken: authData.refreshToken,
           xp: authData.xp,
         })
 
@@ -50,7 +50,6 @@ export function SessionInitProvider({ children }: { children: React.ReactNode })
           if (!cancelled) {
             useAuthStore.getState().setAuth({
               accessToken: authData.accessToken,
-              refreshToken: authData.refreshToken,
               userId: meData.userId,
               institutionId: meData.institutionId,
               email: meData.email,
