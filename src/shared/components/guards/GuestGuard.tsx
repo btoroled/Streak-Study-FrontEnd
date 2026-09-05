@@ -9,13 +9,13 @@ import LoadingScreen from '../feedback/LoadingScreen'
  * Mientras hidrata evitamos un flash de la página de login.
  */
 export default function GuestGuard() {
-  const refreshToken = useAuthStore((s) => s.refreshToken)
+  const hasSession = useAuthStore((s) => s.hasSession)
   const status = useSessionStore((s) => s.status)
 
-  if (refreshToken && (status === 'idle' || status === 'loading')) {
+  if (hasSession && (status === 'idle' || status === 'loading')) {
     return <LoadingScreen />
   }
-  if (refreshToken && status === 'ready') {
+  if (hasSession && status === 'ready') {
     return <Navigate to="/dashboard" replace />
   }
 

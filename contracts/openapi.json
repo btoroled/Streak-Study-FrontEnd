@@ -10,7 +10,7 @@
     "version" : "v1"
   },
   "servers" : [ {
-    "url" : "http://localhost:63185",
+    "url" : "http://localhost:55968",
     "description" : "Generated server url"
   } ],
   "security" : [ {
@@ -253,7 +253,7 @@
     "/api/v1/users/me/progress/review" : {
       "post" : {
         "tags" : [ "User progress" ],
-        "summary" : "Registrar fin de un repaso (suma XP / actualiza racha; sin efecto si es modo práctica)",
+        "summary" : "Registrar fin de un repaso (suma XP / actualiza racha; sin efecto si es modo práctica). Retorna el progreso actualizado.",
         "operationId" : "finishReview",
         "requestBody" : {
           "content" : {
@@ -267,7 +267,14 @@
         },
         "responses" : {
           "200" : {
-            "description" : "OK"
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserProgressResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -492,7 +499,7 @@
       },
       "post" : {
         "tags" : [ "Institutions" ],
-        "summary" : "Crear institución (cross-tenant)",
+        "summary" : "Crear institución (cross-tenant, solo SUPER_ADMIN)",
         "operationId" : "create_1",
         "requestBody" : {
           "content" : {
@@ -1001,6 +1008,14 @@
         "tags" : [ "Auth" ],
         "summary" : "Registrar usuario",
         "operationId" : "register_1",
+        "parameters" : [ {
+          "name" : "X-Auth-Client",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1030,6 +1045,21 @@
         "tags" : [ "Auth" ],
         "summary" : "Renovar access token",
         "operationId" : "refresh",
+        "parameters" : [ {
+          "name" : "streakstudy_refresh",
+          "in" : "cookie",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Client",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1037,8 +1067,7 @@
                 "$ref" : "#/components/schemas/RefreshTokenRequest"
               }
             }
-          },
-          "required" : true
+          }
         },
         "responses" : {
           "200" : {
@@ -1103,6 +1132,21 @@
         "tags" : [ "Auth" ],
         "summary" : "Cerrar sesión",
         "operationId" : "logout",
+        "parameters" : [ {
+          "name" : "streakstudy_refresh",
+          "in" : "cookie",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "X-Auth-Client",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1110,8 +1154,7 @@
                 "$ref" : "#/components/schemas/RefreshTokenRequest"
               }
             }
-          },
-          "required" : true
+          }
         },
         "responses" : {
           "200" : {
@@ -1125,6 +1168,14 @@
         "tags" : [ "Auth" ],
         "summary" : "Iniciar sesión",
         "operationId" : "login",
+        "parameters" : [ {
+          "name" : "X-Auth-Client",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -2502,6 +2553,30 @@
           }
         }
       },
+      "UserProgressResponse" : {
+        "type" : "object",
+        "properties" : {
+          "xp" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "currentStreak" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "streakFreezes" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "badges" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "uniqueItems" : true
+          }
+        }
+      },
       "TranscriptionResponse" : {
         "type" : "object",
         "properties" : {
@@ -3094,30 +3169,6 @@
           "dueToday" : {
             "type" : "integer",
             "format" : "int64"
-          }
-        }
-      },
-      "UserProgressResponse" : {
-        "type" : "object",
-        "properties" : {
-          "xp" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "currentStreak" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "streakFreezes" : {
-            "type" : "integer",
-            "format" : "int32"
-          },
-          "badges" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            },
-            "uniqueItems" : true
           }
         }
       },

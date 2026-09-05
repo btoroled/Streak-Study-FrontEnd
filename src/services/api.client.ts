@@ -24,6 +24,9 @@ const UNAUTHENTICATED_PATHS = ['/auth/login', '/auth/register', '/auth/refresh']
 axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const url = config.url ?? ''
   const isPublicAuthPath = UNAUTHENTICATED_PATHS.some((p) => url.includes(p))
+  if (url.includes('/auth/')) {
+    config.headers.set('X-Auth-Client', 'web')
+  }
   const token = useAuthStore.getState().accessToken
   if (token && config.headers && !isPublicAuthPath) {
     config.headers.Authorization = `Bearer ${token}`
@@ -70,14 +73,16 @@ axiosInstance.interceptors.response.use(
     isRefreshing = true
 
     try {
-      const { refreshToken } = useAuthStore.getState()
-      if (!refreshToken) throw new Error('No refresh token available')
+      const { refreshToken, hasSession } = useAuthStore.getState()
+      if (!hasSession && !refreshToken) throw new Error('No refresh session available')
 
-      const { data } = await axiosInstance.post('/auth/refresh', { refreshToken })
+      const { data } = await axiosInstance.post(
+        '/auth/refresh',
+        refreshToken ? { refreshToken } : undefined,
+      )
 
       useAuthStore.getState().setTokens({
         accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
         xp: data.xp,
       })
 

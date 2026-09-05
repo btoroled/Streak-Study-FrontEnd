@@ -22,7 +22,7 @@ vi.mock('@/services/progress.service', () => ({
 describe('SessionInitProvider', () => {
   beforeEach(() => {
     useAuthStore.getState().logout()
-    useAuthStore.setState({ refreshToken: 'stored-refresh-token' })
+    useAuthStore.setState({ refreshToken: null, hasSession: true })
     useSessionStore.setState({ status: 'idle' })
     vi.clearAllMocks()
   })
@@ -76,6 +76,6 @@ describe('SessionInitProvider', () => {
     render(<SessionInitProvider><div>app</div></SessionInitProvider>)
 
     await waitFor(() => expect(useSessionStore.getState().status).toBe('error'))
-    expect(useAuthStore.getState().refreshToken).toBeNull()
+    expect(useAuthStore.getState().hasSession).toBe(false)
   })
 })

@@ -70,7 +70,8 @@ describe('useAuth session flow', () => {
 
     expect(useAuthStore.getState()).toMatchObject({
       accessToken: 'access-token',
-      refreshToken: 'refresh-token',
+      refreshToken: null,
+      hasSession: true,
       userId: 7,
       institutionId: 3,
       email: AUTH_RESPONSE.email,
@@ -80,6 +81,7 @@ describe('useAuth session flow', () => {
     })
     expect(useSessionStore.getState().status).toBe('ready')
     expect(navigate).toHaveBeenCalledWith('/dashboard', { replace: true })
+    expect(localStorage.getItem('streakstudy-auth')).not.toContain('refresh-token')
   })
 
   it('keeps the login response XP when progress synchronization fails', async () => {
@@ -103,7 +105,7 @@ describe('useAuth session flow', () => {
     await result.current.logout()
 
     await waitFor(() => expect(useAuthStore.getState().refreshToken).toBeNull())
-    expect(authService.logout).toHaveBeenCalledWith({ refreshToken: 'refresh-token' })
+    expect(authService.logout).toHaveBeenCalledWith(undefined)
     expect(useSessionStore.getState().status).toBe('idle')
     expect(clearQueries).toHaveBeenCalledOnce()
     expect(navigate).toHaveBeenCalledWith('/login', { replace: true })

@@ -16,7 +16,7 @@ export interface LoginRequest {
 
 export interface AuthResponse {
   accessToken: string
-  refreshToken: string
+  refreshToken?: string | null
   expiresIn: number
   userId: number
   institutionId: number

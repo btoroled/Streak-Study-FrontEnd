@@ -19,7 +19,6 @@ export function useAuth() {
 
       useAuthStore.getState().setAuth({
         accessToken: authData.accessToken,
-        refreshToken: authData.refreshToken,
         userId: authData.userId,
         institutionId: authData.institutionId,
         email: authData.email,
@@ -50,7 +49,6 @@ export function useAuth() {
 
       useAuthStore.getState().setAuth({
         accessToken: authData.accessToken,
-        refreshToken: authData.refreshToken,
         userId: authData.userId,
         institutionId: authData.institutionId,
         email: authData.email,
@@ -72,10 +70,10 @@ export function useAuth() {
   )
 
   const logout = useCallback(async () => {
-    const { refreshToken } = useAuthStore.getState()
-    if (refreshToken) {
+    const { refreshToken, hasSession } = useAuthStore.getState()
+    if (hasSession || refreshToken) {
       try {
-        await authService.logout({ refreshToken })
+        await authService.logout(refreshToken ? { refreshToken } : undefined)
       } catch {
         // Local cleanup always proceeds even if the request fails
       }

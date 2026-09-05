@@ -84,7 +84,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Registrar fin de un repaso (suma XP / actualiza racha; sin efecto si es modo práctica) */
+        /** Registrar fin de un repaso (suma XP / actualiza racha; sin efecto si es modo práctica). Retorna el progreso actualizado. */
         post: operations["finishReview"];
         delete?: never;
         options?: never;
@@ -238,7 +238,7 @@ export interface paths {
         /** Listar instituciones activas */
         get: operations["list"];
         put?: never;
-        /** Crear institución (cross-tenant) */
+        /** Crear institución (cross-tenant, solo SUPER_ADMIN) */
         post: operations["create_1"];
         delete?: never;
         options?: never;
@@ -1341,6 +1341,15 @@ export interface components {
             durationMinutes?: number;
             practice?: boolean;
         };
+        UserProgressResponse: {
+            /** Format: int32 */
+            xp?: number;
+            /** Format: int32 */
+            currentStreak?: number;
+            /** Format: int32 */
+            streakFreezes?: number;
+            badges?: string[];
+        };
         TranscriptionResponse: {
             text?: string;
         };
@@ -1563,15 +1572,6 @@ export interface components {
             masteredCards?: number;
             /** Format: int64 */
             dueToday?: number;
-        };
-        UserProgressResponse: {
-            /** Format: int32 */
-            xp?: number;
-            /** Format: int32 */
-            currentStreak?: number;
-            /** Format: int32 */
-            streakFreezes?: number;
-            badges?: string[];
         };
         ForecastPoint: {
             /** Format: date */
@@ -2081,7 +2081,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["UserProgressResponse"];
+                };
             };
         };
     };
@@ -2685,7 +2687,9 @@ export interface operations {
     register_1: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "X-Auth-Client"?: string;
+            };
             path?: never;
             cookie?: never;
         };
@@ -2709,11 +2713,15 @@ export interface operations {
     refresh: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "X-Auth-Client"?: string;
+            };
             path?: never;
-            cookie?: never;
+            cookie?: {
+                streakstudy_refresh?: string;
+            };
         };
-        requestBody: {
+        requestBody?: {
             content: {
                 "application/json": components["schemas"]["RefreshTokenRequest"];
             };
@@ -2777,11 +2785,15 @@ export interface operations {
     logout: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "X-Auth-Client"?: string;
+            };
             path?: never;
-            cookie?: never;
+            cookie?: {
+                streakstudy_refresh?: string;
+            };
         };
-        requestBody: {
+        requestBody?: {
             content: {
                 "application/json": components["schemas"]["RefreshTokenRequest"];
             };
@@ -2799,7 +2811,9 @@ export interface operations {
     login: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "X-Auth-Client"?: string;
+            };
             path?: never;
             cookie?: never;
         };
