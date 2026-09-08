@@ -1,4 +1,4 @@
-import { CheckCircle2, XCircle, Clock, Loader2 } from 'lucide-react'
+import { CheckCircle2, XCircle, Clock, Loader2, ScanText } from 'lucide-react'
 import type { DocumentStatusResponse } from '@/types/document.types'
 
 interface Props { doc: DocumentStatusResponse }
@@ -6,6 +6,7 @@ interface Props { doc: DocumentStatusResponse }
 const STATUS_INFO = {
   PENDING:    { icon: Clock,        label: 'En cola',      cls: 'text-white/50',    spin: false },
   PROCESSING: { icon: Loader2,      label: 'Procesando…',  cls: 'text-orange-400',  spin: true  },
+  OCR_REQUIRED: { icon: ScanText,   label: 'Necesita reconocimiento de texto', cls: 'text-amber-400', spin: false },
   READY:      { icon: CheckCircle2, label: 'Listo',        cls: 'text-green-400',   spin: false },
   FAILED:     { icon: XCircle,      label: 'Error',        cls: 'text-red-400',     spin: false },
 } as const

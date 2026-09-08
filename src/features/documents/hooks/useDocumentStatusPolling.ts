@@ -12,7 +12,7 @@ export function useDocumentStatusPolling(documentId: number | null) {
     enabled: documentId !== null && documentId > 0,
     refetchInterval: (query) => {
       const status = query.state.data?.status
-      if (status === 'READY' || status === 'FAILED') return false
+      if (status === 'READY' || status === 'FAILED' || status === 'OCR_REQUIRED') return false
       const attempt = query.state.dataUpdateCount
       return Math.min(MAX_INTERVAL_MS, MIN_INTERVAL_MS * Math.pow(1.5, attempt))
     },
