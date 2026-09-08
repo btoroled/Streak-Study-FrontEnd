@@ -108,8 +108,21 @@ export default function DocumentsPage() {
               <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
           </div>
-          {docStatus && !docStatus.markdownAvailable && docStatus.status !== 'FAILED' && (
+          {docStatus && !docStatus.markdownAvailable
+            && docStatus.status !== 'FAILED'
+            && docStatus.status !== 'OCR_REQUIRED' && (
             <p className="text-xs text-text-muted">Extrayendo contenido del PDF…</p>
+          )}
+          {docStatus?.status === 'OCR_REQUIRED' && (
+            <div className="rounded-xl border border-amber-400/20 bg-amber-400/10 px-4 py-3">
+              <p className="text-sm font-medium text-amber-300">
+                Este PDF contiene texto dentro de imágenes
+              </p>
+              <p className="mt-1 text-xs text-text-secondary">
+                Todavía no podemos leer suficiente contenido con precisión. Exporta una versión
+                con texto seleccionable o sube otro documento mientras incorporamos OCR.
+              </p>
+            </div>
           )}
           {docStatus?.status === 'FAILED' && (
             <p className="text-xs text-error">No se pudo procesar el PDF. Sube otro documento.</p>

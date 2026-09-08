@@ -2876,7 +2876,7 @@
           },
           "status" : {
             "type" : "string",
-            "enum" : [ "PENDING", "PROCESSING", "READY", "FAILED" ]
+            "enum" : [ "PENDING", "PROCESSING", "OCR_REQUIRED", "READY", "FAILED" ]
           },
           "duplicate" : {
             "type" : "boolean"
@@ -3726,7 +3726,7 @@
           },
           "status" : {
             "type" : "string",
-            "enum" : [ "PENDING", "PROCESSING", "READY", "FAILED" ]
+            "enum" : [ "PENDING", "PROCESSING", "OCR_REQUIRED", "READY", "FAILED" ]
           },
           "sizeBytes" : {
             "type" : "integer",
@@ -3750,7 +3750,7 @@
           },
           "status" : {
             "type" : "string",
-            "enum" : [ "PENDING", "PROCESSING", "READY", "FAILED" ]
+            "enum" : [ "PENDING", "PROCESSING", "OCR_REQUIRED", "READY", "FAILED" ]
           },
           "markdownAvailable" : {
             "type" : "boolean"

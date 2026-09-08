@@ -1,4 +1,4 @@
-export type DocumentStatus = 'PENDING' | 'PROCESSING' | 'READY' | 'FAILED'
+export type DocumentStatus = 'PENDING' | 'PROCESSING' | 'OCR_REQUIRED' | 'READY' | 'FAILED'
 export type AiJobStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED'
 
 export interface DocumentUploadResponse {

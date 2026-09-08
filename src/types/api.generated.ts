@@ -1466,7 +1466,7 @@ export interface components {
             documentId?: number;
             originalFilename?: string;
             /** @enum {string} */
-            status?: "PENDING" | "PROCESSING" | "READY" | "FAILED";
+            status?: "PENDING" | "PROCESSING" | "OCR_REQUIRED" | "READY" | "FAILED";
             duplicate?: boolean;
         };
         CreateDeckRequest: {
@@ -1808,7 +1808,7 @@ export interface components {
             id?: number;
             originalFilename?: string;
             /** @enum {string} */
-            status?: "PENDING" | "PROCESSING" | "READY" | "FAILED";
+            status?: "PENDING" | "PROCESSING" | "OCR_REQUIRED" | "READY" | "FAILED";
             /** Format: int64 */
             sizeBytes?: number;
             /** Format: date-time */
@@ -1819,7 +1819,7 @@ export interface components {
             documentId?: number;
             originalFilename?: string;
             /** @enum {string} */
-            status?: "PENDING" | "PROCESSING" | "READY" | "FAILED";
+            status?: "PENDING" | "PROCESSING" | "OCR_REQUIRED" | "READY" | "FAILED";
             markdownAvailable?: boolean;
         };
         Flashcard: unknown;
